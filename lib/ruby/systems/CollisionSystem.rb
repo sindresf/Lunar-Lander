@@ -49,18 +49,37 @@ class CollisionSystem < System
       bounding_areas.each_key do |other|
         next if entity == other
 
+        # TODO FIX THIS LIKE A MOFO!
         if Intersector.overlapConvexPolygons(bounding_areas[entity], bounding_areas[other])
-          if (entity_mgr.get_tag entity =='p1_lander') && (entity_mgr.get_tag other !='p2_lander') ||
-          (entity_mgr.get_tag entity !='p2_lander') && (entity_mgr.get_tag other =='p1_lander')
-            #puts "Intersection!"
-            return true
-          elsif (entity_mgr.get_tag entity =='p2_lander') || (entity_mgr.get_tag other !='p1_lander') ||
-          (entity_mgr.get_tag entity !='p1_lander') && (entity_mgr.get_tag other =='p2_lander')
-            #puts "Intersection!"
-            return true
+          if is_player1?(entity_mgr, entity, other)
+            if is_player2?(entity_mgr, entity, other)
+              puts "playa playa"
+            else
+              puts "Intersection 1!"
+              return true
+            end
+          end
+          if is_player2?(entity_mgr, entity, other)
+            if is_player1?(entity_mgr, entity, other)
+              puts "playa playa"
+            else
+              puts "Intersection 2!"
+              return true
+            end
           end
         end
       end
     end
   end
+
+  private
+
+  def is_player1?(entity_mgr, entity, other)
+    return entity_mgr.get_tag(entity) == 'p1_lander' || entity_mgr.get_tag(other) =='p1_lander'
+  end
+
+  def is_player2?(entity_mgr, entity, other)
+    return entity_mgr.get_tag(entity) == 'p2_lander' || entity_mgr.get_tag(other) =='p2_lander'
+  end
+
 end

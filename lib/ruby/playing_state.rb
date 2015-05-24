@@ -7,7 +7,9 @@ require_relative 'components/component'
 require_relative 'components/engine'
 require_relative 'components/fuel'
 require_relative 'components/gravitysensitive'
+require_relative 'components/landable'
 require_relative 'components/motion'
+require_relative 'components/pad'
 require_relative 'components/playerinput'
 require_relative 'components/polygoncollidable'
 require_relative 'components/renderable'
@@ -45,9 +47,10 @@ class PlayingState
     @entity_manager.add_component platform, SpatialState.new(50, 145, 0, 0)
     @entity_manager.add_component platform, Renderable.new(RELATIVE_ROOT + "res/images/platform.png", 1.0, 0)
     @entity_manager.add_component platform, PolygonCollidable.new
+    @entity_manager.add_component platform, Pad.new
 
     p1_lander = @entity_manager.create_tagged_entity 'p1_lander'
-    @entity_manager.add_component p1_lander, SpatialState.new(150, 300, 0, 0)
+    @entity_manager.add_component p1_lander, SpatialState.new(400, 350, 0, 0)
     @entity_manager.add_component p1_lander, Engine.new(0.01)
     @entity_manager.add_component p1_lander, Fuel.new(250)
     @entity_manager.add_component p1_lander, Renderable.new(RELATIVE_ROOT + "res/images/crashlander.png", 1.2, 0)
@@ -55,15 +58,17 @@ class PlayingState
     @entity_manager.add_component p1_lander, GravitySensitive.new
     @entity_manager.add_component p1_lander, Motion.new
     @entity_manager.add_component p1_lander, PolygonCollidable.new
+    @entity_manager.add_component p1_lander, Landable.new
 
     p2_lander = @entity_manager.create_tagged_entity('p2_lander')
-    @entity_manager.add_component p2_lander, SpatialState.new(10, 10, 0, 0)
+    @entity_manager.add_component p2_lander, SpatialState.new(70, 200, 0, 0)
     @entity_manager.add_component p2_lander, Engine.new(0.025)
     @entity_manager.add_component p2_lander, Fuel.new(100)
     @entity_manager.add_component p2_lander, Renderable.new(RELATIVE_ROOT + "res/images/crashlander.png", 1.2, 0)
     @entity_manager.add_component p2_lander, PlayerInput.new([Input::Keys::J, Input::Keys::K, Input::Keys::L])
     @entity_manager.add_component p2_lander, Motion.new
     @entity_manager.add_component p2_lander, PolygonCollidable.new
+    @entity_manager.add_component p2_lander, Landable.new
     # end
     #$logger.debug @entity_manager.dump_details
 
