@@ -16,4 +16,13 @@ class Renderable < Component
   def rotate(amount)
     @rotation += amount
   end
+
+  def marshal_dump
+    [@id, @image_fn, @scale, @rotation]
+  end
+
+  def marshal_load(array)
+    @id, @image_fn, @scale, @rotation = array
+    @image = Texture.new(Gdx.files.internal(image_fn))
+  end
 end

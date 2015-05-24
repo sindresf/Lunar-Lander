@@ -123,9 +123,9 @@ class PlayingState
 
     if Gdx.input.isKeyPressed(Input::Keys::ESCAPE)
       if !(@game_over || @landed)
-        #File.open("savedgame.dat", "wb") do |file|
-        #  file.print Marshal::dump(@entity_manager)
-        #end
+        File.open("savedgame.dat", "wb") do |file|
+          file.print Marshal::dump(@entity_manager)
+        end
       end
       @game.setScreen StartupState.new(@game)
     end
