@@ -9,10 +9,12 @@ require_relative 'components/fuel'
 require_relative 'components/gravitysensitive'
 require_relative 'components/motion'
 require_relative 'components/playerinput'
+require_relative 'components/polygoncollidable'
 require_relative 'components/renderable'
 require_relative 'components/spatialstate'
 
 # Necessary systems
+require_relative 'systems/collisionsystem'
 require_relative 'systems/enginesystem'
 require_relative 'systems/physics'
 require_relative 'systems/inputsystem'
@@ -37,19 +39,22 @@ class PlayingState
     ground = @entity_manager.create_tagged_entity 'ground'
     @entity_manager.add_component ground, SpatialState.new(0, -800, 0, 0)
     @entity_manager.add_component ground, Renderable.new(RELATIVE_ROOT + "res/images/ground.png", 0.95, 0)
+    @entity_manager.add_component ground, PolygonCollidable.new
 
     platform = @entity_manager.create_tagged_entity 'platform'
     @entity_manager.add_component platform, SpatialState.new(50, 118, 0, 0)
     @entity_manager.add_component platform, Renderable.new(RELATIVE_ROOT + "res/images/platform.png", 1.0, 0)
+    @entity_manager.add_component platform, PolygonCollidable.new
 
     p1_lander = @entity_manager.create_tagged_entity 'p1_lander'
-    @entity_manager.add_component p1_lander, SpatialState.new(300, 300, 0, 0)
+    @entity_manager.add_component p1_lander, SpatialState.new(150, 300, 0, 0)
     @entity_manager.add_component p1_lander, Engine.new(0.01)
     @entity_manager.add_component p1_lander, Fuel.new(250)
     @entity_manager.add_component p1_lander, Renderable.new(RELATIVE_ROOT + "res/images/crashlander.png", 0.1, 0)
     @entity_manager.add_component p1_lander, PlayerInput.new([Input::Keys::A, Input::Keys::S, Input::Keys::D])
     @entity_manager.add_component p1_lander, GravitySensitive.new
     @entity_manager.add_component p1_lander, Motion.new
+    @entity_manager.add_component p1_lander, PolygonCollidable.new
 
     p2_lander = @entity_manager.create_tagged_entity('p2_lander')
     @entity_manager.add_component p2_lander, SpatialState.new(10, 10, 0, 0)
@@ -58,14 +63,16 @@ class PlayingState
     @entity_manager.add_component p2_lander, Renderable.new(RELATIVE_ROOT + "res/images/crashlander.png", 0.1, 0)
     @entity_manager.add_component p2_lander, PlayerInput.new([Input::Keys::J, Input::Keys::K, Input::Keys::L])
     @entity_manager.add_component p2_lander, Motion.new
+    @entity_manager.add_component p2_lander, PolygonCollidable.new
     # end
     #$logger.debug @entity_manager.dump_details
 
     # Initialize any runnable systems
-    @engine_system   = EngineSystem.new(self)
-    @input_system   = InputSystem.new(self)
-    @physics_system = Physics.new(self)
+    @engine_system    = EngineSystem.new(self)
+    @input_system       = InputSystem.new(self)
+    @physics_system     = Physics.new(self)
     @rendering_system   = RenderingSystem.new(self)
+    @collision_system   = CollisionSystem.new(self)
 
     #set background if required
     @bg_image = Texture.new(Gdx.files.internal(RELATIVE_ROOT + 'res/images/background.png'))
@@ -98,6 +105,7 @@ class PlayingState
     @input_system.process_one_game_tick(delta, @entity_manager)
     @physics_system.process_one_game_tick(delta, @entity_manager)
     @engine_system.process_one_game_tick(delta, @entity_manager)
+    @collision_system.process_one_game_tick(delta,@entity_manager)
 
     # Make sure you "layer" things in here from bottom to top...
     @camera.update

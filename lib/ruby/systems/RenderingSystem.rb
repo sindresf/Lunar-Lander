@@ -17,11 +17,12 @@ class RenderingSystem < System
       false, false
       )
     end
-
+    fuel_x = 75
     entities = entity_mgr.get_all_entities_with_component_of_type(Fuel)
     entities.each_with_index do |e, index|
       fuel_component   = entity_mgr.get_component_of_type(e, Fuel)
-      font.draw(batch, "Fuel remaining #{sprintf "%.1f" % fuel_component.remaining}", 8, 90);
+      font.draw(batch, "Player #{index + 1} Fuel remaining #{sprintf "%.1f" % fuel_component.remaining}", 8, fuel_x);
+      fuel_x += 15
     end
   end
 end
