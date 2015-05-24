@@ -37,12 +37,12 @@ class PlayingState
     @entity_manager = Lunar_lander_em.new(@game)
 
     ground = @entity_manager.create_tagged_entity 'ground'
-    @entity_manager.add_component ground, SpatialState.new(0, -800, 0, 0)
-    @entity_manager.add_component ground, Renderable.new(RELATIVE_ROOT + "res/images/ground.png", 0.95, 0)
+    @entity_manager.add_component ground, SpatialState.new(0, 0, 0, 0)
+    @entity_manager.add_component ground, Renderable.new(RELATIVE_ROOT + "res/images/ground.png", 1, 0)
     @entity_manager.add_component ground, PolygonCollidable.new
 
     platform = @entity_manager.create_tagged_entity 'platform'
-    @entity_manager.add_component platform, SpatialState.new(50, 118, 0, 0)
+    @entity_manager.add_component platform, SpatialState.new(50, 145, 0, 0)
     @entity_manager.add_component platform, Renderable.new(RELATIVE_ROOT + "res/images/platform.png", 1.0, 0)
     @entity_manager.add_component platform, PolygonCollidable.new
 
@@ -50,7 +50,7 @@ class PlayingState
     @entity_manager.add_component p1_lander, SpatialState.new(150, 300, 0, 0)
     @entity_manager.add_component p1_lander, Engine.new(0.01)
     @entity_manager.add_component p1_lander, Fuel.new(250)
-    @entity_manager.add_component p1_lander, Renderable.new(RELATIVE_ROOT + "res/images/crashlander.png", 0.1, 0)
+    @entity_manager.add_component p1_lander, Renderable.new(RELATIVE_ROOT + "res/images/crashlander.png", 1.2, 0)
     @entity_manager.add_component p1_lander, PlayerInput.new([Input::Keys::A, Input::Keys::S, Input::Keys::D])
     @entity_manager.add_component p1_lander, GravitySensitive.new
     @entity_manager.add_component p1_lander, Motion.new
@@ -60,7 +60,7 @@ class PlayingState
     @entity_manager.add_component p2_lander, SpatialState.new(10, 10, 0, 0)
     @entity_manager.add_component p2_lander, Engine.new(0.025)
     @entity_manager.add_component p2_lander, Fuel.new(100)
-    @entity_manager.add_component p2_lander, Renderable.new(RELATIVE_ROOT + "res/images/crashlander.png", 0.1, 0)
+    @entity_manager.add_component p2_lander, Renderable.new(RELATIVE_ROOT + "res/images/crashlander.png", 1.2, 0)
     @entity_manager.add_component p2_lander, PlayerInput.new([Input::Keys::J, Input::Keys::K, Input::Keys::L])
     @entity_manager.add_component p2_lander, Motion.new
     @entity_manager.add_component p2_lander, PolygonCollidable.new
