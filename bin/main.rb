@@ -43,4 +43,3 @@ LwjglApplication.new(game, cfg)
 while game.is_running
   sleep(1)
 end
-
