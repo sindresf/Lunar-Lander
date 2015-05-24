@@ -53,17 +53,17 @@ class CollisionSystem < System
         if Intersector.overlapConvexPolygons(bounding_areas[entity], bounding_areas[other])
           if is_player1?(entity_mgr, entity, other)
             if is_player2?(entity_mgr, entity, other)
-              puts "playa playa"
+              # puts "playa playa"
             else
-              puts "Intersection 1!"
+              # puts "Intersection 1!"
               return true
             end
           end
           if is_player2?(entity_mgr, entity, other)
             if is_player1?(entity_mgr, entity, other)
-              puts "playa playa"
+              # puts "playa playa"
             else
-              puts "Intersection 2!"
+              # puts "Intersection 2!"
               return true
             end
           end

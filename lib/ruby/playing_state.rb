@@ -18,8 +18,9 @@ require_relative 'components/spatialstate'
 # Necessary systems
 require_relative 'systems/collisionsystem'
 require_relative 'systems/enginesystem'
-require_relative 'systems/physics'
 require_relative 'systems/inputsystem'
+require_relative 'systems/landingsystem'
+require_relative 'systems/physics'
 require_relative 'systems/renderingsystem'
 require_relative 'systems/system'
 
@@ -73,11 +74,12 @@ class PlayingState
     #$logger.debug @entity_manager.dump_details
 
     # Initialize any runnable systems
-    @engine_system    = EngineSystem.new(self)
+    @engine_system      = EngineSystem.new(self)
     @input_system       = InputSystem.new(self)
     @physics_system     = Physics.new(self)
     @rendering_system   = RenderingSystem.new(self)
     @collision_system   = CollisionSystem.new(self)
+    @landing_system     = LandingSystem.new(self)
 
     #set background if required
     @bg_image = Texture.new(Gdx.files.internal(RELATIVE_ROOT + 'res/images/background.png'))
@@ -111,6 +113,7 @@ class PlayingState
     @physics_system.process_one_game_tick(delta, @entity_manager)
     @engine_system.process_one_game_tick(delta, @entity_manager)
     @collision_system.process_one_game_tick(delta,@entity_manager)
+    @landed = @landing_system.process_one_game_tick(delta,@entity_manager)
 
     # Make sure you "layer" things in here from bottom to top...
     @camera.update
