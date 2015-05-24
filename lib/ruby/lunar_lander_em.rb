@@ -165,18 +165,6 @@ class Lunar_lander_em
     output
   end
 
-  def marshal_dump
-    [@id, @ids_to_tags, @tags_to_ids, @component_stores]
-  end
-
-  def marshal_load(array)
-    @id, @ids_to_tags, @tags_to_ids, @component_stores = array
-  end
-
-  def to_s
-    "EntityManager {#{id}: #{all_entities.size} managed entities}"
-  end
-
   def has_component?(entity, component)
     raise ArguentError, "UUID and component must be specified" if entity.nil? || component.nil?
 
@@ -199,4 +187,16 @@ class Lunar_lander_em
     end
   end
 
+  def marshal_dump
+    [@id, @ids_to_tags, @tags_to_ids, @component_stores]
+  end
+
+  def marshal_load(array)
+    @id, @ids_to_tags, @tags_to_ids, @component_stores = array
+    @mutex = Mutex.new
+  end
+
+  def to_s
+    "EntityManager {#{id}: #{all_entities.size} managed entities}"
+  end
 end

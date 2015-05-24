@@ -26,6 +26,12 @@ class PlayingState
   end
 
   def show
+    #if File.size? 'savedgame.dat'
+    #   save_file = File.open( 'savedgame.dat' )
+    #  @entity_manager = Marshal::load(save_file)
+    #   save_file.close
+    #   @entity_manager.game = self
+    # else
     @entity_manager = Lunar_lander_em.new(@game)
 
     ground = @entity_manager.create_tagged_entity 'ground'
@@ -52,7 +58,7 @@ class PlayingState
     @entity_manager.add_component p2_lander, Renderable.new(RELATIVE_ROOT + "res/images/crashlander.png", 0.1, 0)
     @entity_manager.add_component p2_lander, PlayerInput.new([Input::Keys::J, Input::Keys::K, Input::Keys::L])
     @entity_manager.add_component p2_lander, Motion.new
-
+    # end
     #$logger.debug @entity_manager.dump_details
 
     # Initialize any runnable systems
@@ -127,6 +133,8 @@ class PlayingState
           file.print Marshal::dump(@entity_manager)
         end
       end
+      @game.setScreen StartupState.new(@game)
+    elsif Gdx.input.isKeyPressed(Input::Keys::ENTER)
       @game.setScreen StartupState.new(@game)
     end
 
