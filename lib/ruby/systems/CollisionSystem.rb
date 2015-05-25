@@ -44,16 +44,17 @@ class CollisionSystem < System
       bounding_areas[e]=entity_mgr.get_component_of_type(e, PolygonCollidable).bounding_polygon
     end
 
-    # Naive O(n^2)
+    # Naive O(n^2) (kinda)
     bounding_areas.each_key do |entity|
       bounding_areas.each_key do |other|
         #All the don't care situations
-        next if is_same_polygon?(entity, other)
-        next if is_player_clash?(entity_mgr, entity, other)
+        # list in occurrence order for max efficiency
         next if is_asteroid_clash?(entity_mgr, entity, other)
-        next if is_just_platform_on_ground?(entity_mgr, entity, other)
         next if is_just_asteroid_hitting_ground?(entity_mgr, entity, other)
         next if is_just_asteroid_hitting_platform?(entity_mgr, entity, other)
+        next if is_same_polygon?(entity, other)
+        next if is_just_platform_on_ground?(entity_mgr, entity, other)
+        next if is_player_clash?(entity_mgr, entity, other)
 
         #OK, so we care, check it out
         if is_crash?(bounding_areas, entity, other)
