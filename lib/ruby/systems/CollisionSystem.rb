@@ -47,40 +47,35 @@ class CollisionSystem < System
     # Naive O(n^2)
     bounding_areas.each_key do |entity|
       bounding_areas.each_key do |other|
+        #All the don't care situations
         next if entity == other
+        next if (entity_mgr.get_tag(entity) == 'asteroid') && (entity_mgr.get_tag(other) == 'asteroid')
+
+        next if (entity_mgr.get_tag(entity) == 'platform') && (entity_mgr.get_tag(other) == 'ground')
+        next if (entity_mgr.get_tag(entity) == 'ground') && (entity_mgr.get_tag(other) == 'platform')
+
+        next if (entity_mgr.get_tag(entity) == 'ground') && (entity_mgr.get_tag(other) == 'asteroid')
+        next if (entity_mgr.get_tag(entity) == 'asteroid') && (entity_mgr.get_tag(other) == 'ground')
+
+        next if (entity_mgr.get_tag(entity) == 'platform') && (entity_mgr.get_tag(other) == 'asteroid')
+        next if (entity_mgr.get_tag(entity) == 'asteroid') && (entity_mgr.get_tag(other) == 'platform')
+
+        next if (entity_mgr.get_tag(entity) == 'p1_lander') && (entity_mgr.get_tag(other) == 'p2_lander')
+        next if (entity_mgr.get_tag(entity) == 'p2_lander') && (entity_mgr.get_tag(other) == 'p1_lander')
 
         # TODO FIX THIS LIKE A MOFO!
         if Intersector.overlapConvexPolygons(bounding_areas[entity], bounding_areas[other])
-          if is_player1?(entity_mgr, entity, other)
-            if is_player2?(entity_mgr, entity, other)
-              # puts "playa playa"
-            else
-              # puts "Intersection 1!"
-              return true
-            end
-          elsif is_player2?(entity_mgr, entity, other)
-            if is_player1?(entity_mgr, entity, other)
-              # puts "playa playa"
-            else
-              # puts "Intersection 2!"
-              return true
-            end
-          else return false
+          if (entity_mgr.get_tag(entity) == 'p1_lander') || (entity_mgr.get_tag(other) == 'p1_lander')
+            return true
+          elsif (entity_mgr.get_tag(entity) == 'p2_lander') || (entity_mgr.get_tag(other) == 'p2_lander')
+            return true
+          else
+            return false
           end
         end
       end
     end
     return false
-  end
-
-  private
-
-  def is_player1?(entity_mgr, entity, other)
-    return entity_mgr.get_tag(entity) == 'p1_lander' || entity_mgr.get_tag(other) =='p1_lander'
-  end
-
-  def is_player2?(entity_mgr, entity, other)
-    return entity_mgr.get_tag(entity) == 'p2_lander' || entity_mgr.get_tag(other) =='p2_lander'
   end
 
 end
