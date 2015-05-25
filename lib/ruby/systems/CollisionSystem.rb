@@ -70,6 +70,7 @@ class CollisionSystem < System
         end
       end
     end
+    return false
   end
 
   private
