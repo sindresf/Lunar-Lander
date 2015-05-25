@@ -46,7 +46,7 @@ class PlayingState
     @entity_manager.add_component ground, PolygonCollidable.new
 
     platform = @entity_manager.create_tagged_entity 'platform'
-    @entity_manager.add_component platform, SpatialState.new(50, 145, 0, 0)
+    @entity_manager.add_component platform, SpatialState.new(150, 145, 0, 0)
     @entity_manager.add_component platform, Renderable.new(RELATIVE_ROOT + "res/images/platform.png", 1.0, 0)
     @entity_manager.add_component platform, PolygonCollidable.new
     @entity_manager.add_component platform, Pad.new
