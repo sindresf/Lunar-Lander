@@ -48,26 +48,18 @@ class CollisionSystem < System
     bounding_areas.each_key do |entity|
       bounding_areas.each_key do |other|
         #All the don't care situations
-        next if entity == other
-        next if (entity_mgr.get_tag(entity) == 'asteroid') && (entity_mgr.get_tag(other) == 'asteroid')
+        next if is_same_polygon?(entity, other)
+        next if is_player_clash?(entity_mgr, entity, other)
+        next if is_asteroid_clash?(entity_mgr, entity, other)
+        next if is_just_platform_on_ground?(entity_mgr, entity, other)
+        next if is_just_asteroid_hitting_ground?(entity_mgr, entity, other)
+        next if is_just_asteroid_hitting_platform?(entity_mgr, entity, other)
 
-        next if (entity_mgr.get_tag(entity) == 'platform') && (entity_mgr.get_tag(other) == 'ground')
-        next if (entity_mgr.get_tag(entity) == 'ground') && (entity_mgr.get_tag(other) == 'platform')
-
-        next if (entity_mgr.get_tag(entity) == 'ground') && (entity_mgr.get_tag(other) == 'asteroid')
-        next if (entity_mgr.get_tag(entity) == 'asteroid') && (entity_mgr.get_tag(other) == 'ground')
-
-        next if (entity_mgr.get_tag(entity) == 'platform') && (entity_mgr.get_tag(other) == 'asteroid')
-        next if (entity_mgr.get_tag(entity) == 'asteroid') && (entity_mgr.get_tag(other) == 'platform')
-
-        next if (entity_mgr.get_tag(entity) == 'p1_lander') && (entity_mgr.get_tag(other) == 'p2_lander')
-        next if (entity_mgr.get_tag(entity) == 'p2_lander') && (entity_mgr.get_tag(other) == 'p1_lander')
-
-        # TODO FIX THIS LIKE A MOFO!
-        if Intersector.overlapConvexPolygons(bounding_areas[entity], bounding_areas[other])
-          if (entity_mgr.get_tag(entity) == 'p1_lander') || (entity_mgr.get_tag(other) == 'p1_lander')
+        #OK, so we care, check it out
+        if is_crash?(bounding_areas, entity, other)
+          if is_player1_crash?(entity_mgr, entity, other)
             return true
-          elsif (entity_mgr.get_tag(entity) == 'p2_lander') || (entity_mgr.get_tag(other) == 'p2_lander')
+          elsif is_player2_crash?(entity_mgr, entity, other)
             return true
           else
             return false
@@ -76,6 +68,43 @@ class CollisionSystem < System
       end
     end
     return false
+  end
+
+  # Helper ifs for readability
+  def is_same_polygon?(entity, other)
+    return entity == other
+  end
+
+  def is_asteroid_clash?(entity_mgr, entity, other)
+    return (entity_mgr.get_tag(entity) == 'asteroid') && (entity_mgr.get_tag(other) == 'asteroid')
+  end
+
+  def is_just_platform_on_ground?(entity_mgr, entity, other)
+    return ((entity_mgr.get_tag(entity) == 'platform') && (entity_mgr.get_tag(other) == 'ground')) || ((entity_mgr.get_tag(entity) == 'ground') && (entity_mgr.get_tag(other) == 'platform'))
+  end
+
+  def is_just_asteroid_hitting_ground?(entity_mgr, entity, other)
+    return ((entity_mgr.get_tag(entity) == 'ground') && (entity_mgr.get_tag(other) == 'asteroid')) || ((entity_mgr.get_tag(entity) == 'asteroid') && (entity_mgr.get_tag(other) == 'ground'))
+  end
+
+  def is_just_asteroid_hitting_platform?(entity_mgr, entity, other)
+    return ((entity_mgr.get_tag(entity) == 'platform') && (entity_mgr.get_tag(other) == 'asteroid')) || ((entity_mgr.get_tag(entity) == 'asteroid') && (entity_mgr.get_tag(other) == 'platform'))
+  end
+
+  def is_player_clash?(entity_mgr, entity, other)
+    return ((entity_mgr.get_tag(entity) == 'p1_lander') && (entity_mgr.get_tag(other) == 'p2_lander')) || ((entity_mgr.get_tag(entity) == 'p2_lander') && (entity_mgr.get_tag(other) == 'p1_lander'))
+  end
+
+  def is_crash?(bounding_areas, entity, other)
+    return Intersector.overlapConvexPolygons(bounding_areas[entity], bounding_areas[other])
+  end
+
+  def is_player1_crash?(entity_mgr, entity, other)
+    return (entity_mgr.get_tag(entity) == 'p1_lander') || (entity_mgr.get_tag(other) == 'p1_lander')
+  end
+
+  def is_player2_crash?(entity_mgr, entity, other)
+    return (entity_mgr.get_tag(entity) == 'p2_lander') || (entity_mgr.get_tag(other) == 'p2_lander')
   end
 
 end
