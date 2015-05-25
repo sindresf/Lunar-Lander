@@ -9,7 +9,7 @@ class StartupState
   end
 
   def show
-    @bg_image = Texture.new(Gdx.files.internal(RELATIVE_ROOT + 'res/images/background.png'))
+    @bg_image = Texture.new(Gdx.files.internal(RELATIVE_ROOT + 'res/images/startup.png'))
     @camera = OrthographicCamera.new
     @camera.setToOrtho(false, 900, 600);
     @batch = SpriteBatch.new

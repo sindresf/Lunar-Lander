@@ -58,14 +58,14 @@ class CollisionSystem < System
               # puts "Intersection 1!"
               return true
             end
-          end
-          if is_player2?(entity_mgr, entity, other)
+          elsif is_player2?(entity_mgr, entity, other)
             if is_player1?(entity_mgr, entity, other)
               # puts "playa playa"
             else
               # puts "Intersection 2!"
               return true
             end
+          else return false
           end
         end
       end

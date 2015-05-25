@@ -112,7 +112,7 @@ class PlayingState
     @input_system.process_one_game_tick(delta, @entity_manager)
     @physics_system.process_one_game_tick(delta, @entity_manager)
     @engine_system.process_one_game_tick(delta, @entity_manager)
-    @collision_system.process_one_game_tick(delta,@entity_manager)
+    @game_over = @collision_system.process_one_game_tick(delta,@entity_manager)
     @landed = @landing_system.process_one_game_tick(delta,@entity_manager)
 
     # Make sure you "layer" things in here from bottom to top...
@@ -136,9 +136,9 @@ class PlayingState
     @font.draw(@batch, "Time now: #{@game.game_clock.to_s}", 8, 50);
 
     if @landed
-      @font.draw(@batch,"Hooray you made it!", 50, 240)
+      @font.draw(@batch,"Hooray you made it!", 120, 150)
     elsif @game_over
-      @font.draw(@batch,"Bang, you're dead!", 50, 240)
+      @font.draw(@batch,"Bang, you're dead!", 120, 150)
     end
 
     @batch.end
