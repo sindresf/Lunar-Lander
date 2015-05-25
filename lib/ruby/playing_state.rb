@@ -45,11 +45,10 @@ class PlayingState
     @entity_manager.add_component ground, Renderable.new(RELATIVE_ROOT + "res/images/ground.png", 1, 0)
     @entity_manager.add_component ground, PolygonCollidable.new
 
-    platform = @entity_manager.create_tagged_entity 'platform'
-    @entity_manager.add_component platform, SpatialState.new(150, 145, 0, 0)
-    @entity_manager.add_component platform, Renderable.new(RELATIVE_ROOT + "res/images/platform.png", 1.0, 0)
-    @entity_manager.add_component platform, PolygonCollidable.new
-    @entity_manager.add_component platform, Pad.new
+    platformbackground = @entity_manager.create_tagged_entity 'platform_bg'
+    @entity_manager.add_component platformbackground, SpatialState.new(150, 145, 0, 0)
+    @entity_manager.add_component platformbackground, Renderable.new(RELATIVE_ROOT + "res/images/platformbackground.png", 1.0, 0)
+    @entity_manager.add_component platformbackground, Pad.new
 
     p1_lander = @entity_manager.create_tagged_entity 'p1_lander'
     @entity_manager.add_component p1_lander, SpatialState.new(400, 350, 0, 0)
@@ -71,6 +70,11 @@ class PlayingState
     @entity_manager.add_component p2_lander, Motion.new
     @entity_manager.add_component p2_lander, PolygonCollidable.new
     @entity_manager.add_component p2_lander, Landable.new
+
+    platform = @entity_manager.create_tagged_entity 'platform'
+    @entity_manager.add_component platform, SpatialState.new(150, 145, 0, 0)
+    @entity_manager.add_component platform, Renderable.new(RELATIVE_ROOT + "res/images/platform.png", 1.0, 0)
+    @entity_manager.add_component platform, PolygonCollidable.new
     # end
     #$logger.debug @entity_manager.dump_details
 
