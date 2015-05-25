@@ -16,6 +16,7 @@ require_relative 'components/renderable'
 require_relative 'components/spatialstate'
 
 # Necessary systems
+require_relative 'systems/asteroidsystem'
 require_relative 'systems/collisionsystem'
 require_relative 'systems/enginesystem'
 require_relative 'systems/inputsystem'
@@ -80,6 +81,7 @@ class PlayingState
     @rendering_system   = RenderingSystem.new(self)
     @collision_system   = CollisionSystem.new(self)
     @landing_system     = LandingSystem.new(self)
+    @asteroid_system     = AsteroidSystem.new(self)
 
     #set background if required
     @bg_image = Texture.new(Gdx.files.internal(RELATIVE_ROOT + 'res/images/background.png'))
@@ -109,6 +111,7 @@ class PlayingState
     delta = gdx_delta * 1000
 
     # Nice because you can dictate the order things are processed
+    @asteroid_system.process_one_game_tick(delta, @entity_manager)
     @input_system.process_one_game_tick(delta, @entity_manager)
     @physics_system.process_one_game_tick(delta, @entity_manager)
     @engine_system.process_one_game_tick(delta, @entity_manager)
