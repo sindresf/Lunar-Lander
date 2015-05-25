@@ -6,10 +6,12 @@ class StartupState
   include Screen
   def initialize(game)
     @game = game
+    @skin = "res/images/firstskin/"
   end
 
   def show
-    @bg_image = Texture.new(Gdx.files.internal(RELATIVE_ROOT + 'res/images/startup.png'))
+    @bg_image = Texture.new(Gdx.files.internal(RELATIVE_ROOT + @skin + 'startup.png'))
+    # @lunar_lander = Texture.new(Gdx.files.internal(RELATIVE_ROOT + @skin + 'lunarlander.png'))
     @camera = OrthographicCamera.new
     @camera.setToOrtho(false, 900, 600);
     @batch = SpriteBatch.new
@@ -27,8 +29,12 @@ class StartupState
     @batch.begin
 
     @batch.draw(@bg_image, 0, 0)
+    if @skin == "res/images/solidskin/"
+      @batch.draw(@lunar_lander, 150, 250)
+    end
 
-    @font.draw(@batch, "P to play!", 8, 250);
+    @font.draw(@batch, "P to play!", 15, 250);
+    @font.draw(@batch, "S to skin!", 15, 180);
     @font.draw(@batch, "Lunar Lander (Q to exit)", 8, 20);
 
     @batch.end
@@ -36,7 +42,11 @@ class StartupState
     if Gdx.input.isKeyPressed(Input::Keys::Q)
       Gdx.app.exit
     elsif Gdx.input.isKeyPressed(Input::Keys::P)
-      @game.setScreen PlayingState.new(@game)
+      @game.setScreen PlayingState.new(@game, @skin)
+    elsif Gdx.input.isKeyPressed(Input::Keys::S)
+      @skin = "res/images/solidskin/"
+      @bg_image = Texture.new(Gdx.files.internal(RELATIVE_ROOT + @skin + 'startup.png'))
+      @lunar_lander =  Texture.new(Gdx.files.internal(RELATIVE_ROOT + @skin + 'lunarlander.png'))
     end
 
   end

@@ -2,6 +2,11 @@ require_relative 'system'
 
 class AsteroidSystem < System
   HOW_OFTEN = 80 # framerate = 60 -> statistically an asteroid a sec
+  def initialize(game, image_path)
+    @game = game
+    @image_path = image_path
+  end
+
   def generate_new_asteroids(delta, entity_mgr)
     make = rand(HOW_OFTEN)
     if make == 0 # make beyond the left side asteroid
@@ -28,7 +33,7 @@ class AsteroidSystem < System
     asteroid_rotation = 8.0 + rand(48)
     asteroid = entity_mgr.create_tagged_entity 'asteroid'
     entity_mgr.add_component asteroid, SpatialState.new(starting_x, starting_y, starting_dx, starting_dy)
-    entity_mgr.add_component asteroid, Renderable.new(RELATIVE_ROOT + "res/images/asteroid.png", asteroid_scale, asteroid_rotation)
+    entity_mgr.add_component asteroid, Renderable.new(RELATIVE_ROOT +  @image_path + "asteroid.png", asteroid_scale, asteroid_rotation)
     entity_mgr.add_component asteroid, PolygonCollidable.new
     entity_mgr.add_component asteroid, Motion.new
   end
