@@ -11,29 +11,29 @@ class StartupState
   include Screen
   def initialize(game)
     @game = game
-    @skin = "res/images/firstskin/"
+    @skin = "firstskin/"
   end
 
   def show
     @option_entity_manager = Lunar_lander_em.new @game
 
     bg_image = @option_entity_manager.create_tagged_entity 'background'
-    @option_entity_manager.add_component bg_image, Renderable.new(RELATIVE_ROOT + @skin + 'startup.png', 1.0, 0)
+    @option_entity_manager.add_component bg_image, Renderable.new(@skin, 'startup.png', 1.0, 0)
 
     lunar_lander = @option_entity_manager.create_tagged_entity 'lunar_lander'
-    @option_entity_manager.add_component lunar_lander, Renderable.new(RELATIVE_ROOT + @skin + 'lunarlander.png', 1.0, 0)
+    @option_entity_manager.add_component lunar_lander, Renderable.new(@skin, 'lunarlander.png', 1.0, 0)
 
     skin_option = @option_entity_manager.create_tagged_entity 'option'
-    @option_entity_manager.add_component skin_option, UserOption.new('skin', 'res/images/firstskin/')
+    @option_entity_manager.add_component skin_option, UserOption.new('skin', 'firstskin/')
 
     start_option = @option_entity_manager.create_tagged_entity 'start'
     @option_entity_manager.add_component start_option, UserOption.new('start')
 
-    @bg_image = Texture.new(Gdx.files.internal(RELATIVE_ROOT + @skin + 'startup.png'))
-    @lunar_lander = Texture.new(Gdx.files.internal(RELATIVE_ROOT + @skin + 'lunarlander.png'))
+    @bg_image = Texture.new(Gdx.files.internal(RELATIVE_ROOT + "res/images/" + @skin + 'startup.png'))
+    @lunar_lander = Texture.new(Gdx.files.internal(RELATIVE_ROOT + "res/images/" + @skin + 'lunarlander.png'))
 
     @rendering_system = RenderingSystem.new @game
-    @user_option_system = UserOptionSystem.new @game
+    @user_option_system = UserOptionSystem.new @game, @skin
 
     @camera = OrthographicCamera.new
     @camera.setToOrtho(false, 900, 600);
@@ -53,6 +53,7 @@ class StartupState
 
     @user_option_system.process_one_game_tick(@option_entity_manager)
 
+    @rendering_system.process_one_game_tick(@option_entity_manager,@camera,@batch,@font)
     @batch.draw(@bg_image, 0, 0)
     @batch.draw(@lunar_lander, 150, 250)
 

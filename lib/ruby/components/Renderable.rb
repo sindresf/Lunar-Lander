@@ -4,13 +4,27 @@ require 'forwardable'
 class Renderable < Component
   extend Forwardable
   def_delegators :@image, :width, :height # Its image knows the dimensions.
-  attr_accessor :image, :image_path, :scale, :rotation
-  def initialize(image_path, scale, rotation)
+  attr_accessor :skin, :image, :scale, :rotation
+  def initialize(skin, image_name, scale, rotation)
     super()
-    @image_path = image_path
-    @image = Texture.new(Gdx.files.internal(image_path))
+    @skin = skin
+    @image_path = "res/images/" + skin + image_name
+    @image = Texture.new(Gdx.files.internal(@image_path))
     @scale = scale
     @rotation = rotation
+  end
+
+  def change_image()
+    @image = Texture.new(Gdx.files.internal(@image_path))
+  end
+
+  def image_path
+    return image_path
+  end
+
+  def image_path(image_path)
+    @image_path = image_path
+    change_image
   end
 
   def rotate(amount)

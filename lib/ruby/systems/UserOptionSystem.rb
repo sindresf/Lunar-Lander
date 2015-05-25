@@ -2,13 +2,13 @@ require_relative 'system'
 require 'playing_state'
 
 class UserOptionSystem < System
-  SKIN_OPTIONS = ['res/images/firstskin/', 'res/images/solidskin/']
+  SKIN_OPTIONS = ['firstskin/', 'solidskin/']
   PLAYER_OPTIONS = [1,2]
 
-  def initialize(game)
+  def initialize(game, skin)
     @game = game
     @skin_index = 0;
-    @skin = nil
+    @skin = skin
   end
 
   def process_one_game_tick(option_entity_manager)
@@ -29,10 +29,19 @@ class UserOptionSystem < System
   end
 
   def next_skin(option)
-    option.value = SKIN_OPTIONS[@skin_index]
+    @skin = SKIN_OPTIONS[@skin_index]
+    option.value = @skin
     @skin_index += 1
     if @skin_index == SKIN_OPTIONS.length
       @skin_index = 0
     end
   end
+
+  #  def update_images(option_entity_manager)
+  #    image_entities = option_entity_manager.get_all_entities_with_component_of_type Renderable
+  #    image_entities.each do |option|
+  #    image_component = option_entity_manager.get_component_of_type(option, Renderable)
+  #    image_component.image_path = @skin + ''
+  #   end
+  # end
 end

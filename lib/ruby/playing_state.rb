@@ -27,9 +27,9 @@ require_relative 'systems/system'
 
 class PlayingState
   include Screen
-  def initialize(game, image_path)
+  def initialize(game, skin)
     @game = game
-    @image_path = image_path
+    @skin = skin
   end
 
   def show
@@ -43,19 +43,19 @@ class PlayingState
 
     ground = @entity_manager.create_tagged_entity 'ground'
     @entity_manager.add_component ground, SpatialState.new(0, 0, 0, 0)
-    @entity_manager.add_component ground, Renderable.new(RELATIVE_ROOT +  @image_path + "ground.png", 1, 0)
+    @entity_manager.add_component ground, Renderable.new(@skin, "ground.png", 1, 0)
     @entity_manager.add_component ground, PolygonCollidable.new
 
     platformbackground = @entity_manager.create_tagged_entity 'platform_bg'
     @entity_manager.add_component platformbackground, SpatialState.new(150, 145, 0, 0)
-    @entity_manager.add_component platformbackground, Renderable.new(RELATIVE_ROOT +  @image_path + "platformbackground.png", 1.0, 0)
+    @entity_manager.add_component platformbackground, Renderable.new(@skin, "platformbackground.png", 1.0, 0)
     @entity_manager.add_component platformbackground, Pad.new
 
     p1_lander = @entity_manager.create_tagged_entity 'p1_lander'
     @entity_manager.add_component p1_lander, SpatialState.new(400, 350, 0, 0)
     @entity_manager.add_component p1_lander, Engine.new(0.01)
     @entity_manager.add_component p1_lander, Fuel.new(250)
-    @entity_manager.add_component p1_lander, Renderable.new(RELATIVE_ROOT +  @image_path + "crashlander1.png", 1.2, 0)
+    @entity_manager.add_component p1_lander, Renderable.new(@skin, "crashlander1.png", 1.2, 0)
     @entity_manager.add_component p1_lander, PlayerInput.new([Input::Keys::A, Input::Keys::S, Input::Keys::D])
     @entity_manager.add_component p1_lander, GravitySensitive.new
     @entity_manager.add_component p1_lander, Motion.new
@@ -66,7 +66,7 @@ class PlayingState
     @entity_manager.add_component p2_lander, SpatialState.new(70, 200, 0, 0)
     @entity_manager.add_component p2_lander, Engine.new(0.025)
     @entity_manager.add_component p2_lander, Fuel.new(100)
-    @entity_manager.add_component p2_lander, Renderable.new(RELATIVE_ROOT +  @image_path + "crashlander2.png", 1.2, 0)
+    @entity_manager.add_component p2_lander, Renderable.new(@skin, "crashlander2.png", 1.2, 0)
     @entity_manager.add_component p2_lander, PlayerInput.new([Input::Keys::J, Input::Keys::K, Input::Keys::L])
     @entity_manager.add_component p2_lander, Motion.new
     @entity_manager.add_component p2_lander, PolygonCollidable.new
@@ -74,22 +74,22 @@ class PlayingState
 
     platform = @entity_manager.create_tagged_entity 'platform'
     @entity_manager.add_component platform, SpatialState.new(150, 145, 0, 0)
-    @entity_manager.add_component platform, Renderable.new(RELATIVE_ROOT +  @image_path + "platform.png", 1.0, 0)
+    @entity_manager.add_component platform, Renderable.new(@skin, "platform.png", 1.0, 0)
     @entity_manager.add_component platform, PolygonCollidable.new
     # end
     #$logger.debug @entity_manager.dump_details
 
     # Initialize any runnable systems
-    @engine_system      = EngineSystem.new(self)
-    @input_system       = InputSystem.new(self)
-    @physics_system     = Physics.new(self)
-    @rendering_system   = RenderingSystem.new(self)
-    @collision_system   = CollisionSystem.new(self)
-    @landing_system     = LandingSystem.new(self)
-    @asteroid_system     = AsteroidSystem.new(self, @image_path)
+    @engine_system      = EngineSystem.new self
+    @input_system       = InputSystem.new self
+    @physics_system     = Physics.new self
+    @rendering_system   = RenderingSystem.new self
+    @collision_system   = CollisionSystem.new self
+    @landing_system     = LandingSystem.new self
+    @asteroid_system    = AsteroidSystem.new(self, @skin)
 
     #set background
-    @bg_image = Texture.new(Gdx.files.internal(RELATIVE_ROOT +  @image_path + "background.png"))
+    @bg_image = Texture.new(Gdx.files.internal("res/images/" + @skin + "background.png"))
 
     @game_over=false
     # win condition
