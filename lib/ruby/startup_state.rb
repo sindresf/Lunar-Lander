@@ -6,6 +6,7 @@ require 'systems/useroptionsystem'
 require 'systems/renderingsystem'
 require 'components/useroption'
 require 'components/renderable'
+require 'components/spatialstate'
 
 class StartupState
   include Screen
@@ -19,9 +20,11 @@ class StartupState
 
     bg_image = @option_entity_manager.create_tagged_entity 'background'
     @option_entity_manager.add_component bg_image, Renderable.new(@skin, 'startup.png', 1.0, 0)
+    @option_entity_manager.add_component bg_image, SpatialState.new(0 ,0, 0, 0)
 
     lunar_lander = @option_entity_manager.create_tagged_entity 'lunar_lander'
     @option_entity_manager.add_component lunar_lander, Renderable.new(@skin, 'lunarlander.png', 1.0, 0)
+    @option_entity_manager.add_component lunar_lander, SpatialState.new(150, 250, 0, 0)
 
     skin_option = @option_entity_manager.create_tagged_entity 'option'
     @option_entity_manager.add_component skin_option, UserOption.new('skin', 'firstskin/')
@@ -54,8 +57,8 @@ class StartupState
     @user_option_system.process_one_game_tick(@option_entity_manager)
 
     @rendering_system.process_one_game_tick(@option_entity_manager,@camera,@batch,@font)
-    @batch.draw(@bg_image, 0, 0)
-    @batch.draw(@lunar_lander, 150, 250)
+    # @batch.draw(@bg_image, 0, 0)
+    #  @batch.draw(@lunar_lander, 150, 250)
 
     @font.draw(@batch, "P to play!", 15, 250);
     @font.draw(@batch, "S to skin!", 15, 180);

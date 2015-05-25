@@ -8,6 +8,7 @@ class Renderable < Component
   def initialize(skin, image_name, scale, rotation)
     super()
     @skin = skin
+    @image_name = image_name
     @image_path = "res/images/" + skin + image_name
     @image = Texture.new(Gdx.files.internal(@image_path))
     @scale = scale
@@ -22,8 +23,8 @@ class Renderable < Component
     return image_path
   end
 
-  def image_path(image_path)
-    @image_path = image_path
+  def image_path(skin)
+    @image_path = "res/images/" + skin + @image_name
     change_image
   end
 
