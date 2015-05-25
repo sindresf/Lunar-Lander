@@ -10,6 +10,8 @@ the tutorial follow along, and expansion upon the RECF sample game
 * updated graphics
 * animation og explotion and stuff
 * platform stops lander.
+* wind effect
+* better asteroids
 * more maps, choosing between or progression.
 * timer for button presses when it comes to options.
 * winner state updates, instead of returning true false.
