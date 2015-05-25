@@ -39,7 +39,7 @@ class PlayingState
     #   save_file.close
     #   @entity_manager.game = self
     # else
-    @entity_manager = Lunar_lander_em.new(@game)
+    @entity_manager = Lunar_lander_em.new @game
 
     ground = @entity_manager.create_tagged_entity 'ground'
     @entity_manager.add_component ground, SpatialState.new(0, 0, 0, 0)

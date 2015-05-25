@@ -1,6 +1,11 @@
 java_import com.badlogic.gdx.Screen
 
 require 'playing_state'
+require 'lunar_lander_em'
+require 'systems/useroptionsystem'
+require 'systems/renderingsystem'
+require 'components/useroption'
+require 'components/renderable'
 
 class StartupState
   include Screen
@@ -10,8 +15,26 @@ class StartupState
   end
 
   def show
+    @option_entity_manager = Lunar_lander_em.new @game
+
+    bg_image = @option_entity_manager.create_tagged_entity 'background'
+    @option_entity_manager.add_component bg_image, Renderable.new(RELATIVE_ROOT + @skin + 'startup.png', 1.0, 0)
+
+    lunar_lander = @option_entity_manager.create_tagged_entity 'lunar_lander'
+    @option_entity_manager.add_component lunar_lander, Renderable.new(RELATIVE_ROOT + @skin + 'lunarlander.png', 1.0, 0)
+
+    skin_option = @option_entity_manager.create_tagged_entity 'option'
+    @option_entity_manager.add_component skin_option, UserOption.new('skin', 'res/images/firstskin/')
+
+    start_option = @option_entity_manager.create_tagged_entity 'start'
+    @option_entity_manager.add_component start_option, UserOption.new('start')
+
     @bg_image = Texture.new(Gdx.files.internal(RELATIVE_ROOT + @skin + 'startup.png'))
-    # @lunar_lander = Texture.new(Gdx.files.internal(RELATIVE_ROOT + @skin + 'lunarlander.png'))
+    @lunar_lander = Texture.new(Gdx.files.internal(RELATIVE_ROOT + @skin + 'lunarlander.png'))
+
+    @rendering_system = RenderingSystem.new @game
+    @user_option_system = UserOptionSystem.new @game
+
     @camera = OrthographicCamera.new
     @camera.setToOrtho(false, 900, 600);
     @batch = SpriteBatch.new
@@ -28,10 +51,10 @@ class StartupState
 
     @batch.begin
 
+    @user_option_system.process_one_game_tick(@option_entity_manager)
+
     @batch.draw(@bg_image, 0, 0)
-    if @skin == "res/images/solidskin/"
-      @batch.draw(@lunar_lander, 150, 250)
-    end
+    @batch.draw(@lunar_lander, 150, 250)
 
     @font.draw(@batch, "P to play!", 15, 250);
     @font.draw(@batch, "S to skin!", 15, 180);
@@ -41,8 +64,6 @@ class StartupState
 
     if Gdx.input.isKeyPressed(Input::Keys::Q)
       Gdx.app.exit
-    elsif Gdx.input.isKeyPressed(Input::Keys::P)
-      @game.setScreen PlayingState.new(@game, @skin)
     elsif Gdx.input.isKeyPressed(Input::Keys::S)
       @skin = "res/images/solidskin/"
       @bg_image = Texture.new(Gdx.files.internal(RELATIVE_ROOT + @skin + 'startup.png'))
