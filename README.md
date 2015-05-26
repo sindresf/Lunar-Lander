@@ -9,6 +9,8 @@ the tutorial follow along, and expansion upon the RECF sample game
 ####Adds to come
 * music in background
 * Skin are to be made into "worlds"
+ * THIS GAME WILL HAVE A "sidescroller" GOING UP FOR INTERGALACTIC TRAVEL! :O :D
+  * rename the project and game to "Intergalactic Whatsnot" at that point
  * seperate "introduction" scene for the world
   * song choice and asteroid-gravity-wind-lander behavior dependent on this
 * sounds for events and animation
