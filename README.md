@@ -9,6 +9,7 @@ the tutorial follow along, and expansion upon the RECF sample game
 ####Adds to come
 * music in background
 * Skin are to be made into "worlds"
+ * seperate "introduction" scene for the world
   * song choice and asteroid-gravity-wind-lander behavior dependent on this
 * sounds for events and animation
 * updated graphics
