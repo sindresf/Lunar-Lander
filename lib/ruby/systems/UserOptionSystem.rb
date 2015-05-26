@@ -6,23 +6,32 @@ class UserOptionSystem < System
   PLAYER_OPTIONS = [1,2]
 
   def initialize(game, skin)
+    @last_time = Time.new
     @game = game
     @skin_index = 0;
     @skin = skin
   end
 
-  # TODO make this consider Time, so it doesn't flicker so much!
+  # TODO Time Almost correctly considered (first click hack)
   def process_one_game_tick(option_entity_manager)
+    now = Time.new
+    wait = now - @last_time
+    pressed = false
+    if Gdx.input.isKeyPressed(Input::Keys::S)
+      @last_time = now
+      if wait > 0.1
+        pressed = true
+      end
+    end
     option_entities = option_entity_manager.get_all_entities_with_component_of_type UserOption
     option_entities.each do |option|
       option_component = option_entity_manager.get_component_of_type(option, UserOption)
       if  option_component.property == 'skin'
-        @skin = option_component.value
-      end
-      if option_component.property == 'skin' && Gdx.input.isKeyPressed(Input::Keys::S)
-        puts "WOW, damn"
-        next_skin option_component
-        update_images option_entity_manager
+        if pressed
+          @skin = option_component.value
+          next_skin option_component
+          update_images option_entity_manager
+        end
       elsif option_component.property == 'start' && Gdx.input.isKeyPressed(Input::Keys::P)
         @game.setScreen PlayingState.new(@game, @skin)
       end

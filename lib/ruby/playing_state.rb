@@ -86,7 +86,7 @@ class PlayingState
     @rendering_system   = RenderingSystem.new self
     @collision_system   = CollisionSystem.new self
     @landing_system     = LandingSystem.new self
-    @asteroid_system    = AsteroidSystem.new(self, @skin)
+    @asteroid_system    = AsteroidSystem.new self, @skin
 
     #set background
     @bg_image = Texture.new(Gdx.files.internal("res/images/" + @skin + "background.png"))
