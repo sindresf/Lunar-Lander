@@ -30,6 +30,7 @@ __Game Scene__
  - [x] background graphic
  - [x] player 1 and 2 graphics
  - [x] asteroid graphic
+   - [x] rotates based on latitudinal direction and speed
  - [ ] randomly pick from several asteroid graphics
  - [x] platform graphic
  - [ ] platform stops player when landed
