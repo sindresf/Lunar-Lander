@@ -1,27 +1,78 @@
 # Lunar-Lander
 
 ###Origins
-the tutorial follow along, and expansion upon the RECF sample game
+The tutorial follow-along, and subsequent expansion upon, RECF sample game: [ruby entity component framework](https://github.com/cpowell/ruby-entity-component-framework)
 
-##Current standing
-1-2 Player, "Lunar Lander" game with one map and 3 skins.
+##Features
+__Startup Scene__
+- [x] create
+ - [x] with its own entity manager
+ - [x] background graphic
+ - [x] title graphic
+ - [ ] everything is enteties even here
+- [x] buttonsystem considers time between presses
+ - [ ] for all types of presses
+- [x] press 'p' to start game
+- [x] press 's' to cycle through skins
+ - [x] skin carries into game scene
+ - [ ] set all variables that controls the skins behaviour
+- [ ] press '1' for single player
+- [ ] press '2' for multiplayer
+- [ ] press 'l' to load previous game
+- [ ] display both players controls
+- [ ] press 'shift' to enter player control setter mode
+- [ ] press 'tab' to view scoreboard
+ - [ ] make file-stored scoreboard info
+- [ ] music in background
 
-####Adds to come
-* music in background
-* Skin are to be made into "worlds"
- * THIS GAME WILL HAVE A "sidescroller" GOING UP FOR INTERGALACTIC TRAVEL! :O :D
-  * rename the project and game to "Intergalactic Whatsnot" at that point
- * seperate "introduction" scene for the world
-  * song choice and asteroid-gravity-wind-lander behavior dependent on this
-* sounds for events and animation
-* updated graphics
-* animation og explotion and stuff
-* platform stops lander.
-* wind effect
-* better asteroids
-* more maps, choosing between or progression.
-* **almost:** timer for button presses when it comes to options.
-* winner state updates, instead of returning true false.
-* game over scene with scoring pr. level.
-* save file of scores or something
-* option for choosing to load game or start new one
+__Game Scene__
+- [x] create
+ - [x] background graphic
+ - [x] player 1 and 2 graphics
+ - [x] asteroid graphic
+ - [ ] randomly pick from several asteroid graphics
+ - [x] platform graphic
+ - [ ] platform stops player when landed
+ - [x] platform backgroun graphic
+ - [x] ground graphics
+ - [x] skins
+ - [ ] updated graphics
+ - [ ] skins made into worlds
+ - [ ] different behaviour and gameplay for worlds
+- [x] controls for both players
+ - [x] fuel consideration
+ - [x] slight difference in gameplay
+- [x] collision detection
+ - [ ] upgraded detection algorithm
+- [x] asteroids creation
+ - [x] asteroids removal
+ - [x] off screen
+ - [x] hitting ground
+ - [ ] upgraded creation algorithm
+- [ ] wind effect
+- [ ] player life points 
+- [ ] animations
+ - [ ] effect on collision
+ - [ ] effect on fuel burning
+- [ ] music in background
+- [ ] sounds
+ - [ ] for engine on
+ - [ ] for collision
+ - [ ] for dying
+ - [ ] for landing
+
+__Transition Scene__
+- [ ] create
+- [ ] music in background
+ - [ ] same as startup screen *or* 'world' specific 
+- [ ] make a up-scroller for world transition 
+ - [ ] rename the project "**Intergalactic whatnots**" at this point
+
+__Win/loss Scene__
+- [ ] create
+ - [ ] type in score name for scoreboard
+- [ ] scoring
+ - [ ] consider: time
+ - [ ] consider: fuel left
+ - [ ] consider: *who* for multiplayer
+ - [ ] consider: life left
