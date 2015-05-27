@@ -23,7 +23,8 @@ __Startup Scene__
 - [ ] press 'shift' to enter player control setter mode
 - [ ] press 'tab' to view scoreboard
  - [ ] make file-stored scoreboard info
-- [ ] music in background
+- [x] music in background
+ - [ ] fade to game music
 
 __Game Scene__
 - [x] create
@@ -55,7 +56,8 @@ __Game Scene__
 - [ ] animations
  - [ ] effect on collision
  - [ ] effect on fuel burning
-- [ ] music in background
+- [x] music in background
+ - [ ] fade out to menu music on quit
 - [ ] sounds
  - [ ] for engine on
  - [ ] for collision

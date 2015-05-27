@@ -27,9 +27,11 @@ require_relative 'systems/system'
 
 class PlayingState
   include Screen
-  def initialize(game, skin)
+  def initialize(game, menu_screen, skin)
     @game = game
     @skin = skin
+    @menu_screen = menu_screen
+    @bg_song = Gdx.audio.newMusic(Gdx.files.internal("res/music/flux.mp3"))
   end
 
   def show
@@ -102,6 +104,7 @@ class PlayingState
     @camera.setToOrtho(false, 900, 600);
     @batch = SpriteBatch.new
     @font = BitmapFont.new
+    @bg_song.play
   end
 
   # Called when this screen is no longer the current screen for a Game.
@@ -157,9 +160,13 @@ class PlayingState
           file.print Marshal::dump(@entity_manager)
         end
       end
-      @game.setScreen StartupState.new(@game)
+      @bg_song.stop
+      @bg_song.dispose
+      @game.setScreen @menu_screen
     elsif Gdx.input.isKeyPressed(Input::Keys::ENTER)
-      @game.setScreen StartupState.new(@game)
+      @bg_song.stop
+      @bg_song.dispose
+      @game.setScreen @menu_screen
     end
 
   end

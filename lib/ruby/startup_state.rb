@@ -1,4 +1,5 @@
 java_import com.badlogic.gdx.Screen
+java_import com.badlogic.gdx.Audio
 
 require 'playing_state'
 require 'lunar_lander_em'
@@ -13,6 +14,7 @@ class StartupState
   def initialize(game)
     @game = game
     @skin = "firstskin/"
+    @bg_song = Gdx.audio.newMusic(Gdx.files.internal("res/music/ghostwriter.mp3"))
   end
 
   def show
@@ -36,12 +38,13 @@ class StartupState
     @lunar_lander = Texture.new(Gdx.files.internal(RELATIVE_ROOT + "res/images/" + @skin + 'lunarlander.png'))
 
     @rendering_system = RenderingSystem.new @game
-    @user_option_system = UserOptionSystem.new @game, @skin
+    @user_option_system = UserOptionSystem.new @game, self, @skin, @bg_song
 
     @camera = OrthographicCamera.new
     @camera.setToOrtho(false, 900, 600);
     @batch = SpriteBatch.new
     @font = BitmapFont.new
+    @bg_song.play
   end
 
   def hide
@@ -68,11 +71,9 @@ class StartupState
     @batch.end
 
     if Gdx.input.isKeyPressed(Input::Keys::Q)
+      @bg_song.stop
+      @bg_song.dispose
       Gdx.app.exit
-    elsif Gdx.input.isKeyPressed(Input::Keys::S)
-      @skin = "res/images/solidskin/"
-      @bg_image = Texture.new(Gdx.files.internal(RELATIVE_ROOT + @skin + 'startup.png'))
-      @lunar_lander =  Texture.new(Gdx.files.internal(RELATIVE_ROOT + @skin + 'lunarlander.png'))
     end
 
   end
@@ -94,6 +95,8 @@ class StartupState
 
   # Called when the application is destroyed. It is preceded by a call to pause().
   def dispose
+    @bg_song.stop
+    @bg_song.dispose
   end
 end
 

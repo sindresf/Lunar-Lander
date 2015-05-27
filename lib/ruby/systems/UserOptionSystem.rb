@@ -5,11 +5,13 @@ class UserOptionSystem < System
   SKIN_OPTIONS = ['firstskin/', 'solidskin/', 'neonskin/']
   PLAYER_OPTIONS = [1,2]
 
-  def initialize(game, skin)
+  def initialize(game, menu_screen, skin, bg_song)
     @last_time = Time.new
     @game = game
     @skin_index = 0;
     @skin = skin
+    @menu_screen = menu_screen
+    @bg_song = bg_song
   end
 
   # TODO Time Almost correctly considered (first click hack)
@@ -33,7 +35,9 @@ class UserOptionSystem < System
           update_images option_entity_manager
         end
       elsif option_component.property == 'start' && Gdx.input.isKeyPressed(Input::Keys::P)
-        @game.setScreen PlayingState.new(@game, @skin)
+        @bg_song.stop
+        @bg_song.dispose
+        @game.setScreen PlayingState.new(@game, @menu_screen, @skin)
       end
     end
 
