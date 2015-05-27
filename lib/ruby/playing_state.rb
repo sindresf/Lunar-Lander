@@ -130,7 +130,7 @@ class PlayingState
 
     @batch.draw(@bg_image, 0, 0)
 
-    @rendering_system.process_one_game_tick(@entity_manager, @camera, @batch, @font)
+    @rendering_system.process_one_game_tick(delta, @entity_manager, @camera, @batch, @font)
 
     # This shows how to do something every N seconds:
     @elapsed += delta;

@@ -1,11 +1,29 @@
 require_relative 'system'
 
 class RenderingSystem < System
-  def process_one_game_tick(entity_mgr, camera, batch, font)
+  def initialize(game)
+    @game = game
+    @time = Time.now
+  end
+
+  def process_one_game_tick(delta, entity_mgr, camera, batch, font)
+    rot_ast = false
+    if Time.now - @time >= 0.05
+      rot_ast = true
+      @time = Time.now
+    end
     entities = entity_mgr.get_all_entities_with_components_of_type([Renderable, SpatialState])
     entities.each do |e|
       loc_comp    = entity_mgr.get_component_of_type(e, SpatialState)
       render_comp = entity_mgr.get_component_of_type(e, Renderable)
+
+      if entity_mgr.get_tag(e) == 'asteroid' && rot_ast
+        clock_dir = 1 # wise
+        if loc_comp.dy >= 0
+          clock_dir = -1 # anti -wise
+        end
+        render_comp.rotate(delta * (clock_dir * (0.04 + (0.01 * loc_comp.dx))))
+      end
 
       batch.draw(render_comp.image, loc_comp.x, loc_comp.y,
       render_comp.width/2, render_comp.height/2,

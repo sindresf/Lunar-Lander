@@ -48,6 +48,7 @@ class StartupState
   end
 
   def render(gdx_delta)
+    delta = gdx_delta * 1000
     # Make sure you "layer" things in here from bottom to top...
     @camera.update
     @batch.setProjectionMatrix(@camera.combined)
@@ -56,7 +57,7 @@ class StartupState
 
     @user_option_system.process_one_game_tick(@option_entity_manager)
 
-    @rendering_system.process_one_game_tick(@option_entity_manager,@camera,@batch,@font)
+    @rendering_system.process_one_game_tick(delta, @option_entity_manager,@camera,@batch,@font)
     # @batch.draw(@bg_image, 0, 0)
     #  @batch.draw(@lunar_lander, 150, 250)
 
