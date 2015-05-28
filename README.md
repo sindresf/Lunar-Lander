@@ -31,16 +31,16 @@ __Game Scene__
  - [x] background graphic
  - [x] player 1 and 2 graphics
  - [x] asteroid graphic
-   - [x] rotates based on latitudinal direction and speed
+    - [x] rotates based on latitudinal direction and speed
  - [ ] randomly pick from several asteroid graphics
  - [x] platform graphic
  - [ ] platform stops player when landed
  - [x] platform backgroun graphic
  - [x] ground graphics
  - [x] skins
- - [ ] updated graphics
- - [ ] skins made into worlds
- - [ ] different behaviour and gameplay for worlds
+    - [ ] updated graphics
+    - [ ] skins made into worlds
+    - [ ] different behaviour and gameplay for worlds
 - [x] controls for both players
  - [x] fuel consideration
  - [x] slight difference in gameplay
@@ -57,6 +57,7 @@ __Game Scene__
  - [ ] effect on collision
  - [ ] effect on fuel burning
 - [x] music in background
+ - [x] background song based on skin
  - [ ] fade out to menu music on quit
 - [ ] sounds
  - [ ] for engine on

@@ -15,6 +15,7 @@ class StartupState
     @game = game
     @skin = "firstskin/"
     @bg_song = Gdx.audio.newMusic(Gdx.files.internal("res/music/ghostwriter.mp3"))
+    @bg_song.setVolume 0.25
   end
 
   def show
@@ -26,7 +27,8 @@ class StartupState
 
     lunar_lander = @option_entity_manager.create_tagged_entity 'lunar_lander'
     @option_entity_manager.add_component lunar_lander, Renderable.new(@skin, 'lunarlander.png', 1.0, 0)
-    @option_entity_manager.add_component lunar_lander, SpatialState.new(150, 250, 0, 0)
+    x = (900 / 2)- (@option_entity_manager.get_component_of_type(lunar_lander, Renderable).width / 2)
+    @option_entity_manager.add_component lunar_lander, SpatialState.new(x, 120, 0, 0)
 
     skin_option = @option_entity_manager.create_tagged_entity 'option'
     @option_entity_manager.add_component skin_option, UserOption.new('skin', 'firstskin/')

@@ -31,10 +31,25 @@ class PlayingState
     @game = game
     @skin = skin
     @menu_screen = menu_screen
-    @bg_song = Gdx.audio.newMusic(Gdx.files.internal("res/music/flux.mp3"))
+    @bg_song = nil
+  end
+
+  def pick_song()
+    case @skin
+    when 'firstskin/'
+      @bg_song = Gdx.audio.newMusic Gdx.files.internal("res/music/portivolare.mp3")
+      @bg_song.setVolume 0.25
+    when 'neonskin/'
+      @bg_song = Gdx.audio.newMusic Gdx.files.internal("res/music/flux.mp3")
+      @bg_song.setVolume 0.85
+    when 'solidskin/'
+      @bg_song = Gdx.audio.newMusic Gdx.files.internal("res/music/greenbackboogie.mp3")
+      @bg_song.setVolume 0.65
+    end
   end
 
   def show
+    pick_song()
     #if File.size? 'savedgame.dat'
     #   save_file = File.open( 'savedgame.dat' )
     #  @entity_manager = Marshal::load(save_file)

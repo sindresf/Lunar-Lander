@@ -35,8 +35,7 @@ class UserOptionSystem < System
           update_images option_entity_manager
         end
       elsif option_component.property == 'start' && Gdx.input.isKeyPressed(Input::Keys::P)
-        @bg_song.stop
-        @bg_song.dispose
+        @bg_song.pause
         @game.setScreen PlayingState.new(@game, @menu_screen, @skin)
       end
     end
