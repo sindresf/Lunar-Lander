@@ -5,6 +5,8 @@ class UserOptionSystem < System
   SKIN_OPTIONS = ['firstskin/', 'solidskin/', 'neonskin/']
   PLAYER_OPTIONS = [1,2]
 
+  attr_reader :multiplayer
+
   def initialize(game, menu_screen, skin, bg_song)
     @last_time = Time.now
     @game = game
@@ -12,13 +14,18 @@ class UserOptionSystem < System
     @skin = skin
     @menu_screen = menu_screen
     @bg_song = bg_song
+    @multiplayer = false
   end
 
   def process_one_game_tick(option_entity_manager)
+
     consider_press = check_press_time
     should_change_skin = false
     if consider_press
       should_change_skin = consider_S_press
+      consider_1_press
+      consider_2_press
+      consider_M_press
       consider_P_press
     end
 
@@ -32,8 +39,6 @@ class UserOptionSystem < System
           next_skin option_component
           update_images option_entity_manager
         end
-        # when 'start' other things might need this
-
       end
     end
   end
@@ -41,7 +46,7 @@ class UserOptionSystem < System
   def check_press_time
     now = Time.now
     wait = now - @last_time
-    return wait > 0.1
+    return wait > 0.15
   end
 
   def consider_S_press
@@ -51,11 +56,43 @@ class UserOptionSystem < System
     end
   end
 
+  def consider_1_press
+    if @multiplayer
+      if Gdx.input.isKeyPressed(Input::Keys::NUM_1)
+        @multiplayer = false
+      end
+    end
+  end
+
+  def consider_2_press
+    if !@multiplayer
+      if Gdx.input.isKeyPressed(Input::Keys::NUM_2)
+        @multiplayer = true
+      end
+    end
+  end
+
   def consider_P_press
     if Gdx.input.isKeyPressed(Input::Keys::P)
-      @bg_song.pause
+      muted = false
+      if @bg_song.isPlaying
+        @bg_song.pause
+        muted = false
+      else
+        muted = true
+      end
+      @game.setScreen PlayingState.new(@game, @menu_screen, @skin, @multiplayer, muted)
+    end
+  end
+
+  def consider_M_press
+    if Gdx.input.isKeyPressed(Input::Keys::M)
+      if @bg_song.isPlaying
+        @bg_song.pause
+      else
+        @bg_song.play
+      end
       @last_time = Time.now
-      @game.setScreen PlayingState.new(@game, @menu_screen, @skin)
     end
   end
 

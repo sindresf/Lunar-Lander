@@ -26,11 +26,11 @@ require 'logger'
 
 $logger = Logger.new(STDERR)
 $logger.level = Logger::DEBUG
-$logger.info 'Uses The Ruby Entity-Component Framework, Copyright 2012 Prylis Inc.'
+$logger.info 'Uses The Ruby Entity-Component Framework, Copyright 2012 P  rylis Inc.'
 $logger.info 'See https://github.com/cpowell/ruby-entity-component-framework'
 
 cfg = LwjglApplicationConfiguration.new
-cfg.title = "LunarLander"
+cfg.title = "LunarLander" 
 cfg.useGL20 = true
 cfg.width = 900
 cfg.height = 600

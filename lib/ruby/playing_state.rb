@@ -27,11 +27,13 @@ require_relative 'systems/system'
 
 class PlayingState
   include Screen
-  def initialize(game, menu_screen, skin)
+  def initialize(game, menu_screen, skin, multiplayer, muted)
     @game = game
     @skin = skin
     @menu_screen = menu_screen
     @bg_song = nil
+    @multiplayer = multiplayer
+    @muted = muted
   end
 
   def pick_song()
@@ -79,15 +81,17 @@ class PlayingState
     @entity_manager.add_component p1_lander, PolygonCollidable.new
     @entity_manager.add_component p1_lander, Landable.new
 
-    p2_lander = @entity_manager.create_tagged_entity('p2_lander')
-    @entity_manager.add_component p2_lander, SpatialState.new(70, 200, 0, 0)
-    @entity_manager.add_component p2_lander, Engine.new(0.025)
-    @entity_manager.add_component p2_lander, Fuel.new(100)
-    @entity_manager.add_component p2_lander, Renderable.new(@skin, "crashlander2.png", 1.2, 0)
-    @entity_manager.add_component p2_lander, PlayerInput.new([Input::Keys::J, Input::Keys::K, Input::Keys::L])
-    @entity_manager.add_component p2_lander, Motion.new
-    @entity_manager.add_component p2_lander, PolygonCollidable.new
-    @entity_manager.add_component p2_lander, Landable.new
+    if @multiplayer
+      p2_lander = @entity_manager.create_tagged_entity('p2_lander')
+      @entity_manager.add_component p2_lander, SpatialState.new(70, 200, 0, 0)
+      @entity_manager.add_component p2_lander, Engine.new(0.025)
+      @entity_manager.add_component p2_lander, Fuel.new(100)
+      @entity_manager.add_component p2_lander, Renderable.new(@skin, "crashlander2.png", 1.2, 0)
+      @entity_manager.add_component p2_lander, PlayerInput.new([Input::Keys::J, Input::Keys::K, Input::Keys::L])
+      @entity_manager.add_component p2_lander, Motion.new
+      @entity_manager.add_component p2_lander, PolygonCollidable.new
+      @entity_manager.add_component p2_lander, Landable.new
+    end
 
     platform = @entity_manager.create_tagged_entity 'platform'
     @entity_manager.add_component platform, SpatialState.new(150, 145, 0, 0)
@@ -119,7 +123,9 @@ class PlayingState
     @camera.setToOrtho(false, 900, 600);
     @batch = SpriteBatch.new
     @font = BitmapFont.new
-    @bg_song.play
+    if !@muted
+      @bg_song.play
+    end
   end
 
   # Called when this screen is no longer the current screen for a Game.
@@ -169,7 +175,14 @@ class PlayingState
 
     @batch.end
 
-    if Gdx.input.isKeyPressed(Input::Keys::ESCAPE)
+    if Gdx.input.isKeyPressed(Input::Keys::M)
+      if @muted
+        @bg_song.play
+      else
+        @bg_song.pause
+      end
+      @muted = !@muted
+    elsif Gdx.input.isKeyPressed(Input::Keys::ESCAPE)
       if !(@game_over || @landed)
         File.open("savedgame.dat", "wb") do |file|
           file.print Marshal::dump(@entity_manager)

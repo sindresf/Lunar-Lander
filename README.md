@@ -16,14 +16,15 @@ __Startup Scene__
 - [x] press 's' to cycle through skins
  - [x] skin carries into game scene
  - [ ] set all variables that controls the skins behaviour
-- [ ] press '1' for single player
-- [ ] press '2' for multiplayer
+- [x] press '1' for single player
+- [x] press '2' for multiplayer
 - [ ] press 'l' to load previous game
 - [ ] display both players controls
 - [ ] press 'shift' to enter player control setter mode
 - [ ] press 'tab' to view scoreboard
  - [ ] make file-stored scoreboard info
 - [x] music in background
+ - [x] press 'm' to mute
  - [ ] fade to game music
 
 __Game Scene__
@@ -48,8 +49,8 @@ __Game Scene__
  - [ ] upgraded detection algorithm
 - [x] asteroids creation
  - [x] asteroids removal
- - [x] off screen
- - [x] hitting ground
+   - [x] off screen
+   - [x] hitting ground
  - [ ] upgraded creation algorithm
 - [ ] wind effect
 - [ ] player life points 

@@ -27,17 +27,17 @@ class StartupState
 
     lunar_lander = @option_entity_manager.create_tagged_entity 'lunar_lander'
     @option_entity_manager.add_component lunar_lander, Renderable.new(@skin, 'lunarlander.png', 1.0, 0)
-    x = (900 / 2)- (@option_entity_manager.get_component_of_type(lunar_lander, Renderable).width / 2)
-    @option_entity_manager.add_component lunar_lander, SpatialState.new(x, 120, 0, 0)
+    x_center = 900 / 2
+    y_center = 135
+    x =  x_center - (@option_entity_manager.get_component_of_type(lunar_lander, Renderable).width / 2)
+    y = y_center - (@option_entity_manager.get_component_of_type(lunar_lander, Renderable).height / 2)
+    @option_entity_manager.add_component lunar_lander, SpatialState.new(x, y, 0, 0)
 
     skin_option = @option_entity_manager.create_tagged_entity 'option'
     @option_entity_manager.add_component skin_option, UserOption.new('skin', 'firstskin/')
 
     start_option = @option_entity_manager.create_tagged_entity 'start'
     @option_entity_manager.add_component start_option, UserOption.new('start')
-
-    @bg_image = Texture.new(Gdx.files.internal(RELATIVE_ROOT + "res/images/" + @skin + 'startup.png'))
-    @lunar_lander = Texture.new(Gdx.files.internal(RELATIVE_ROOT + "res/images/" + @skin + 'lunarlander.png'))
 
     @rendering_system = RenderingSystem.new @game
     @user_option_system = UserOptionSystem.new @game, self, @skin, @bg_song
@@ -66,9 +66,16 @@ class StartupState
     # @batch.draw(@bg_image, 0, 0)
     #  @batch.draw(@lunar_lander, 150, 250)
 
-    @font.draw(@batch, "P to play!", 15, 250);
-    @font.draw(@batch, "S to skin!", 15, 180);
+    @font.draw(@batch, "P to play!", 8, 100);
+    @font.draw(@batch, "S to skin!", 8, 80);
+    @font.draw(@batch, "1/2 to choose players!", 8, 60);
+    if @user_option_system.multiplayer
+      @font.draw(@batch,  "multiplayer", 36, 46);
+    else
+      @font.draw(@batch,  "singleplayer", 29, 46);
+    end
     @font.draw(@batch, "Lunar Lander (Q to exit)", 8, 20);
+    @font.draw(@batch, "M to mute!", 820, 20);
 
     @batch.end
 
