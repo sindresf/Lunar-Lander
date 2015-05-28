@@ -1,5 +1,6 @@
 java_import com.badlogic.gdx.Screen
 java_import com.badlogic.gdx.Audio
+java_import com.badlogic.gdx.audio.Music
 
 require 'playing_state'
 require 'lunar_lander_em'
@@ -54,15 +55,14 @@ class StartupState
 
   def render(gdx_delta)
     delta = gdx_delta * 1000
-    # Make sure you "layer" things in here from bottom to top...
+
     @camera.update
     @batch.setProjectionMatrix(@camera.combined)
 
     @batch.begin
 
-    @user_option_system.process_one_game_tick(@option_entity_manager)
-
-    @rendering_system.process_one_game_tick(delta, @option_entity_manager,@camera,@batch,@font)
+    @user_option_system.process_one_game_tick @option_entity_manager
+    @rendering_system.process_one_game_tick(delta, @option_entity_manager, @camera, @batch, @font)
 
     draw_info
     @batch.end
@@ -97,6 +97,7 @@ class StartupState
     @font.draw(@batch, "P to play!", 8, 100);
     @font.draw(@batch, "S to skin", 8, 80);
     @font.draw(@batch, "1/2 to choose players", 8, 60);
+
     if @user_option_system.multiplayer
       @font.draw(@batch,  "multiplayer", 36, 46);
     else

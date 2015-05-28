@@ -1,11 +1,12 @@
 require_relative 'system'
+require_relative 'musicfadingsystem'
 require 'playing_state'
 
 class UserOptionSystem < System
   SKIN_OPTIONS = ['firstskin/', 'solidskin/', 'neonskin/']
   PLAYER_OPTIONS = [1,2]
 
-  attr_reader :multiplayer
+  attr_reader :multiplayer, :fading_dir
 
   def initialize(game, menu_screen, skin, bg_song)
     @last_time = Time.now
@@ -15,6 +16,8 @@ class UserOptionSystem < System
     @menu_screen = menu_screen
     @bg_song = bg_song
     @multiplayer = false
+    @music_fading_system = MusicFadingSystem.new @game, bg_song
+    @fading_dir = 'no'
   end
 
   def process_one_game_tick(option_entity_manager)
@@ -76,6 +79,7 @@ class UserOptionSystem < System
     if Gdx.input.isKeyPressed(Input::Keys::P)
       muted = false
       if @bg_song.isPlaying
+        @music_fading_system.fade_out 2
         @bg_song.pause
         muted = false
       else
