@@ -63,20 +63,8 @@ class StartupState
     @user_option_system.process_one_game_tick(@option_entity_manager)
 
     @rendering_system.process_one_game_tick(delta, @option_entity_manager,@camera,@batch,@font)
-    # @batch.draw(@bg_image, 0, 0)
-    #  @batch.draw(@lunar_lander, 150, 250)
 
-    @font.draw(@batch, "P to play!", 8, 100);
-    @font.draw(@batch, "S to skin!", 8, 80);
-    @font.draw(@batch, "1/2 to choose players!", 8, 60);
-    if @user_option_system.multiplayer
-      @font.draw(@batch,  "multiplayer", 36, 46);
-    else
-      @font.draw(@batch,  "singleplayer", 29, 46);
-    end
-    @font.draw(@batch, "Lunar Lander (Q to exit)", 8, 20);
-    @font.draw(@batch, "M to mute!", 820, 20);
-
+    draw_info
     @batch.end
 
     if Gdx.input.isKeyPressed(Input::Keys::Q)
@@ -85,6 +73,37 @@ class StartupState
       Gdx.app.exit
     end
 
+  end
+
+  def draw_info
+    @font.draw(@batch, "player 1 controls", 99, 420);
+    @font.draw(@batch, "thrust", 130, 382);
+    @font.draw(@batch, "s", 145, 366);
+    @font.draw(@batch, "a", 139, 355);
+    @font.draw(@batch, "turn left", 88, 341);
+    @font.draw(@batch, "d", 151, 355);
+    @font.draw(@batch, "turns right", 162, 341);
+
+    if @user_option_system.multiplayer
+      @font.draw(@batch, "player 2 controls", 699, 420);
+      @font.draw(@batch, "thrust", 730, 381);
+      @font.draw(@batch, "k", 745, 364);
+      @font.draw(@batch, "j", 738, 357);
+      @font.draw(@batch, "turn left", 684, 342);
+      @font.draw(@batch, "l", 756, 357);
+      @font.draw(@batch, "turns right", 764, 345);
+    end
+
+    @font.draw(@batch, "P to play!", 8, 100);
+    @font.draw(@batch, "S to skin", 8, 80);
+    @font.draw(@batch, "1/2 to choose players", 8, 60);
+    if @user_option_system.multiplayer
+      @font.draw(@batch,  "multiplayer", 36, 46);
+    else
+      @font.draw(@batch,  "singleplayer", 29, 46);
+    end
+    @font.draw(@batch, "Lunar Lander (Q to exit)", 8, 20);
+    @font.draw(@batch, "M to mute", 820, 20);
   end
 
   def resize width, height

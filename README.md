@@ -19,7 +19,7 @@ __Startup Scene__
 - [x] press '1' for single player
 - [x] press '2' for multiplayer
 - [ ] press 'l' to load previous game
-- [ ] display both players controls
+- [x] display both players controls
 - [ ] press 'shift' to enter player control setter mode
 - [ ] press 'tab' to view scoreboard
  - [ ] make file-stored scoreboard info
