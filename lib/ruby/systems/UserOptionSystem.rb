@@ -6,7 +6,7 @@ class UserOptionSystem < System
   PLAYER_OPTIONS = [1,2]
 
   def initialize(game, menu_screen, skin, bg_song)
-    @last_time = Time.new
+    @last_time = Time.now
     @game = game
     @skin_index = 0;
     @skin = skin
@@ -14,41 +14,58 @@ class UserOptionSystem < System
     @bg_song = bg_song
   end
 
-  # TODO Time Almost correctly considered (first click hack)
   def process_one_game_tick(option_entity_manager)
-    now = Time.new
-    wait = now - @last_time
-    pressed = false
-    if Gdx.input.isKeyPressed(Input::Keys::S)
-      @last_time = now
-      if wait > 0.1
-        pressed = true
-      end
+    consider_press = check_press_time
+    should_change_skin = false
+    if consider_press
+      should_change_skin = consider_S_press
+      consider_P_press
     end
+
     option_entities = option_entity_manager.get_all_entities_with_component_of_type UserOption
     option_entities.each do |option|
       option_component = option_entity_manager.get_component_of_type(option, UserOption)
-      if  option_component.property == 'skin'
-        if pressed
+      case option_component.property
+      when 'skin'
+        if should_change_skin
           @skin = option_component.value
           next_skin option_component
           update_images option_entity_manager
         end
-      elsif option_component.property == 'start' && Gdx.input.isKeyPressed(Input::Keys::P)
-        @bg_song.pause
-        @game.setScreen PlayingState.new(@game, @menu_screen, @skin)
+        # when 'start' other things might need this
+
       end
     end
+  end
 
+  def check_press_time
+    now = Time.now
+    wait = now - @last_time
+    return wait > 0.1
+  end
+
+  def consider_S_press
+    if Gdx.input.isKeyPressed(Input::Keys::S)
+      @last_time = Time.now
+      return true
+    end
+  end
+
+  def consider_P_press
+    if Gdx.input.isKeyPressed(Input::Keys::P)
+      @bg_song.pause
+      @last_time = Time.now
+      @game.setScreen PlayingState.new(@game, @menu_screen, @skin)
+    end
   end
 
   def next_skin(option)
-    @skin = SKIN_OPTIONS[@skin_index]
-    option.value = @skin
     @skin_index += 1
     if @skin_index == SKIN_OPTIONS.length
       @skin_index = 0
     end
+    @skin = SKIN_OPTIONS[@skin_index]
+    option.value = @skin
   end
 
   def update_images(option_entity_manager)

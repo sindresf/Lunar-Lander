@@ -12,7 +12,6 @@ class InputSystem < System
     inputtable_entities = entity_mgr.get_all_entities_with_component_of_type PlayerInput
     inputtable_entities.each do |entity|
       input_component = entity_mgr.get_component_of_type(entity, PlayerInput)
-
       handle_player1(input_component, entity_mgr, entity, delta)
       handle_player2(input_component, entity_mgr, entity, delta)
     end

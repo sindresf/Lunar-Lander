@@ -11,7 +11,7 @@ __Startup Scene__
  - [x] title graphic
  - [ ] everything is enteties even here
 - [x] buttonsystem considers time between presses
- - [ ] for all types of presses
+ - [x] for all types of presses
 - [x] press 'p' to start game
 - [x] press 's' to cycle through skins
  - [x] skin carries into game scene
