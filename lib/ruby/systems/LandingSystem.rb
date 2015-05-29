@@ -24,6 +24,8 @@ class LandingSystem < System
         if (bl_y>=ul_y - PIXEL_FUDGE && bl_y <= ul_y + PIXEL_FUDGE) &&
         (bc_x>=ul_x && bc_x <= ur_x) &&
         (location_component.dy <= MAX_SPEED)
+          landable_component = entity_mgr.get_component_of_type(entity, Landable)
+          landable_component.landed = true
           return true
         end
       end

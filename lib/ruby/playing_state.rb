@@ -13,6 +13,7 @@ require_relative 'components/pad'
 require_relative 'components/playerinput'
 require_relative 'components/polygoncollidable'
 require_relative 'components/renderable'
+require_relative 'components/solid'
 require_relative 'components/spatialstate'
 
 # Necessary systems
@@ -97,6 +98,9 @@ class PlayingState
     @entity_manager.add_component platform, SpatialState.new(150, 145, 0, 0)
     @entity_manager.add_component platform, Renderable.new(@skin, "platform.png", 1.0, 0)
     @entity_manager.add_component platform, PolygonCollidable.new
+    upper_y = 145 + @entity_manager.get_component_of_type(platform, Renderable).height
+    upper_x = 150 + @entity_manager.get_component_of_type(platform, Renderable).width
+    @entity_manager.add_component platform, Solid.new(150, upper_x, upper_y)
     # end
     #$logger.debug @entity_manager.dump_details
 

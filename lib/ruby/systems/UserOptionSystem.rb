@@ -79,7 +79,7 @@ class UserOptionSystem < System
     if Gdx.input.isKeyPressed(Input::Keys::P)
       muted = false
       if @bg_song.isPlaying
-        @music_fading_system.fade_out 2
+        # @music_fading_system.fade_out 2
         @bg_song.pause
         muted = false
       else

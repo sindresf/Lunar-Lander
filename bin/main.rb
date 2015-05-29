@@ -30,7 +30,7 @@ $logger.info 'Uses The Ruby Entity-Component Framework, Copyright 2012 P  rylis 
 $logger.info 'See https://github.com/cpowell/ruby-entity-component-framework'
 
 cfg = LwjglApplicationConfiguration.new
-cfg.title = "LunarLander" 
+cfg.title = "LunarLander"
 cfg.useGL20 = true
 cfg.width = 900
 cfg.height = 600
