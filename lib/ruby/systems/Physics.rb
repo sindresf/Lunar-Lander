@@ -29,6 +29,9 @@ class Physics < System
       end
       if !stop_movement
         spatial_component.dy += ACCELERATION * delta
+      else
+        spatial_component.dy = 0
+        spatial_component.dx = 0
       end
     end
 
@@ -36,15 +39,15 @@ class Physics < System
     moving_entities.each do |e|
       spatial_component = entity_mgr.get_component_of_type(e, SpatialState)
       gravity_component = entity_mgr.get_component_of_type(e, GravitySensitive) # players (so far at least)
-      if !stop_movement && gravity_component != nil
-        # move horizontally according to dx
-        amount = MOVE_SCALER * delta * spatial_component.dx
-        spatial_component.x += (amount)
+      #if !stop_movement && gravity_component != nil
+      # move horizontally according to dx
+      amount = MOVE_SCALER * delta * spatial_component.dx
+      spatial_component.x += (amount)
 
-        # now fall according to dy
-        amount = MOVE_SCALER * delta * spatial_component.dy
-        spatial_component.y += (amount * DOWN)
-      end
+      # now fall according to dy
+      amount = MOVE_SCALER * delta * spatial_component.dy
+      spatial_component.y += (amount * DOWN)
+      # end
     end
   end
 end
