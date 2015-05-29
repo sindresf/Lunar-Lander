@@ -13,6 +13,8 @@ require "gdx.jar"
 java_import com.badlogic.gdx.ApplicationListener
 java_import com.badlogic.gdx.Gdx
 java_import com.badlogic.gdx.Input
+java_import com.badlogic.gdx.Audio
+java_import com.badlogic.gdx.audio.Music
 java_import com.badlogic.gdx.graphics.GL10
 java_import com.badlogic.gdx.graphics.Texture
 java_import com.badlogic.gdx.graphics.OrthographicCamera

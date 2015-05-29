@@ -18,28 +18,34 @@ class Physics < System
     end
     gravity_entities.each do |e|
       spatial_component = entity_mgr.get_component_of_type(e, SpatialState)
+      landable_component = entity_mgr.get_component_of_type(e,Landable)
 
-      solid_surfaces.each do |surface|
-        if (spatial_component.x >= surface[0] - STOP_ACCEPT && spatial_component.x <= surface[1] + STOP_ACCEPT) &&
-        (spatial_component.y >= surface[2] - 1 && spatial_component.y <= surface[2] + 1)
-          stop_movement = true
-        else
-          stop_movement = false
+      #test for landing on solid "surfaces"
+      if !landable_component.nil?
+        solid_surfaces.each do |surface|
+          if (spatial_component.x >= surface[0] - STOP_ACCEPT && spatial_component.x <= surface[1] + STOP_ACCEPT) &&
+          (spatial_component.y >= surface[2] - 1 && spatial_component.y <= surface[2] + 1)
+            stop_movement = true
+          else
+            stop_movement = false
+          end
         end
-      end
-      if !stop_movement
-        spatial_component.dy += ACCELERATION * delta
+        if !stop_movement
+          spatial_component.dy += ACCELERATION * delta
+        else
+          entity_mgr.remove_component e, GravitySensitive
+          entity_mgr.remove_component e, PlayerInput
+          spatial_component.dy = 0
+          spatial_component.dx = 0
+        end
       else
-        spatial_component.dy = 0
-        spatial_component.dx = 0
+        spatial_component.dy += ACCELERATION * delta
       end
     end
 
     moving_entities = entity_mgr.get_all_entities_with_component_of_type(Motion)
     moving_entities.each do |e|
       spatial_component = entity_mgr.get_component_of_type(e, SpatialState)
-      gravity_component = entity_mgr.get_component_of_type(e, GravitySensitive) # players (so far at least)
-      #if !stop_movement && gravity_component != nil
       # move horizontally according to dx
       amount = MOVE_SCALER * delta * spatial_component.dx
       spatial_component.x += (amount)
@@ -47,7 +53,6 @@ class Physics < System
       # now fall according to dy
       amount = MOVE_SCALER * delta * spatial_component.dy
       spatial_component.y += (amount * DOWN)
-      # end
     end
   end
 end

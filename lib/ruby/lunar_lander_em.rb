@@ -64,6 +64,15 @@ class Lunar_lander_em
     end
   end
 
+  def remove_component(entity, component_class)
+    store = @component_stores[component_class]
+    if !store.nil?
+      if store.has_key? entity
+        store.delete entity
+      end
+    end
+  end
+
   def get_component_of_type(entity, component_class)
     raise ArgumentError, "UUID and component class must be specified" if entity.nil? || component_class.nil?
 
