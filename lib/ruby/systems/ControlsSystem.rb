@@ -1,6 +1,6 @@
 require_relative 'system'
 
-class InputSystem < System
+class ConstrolsSystem < System
   # Presumably these would be DRYed into a config file... the fuck?
   P1_KEY_ROTL   = Input::Keys::A
   P1_KEY_THRUST = Input::Keys::S

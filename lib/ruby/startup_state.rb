@@ -37,7 +37,7 @@ class StartupState
     skin_option = @option_entity_manager.create_tagged_entity 'option'
     @option_entity_manager.add_component skin_option, UserOption.new('skin', 'firstskin/')
 
-    start_option = @option_entity_manager.create_tagged_entity 'start'
+    start_option = @option_entity_manager.create_tagged_entity 'option'
     @option_entity_manager.add_component start_option, UserOption.new('start')
 
     @rendering_system = RenderingSystem.new @game
