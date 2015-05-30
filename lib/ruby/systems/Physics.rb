@@ -2,10 +2,13 @@ require_relative 'system'
 
 class Physics < System
   # This constant could conceivably live in the gravity component...
-  ACCELERATION = 0.0045 # m/s^2
   DOWN = Math.cos(Math::PI)
   MOVE_SCALER = 0.013
   STOP_ACCEPT = 30
+  def initialize(gravity_ACCELERATION)
+    @ACCELERATION = gravity_ACCELERATION
+  end
+
   def process_one_game_tick(delta, entity_mgr)
     stop_movement = false
     gravity_entities = entity_mgr.get_all_entities_with_component_of_type GravitySensitive
@@ -24,14 +27,14 @@ class Physics < System
       if !landable_component.nil?
         solid_surfaces.each do |surface|
           if (spatial_component.x >= surface[0] - STOP_ACCEPT && spatial_component.x <= surface[1] + STOP_ACCEPT) &&
-          (spatial_component.y >= surface[2] - 1 && spatial_component.y <= surface[2] + 1)
+          (spatial_component.y >= surface[2] - 1 && spatial_component.y <= surface[2])
             stop_movement = true
           else
             stop_movement = false
           end
         end
         if !stop_movement
-          spatial_component.dy += ACCELERATION * delta
+          spatial_component.dy += @ACCELERATION * delta
         else
           entity_mgr.remove_component e, GravitySensitive
           entity_mgr.remove_component e, PlayerInput
@@ -39,7 +42,7 @@ class Physics < System
           spatial_component.dx = 0
         end
       else
-        spatial_component.dy += ACCELERATION * delta
+        spatial_component.dy += @ACCELERATION * delta
       end
     end
 

@@ -7,7 +7,7 @@ class EngineSystem < System
       engine_component = entity_mgr.get_component_of_type(entity, Engine)
       fuel_component   = entity_mgr.get_component_of_type(entity, Fuel)
 
-      if engine_component.on && fuel_component.remaining > 0
+      if engine_component.on && fuel_component.amount > 0
         location_component   = entity_mgr.get_component_of_type(entity, SpatialState)
         renderable_component = entity_mgr.get_component_of_type(entity, Renderable)
 

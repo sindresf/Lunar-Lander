@@ -61,6 +61,9 @@ class PlayingState
     # else
     @entity_manager = Lunar_lander_em.new @game
 
+    # to go into the World entities component list
+    pull = 0.0045 # m/s^2
+
     ground = @entity_manager.create_tagged_entity 'ground'
     @entity_manager.add_component ground, SpatialState.new(0, 0, 0, 0)
     @entity_manager.add_component ground, Renderable.new(@skin, "ground.png", 1, 0)
@@ -77,7 +80,7 @@ class PlayingState
     @entity_manager.add_component p1_lander, Fuel.new(250)
     @entity_manager.add_component p1_lander, Renderable.new(@skin, "crashlander1.png", 1.2, 0)
     @entity_manager.add_component p1_lander, PlayerInput.new([Input::Keys::A, Input::Keys::S, Input::Keys::D])
-    @entity_manager.add_component p1_lander, GravitySensitive.new
+    @entity_manager.add_component p1_lander, GravitySensitive.new(pull)
     @entity_manager.add_component p1_lander, Motion.new
     @entity_manager.add_component p1_lander, PolygonCollidable.new
     @entity_manager.add_component p1_lander, Landable.new
