@@ -1,5 +1,5 @@
 java_import com.badlogic.gdx.Game
-require_relative 'startup_state'
+require_relative 'startup_screen'
 
 class LunarLanderGame < Game
   include ApplicationListener
@@ -11,7 +11,7 @@ class LunarLanderGame < Game
 
   def create
     @game_clock = Time.utc(2015,"may",1,20,15,1)
-    setScreen(StartupState.new(self))
+    setScreen(StartupScreen.new(self))
   end
 
   def increment_game_clock(seconds)

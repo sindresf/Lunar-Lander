@@ -35,7 +35,7 @@ require 'systems/system'
 # Helpers
 require 'helper/renderinglevels'
 
-class PlayingState
+class PlayingScreen
   include Screen
   include RenderingLevels
   def initialize(game, menu_screen, world, multiplayer, muted)
@@ -60,7 +60,7 @@ class PlayingState
 
     if @multiplayer
       p2_lander = @entity_manager.create_tagged_entity('p2_lander')
-      @entity_manager.add_component p2_lander, Position.new(70, 200, 0, 0)
+      @entity_manager.add_component p2_lander, Position.new(70, 200)
       thrust = 0.01
       @entity_manager.add_component p2_lander, Engine.new(thrust, @world.eng_x, @world.eng_y)
       @entity_manager.add_component p2_lander, Fuel.new(100)

@@ -2,7 +2,7 @@ java_import com.badlogic.gdx.Screen
 java_import com.badlogic.gdx.Audio
 java_import com.badlogic.gdx.audio.Music
 
-require 'playing_state'
+require 'playing_screen'
 require 'lunar_lander_em'
 require 'systems/useroptionsystem'
 require 'systems/renderingsystem'
@@ -11,7 +11,7 @@ require 'components/renderable'
 require 'components/position'
 require 'helper/WorldMaker'
 
-class StartupState
+class StartupScreen
   include Screen
   def initialize(game)
     @game = game

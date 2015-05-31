@@ -1,6 +1,6 @@
 require_relative 'system'
 require_relative 'musicfadingsystem'
-require 'playing_state'
+require 'playing_screen'
 require 'helper/worldmaker'
 
 class UserOptionSystem < System
@@ -85,7 +85,7 @@ class UserOptionSystem < System
       else
         muted = true
       end
-      @game.setScreen PlayingState.new(@game, @menu_screen, @world, @multiplayer, muted)
+      @game.setScreen PlayingScreen.new(@game, @menu_screen, @world, @multiplayer, muted)
     end
   end
 
