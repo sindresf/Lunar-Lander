@@ -1,19 +1,19 @@
 require_relative 'system'
 require_relative 'musicfadingsystem'
 require 'playing_state'
-require 'WorldMaker'
+require 'helper/worldmaker'
 
 class UserOptionSystem < System
-  SKIN_OPTIONS = ['firstskin/', 'solidskin/', 'neonskin/']
+  WORLD_OPTIONS = ['first', 'solid', 'neon'] # , 'whatever' -world
   PLAYER_OPTIONS = [1,2]
 
   attr_reader :multiplayer, :fading_dir
 
-  def initialize(game, menu_screen, skin, bg_song)
+  def initialize(game, menu_screen, world, bg_song)
     @last_time = Time.now
     @game = game
-    @skin_index = 0;
-    @skin = skin
+    @world_index = 0;
+    @world = world
     @menu_screen = menu_screen
     @bg_song = bg_song
     @multiplayer = false
@@ -24,9 +24,9 @@ class UserOptionSystem < System
   def process_one_game_tick(option_entity_manager)
 
     consider_press = check_press_time
-    should_change_skin = false
+    should_change_world = false
     if consider_press
-      should_change_skin = consider_S_press
+      should_change_world = consider_W_press
       consider_1_press
       consider_2_press
       consider_M_press
@@ -37,10 +37,9 @@ class UserOptionSystem < System
     option_entities.each do |option|
       option_component = option_entity_manager.get_component_of_type(option, UserOption)
       case option_component.property
-      when 'skin'
-        if should_change_skin
-          @skin = option_component.value
-          next_skin option_component
+      when 'world'
+        if should_change_world
+          @world = next_world option_component
           update_images option_entity_manager
         end
       end
@@ -53,8 +52,8 @@ class UserOptionSystem < System
     return wait > 0.15
   end
 
-  def consider_S_press
-    if Gdx.input.isKeyPressed(Input::Keys::S)
+  def consider_W_press
+    if Gdx.input.isKeyPressed(Input::Keys::W)
       @last_time = Time.now
       return true
     end
@@ -86,7 +85,7 @@ class UserOptionSystem < System
       else
         muted = true
       end
-      @game.setScreen PlayingState.new(@game, @menu_screen, @skin, @multiplayer, muted)
+      @game.setScreen PlayingState.new(@game, @menu_screen, @world, @multiplayer, muted)
     end
   end
 
@@ -101,20 +100,19 @@ class UserOptionSystem < System
     end
   end
 
-  def next_skin(option)
-    @skin_index += 1
-    if @skin_index == SKIN_OPTIONS.length
-      @skin_index = 0
+  def next_world(option)
+    @world_index += 1
+    if @world_index == WORLD_OPTIONS.length
+      @world_index = 0
     end
-    @skin = SKIN_OPTIONS[@skin_index]
-    option.value = @skin
+    @world = WorldMaker.make(WORLD_OPTIONS[@world_index])
   end
 
   def update_images(option_entity_manager)
     image_entities = option_entity_manager.get_all_entities_with_component_of_type Renderable
     image_entities.each do |option|
       image_component = option_entity_manager.get_component_of_type(option, Renderable)
-      image_component.image_path @skin
+      image_component.image_path @world.skin
     end
   end
 end

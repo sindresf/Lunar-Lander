@@ -1,33 +1,43 @@
 java_import com.badlogic.gdx.Screen
 
-require_relative 'lunar_lander_em'
+require 'lunar_lander_em'
 
 # Necesssary components
-require_relative 'components/component'
-require_relative 'components/engine'
-require_relative 'components/fuel'
-require_relative 'components/gravitysensitive'
-require_relative 'components/landable'
-require_relative 'components/motion'
-require_relative 'components/pad'
-require_relative 'components/playerinput'
-require_relative 'components/polygoncollidable'
-require_relative 'components/renderable'
-require_relative 'components/solid'
-require_relative 'components/spatialstate'
+require 'components/aerodynamic'
+require 'components/animation'
+require 'components/collision'
+require 'components/component'
+require 'components/controls'
+require 'components/engine'
+require 'components/fuel'
+require 'components/gravitysensitive'
+require 'components/landable'
+require 'components/life'
+require 'components/motion'
+require 'components/pad'
+require 'components/position'
+require 'components/renderable'
+require 'components/solid'
+require 'components/velocity'
 
 # Necessary systems
-require_relative 'systems/asteroidsystem'
-require_relative 'systems/collisionsystem'
-require_relative 'systems/enginesystem'
-require_relative 'systems/inputsystem'
-require_relative 'systems/landingsystem'
-require_relative 'systems/physics'
-require_relative 'systems/renderingsystem'
-require_relative 'systems/system'
+require 'systems/asteroidsystem'
+require 'systems/collisionsystem'
+require 'systems/controlssystem'
+require 'systems/enginesystem'
+require 'systems/landingsystem'
+require 'systems/movementsystem'
+require 'systems/musicfadingsystem'
+require 'systems/physics'
+require 'systems/renderingsystem'
+require 'systems/system'
+
+# Helpers
+require 'helper/renderinglevels'
 
 class PlayingState
   include Screen
+  include RenderingLevels
   def initialize(game, menu_screen, world, multiplayer, muted)
     @game = game
     @world = world
@@ -50,17 +60,19 @@ class PlayingState
 
     if @multiplayer
       p2_lander = @entity_manager.create_tagged_entity('p2_lander')
-      @entity_manager.add_component p2_lander, SpatialState.new(70, 200, 0, 0)
-      @entity_manager.add_component p2_lander, Engine.new(0.025)
+      @entity_manager.add_component p2_lander, Position.new(70, 200, 0, 0)
+      thrust = 0.01
+      @entity_manager.add_component p2_lander, Engine.new(thrust, @world.eng_x, @world.eng_y)
       @entity_manager.add_component p2_lander, Fuel.new(100)
-      @entity_manager.add_component p2_lander, Renderable.new(@world.skin, "crashlander2.png", 1.2, 0)
-      @entity_manager.add_component p2_lander, PlayerInput.new([Input::Keys::J, Input::Keys::K, Input::Keys::L])
-      @entity_manager.add_component p2_lander, Motion.new
-      @entity_manager.add_component p2_lander, PolygonCollidable.new
-      @entity_manager.add_component p2_lander, Landable.new
+      @entity_manager.add_component p2_lander, Renderable.new(@world.skin, "crashlander2.png", 1.2, 0, self.PLAYER2)
+      @entity_manager.add_component p2_lander, Controls.new([Input::Keys::J, Input::Keys::K, Input::Keys::L])
       if @world.has_wind
         @entity_manager.add_component p2_lander, Aerodynamics.new(0.12)
       end
+      @entity_manager.add_component p2_lander, Velocity.new
+      @entity_manager.add_component p2_lander, Motion.new
+      @entity_manager.add_component p2_lander, Collision.new
+      @entity_manager.add_component p2_lander, Landable.new
     end
 
     # end
@@ -68,12 +80,13 @@ class PlayingState
 
     # Initialize any runnable systems
     @engine_system      = EngineSystem.new self
-    @input_system       = InputSystem.new self
-    @physics_system     = Physics.new self
+    @controls_system    = ControlsSystem.new self
+    @physics_system     = Physics.new self, @world.gravity_strength
+    @movement_system    = MovementSystem.new self
     @rendering_system   = RenderingSystem.new self
     @collision_system   = CollisionSystem.new self
     @landing_system     = LandingSystem.new self
-    @asteroid_system    = AsteroidSystem.new self, @world.skin
+    @asteroid_system    = AsteroidSystem.new self, @world
 
     #set background
     @bg_image = Texture.new(Gdx.files.internal("res/images/" + @world.skin + "background.png"))
@@ -96,38 +109,40 @@ class PlayingState
 
   def add_world_entity_commons
     ground = @entity_manager.create_tagged_entity 'ground'
-    @entity_manager.add_component ground, SpatialState.new(0, 0, 0, 0)
-    @entity_manager.add_component ground, Renderable.new(@world.skin, "ground.png", 1, 0)
-    @entity_manager.add_component ground, PolygonCollidable.new
+    @entity_manager.add_component ground, Position.new(0, 0)
+    @entity_manager.add_component ground, Renderable.new(@world.skin, "ground.png", 1, 0, self.GROUND)
+    @entity_manager.add_component ground, Collision.new
 
     platformbackground = @entity_manager.create_tagged_entity 'platform_bg'
-    @entity_manager.add_component platformbackground, SpatialState.new(150, 145, 0, 0)
-    @entity_manager.add_component platformbackground, Renderable.new(@world.skin, "platformbackground.png", 1.0, 0)
+    @entity_manager.add_component platformbackground, Position.new(150, 145)
+    @entity_manager.add_component platformbackground, Renderable.new(@world.skin, "platformbackground.png", 1.0, 0, self.PLATFORM_BACKGROUND)
     @entity_manager.add_component platformbackground, Pad.new
 
     p1_lander = @entity_manager.create_tagged_entity 'p1_lander'
-    @entity_manager.add_component p1_lander, SpatialState.new(400, 350, 0, 0)
-    @entity_manager.add_component p1_lander, Engine.new(0.01)
+    @entity_manager.add_component p1_lander, Position.new(450,450)
+    thrust = 0.01
+    @entity_manager.add_component p1_lander, Engine.new(thrust, @world.eng_x, @world.eng_y)
     @entity_manager.add_component p1_lander, Fuel.new(250)
-    @entity_manager.add_component p1_lander, Renderable.new(@world.skin, "crashlander1.png", 1.2, 0)
-    @entity_manager.add_component p1_lander, PlayerInput.new([Input::Keys::A, Input::Keys::S, Input::Keys::D])
+    @entity_manager.add_component p1_lander, Renderable.new(@world.skin, "crashlander1.png", 1.2, 0, self.PLAYER1)
+    @entity_manager.add_component p1_lander, Controls.new([Input::Keys::A, Input::Keys::S, Input::Keys::D])
     if @world.has_gravity
       @entity_manager.add_component p1_lander, GravitySensitive.new(@world.gravity_strength)
     end
     if @world.has_wind
       @entity_manager.add_component p1_lander, Aerodynamics.new(0.12)
     end
+    @entity_manager.add_component p1_lander, Velocity.new
     @entity_manager.add_component p1_lander, Motion.new
-    @entity_manager.add_component p1_lander, PolygonCollidable.new
+    @entity_manager.add_component p1_lander, Collision.new
     @entity_manager.add_component p1_lander, Landable.new
 
     platform = @entity_manager.create_tagged_entity 'platform'
-    @entity_manager.add_component platform, SpatialState.new(150, 145, 0, 0)
-    @entity_manager.add_component platform, Renderable.new(@world.skin, "platform.png", 1.0, 0)
-    @entity_manager.add_component platform, PolygonCollidable.new
+    @entity_manager.add_component platform, Position.new(150, 145)
+    @entity_manager.add_component platform, Renderable.new(@world.skin, "platform.png", 1.0, 0, self.PLATFORM)
     upper_y = 145 + @entity_manager.get_component_of_type(platform, Renderable).height
     upper_x = 150 + @entity_manager.get_component_of_type(platform, Renderable).width
     @entity_manager.add_component platform, Solid.new(150, upper_x, upper_y)
+    @entity_manager.add_component platform, Collision.new
   end
 
   # Called when this screen is no longer the current screen for a Game.
@@ -143,9 +158,9 @@ class PlayingState
 
     # Nice because you can dictate the order things are processed
     @asteroid_system.process_one_game_tick(delta, @entity_manager)
-    @input_system.process_one_game_tick(delta, @entity_manager)
-    @physics_system.process_one_game_tick(delta, @entity_manager)
+    @controls_system.process_one_game_tick(delta, @entity_manager)
     @engine_system.process_one_game_tick(delta, @entity_manager)
+    @physics_system.process_one_game_tick(delta, @entity_manager, @movement_system)
     @game_over = @collision_system.process_one_game_tick(delta,@entity_manager)
     @landed = @landing_system.process_one_game_tick(delta,@entity_manager)
 

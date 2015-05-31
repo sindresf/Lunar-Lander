@@ -13,14 +13,15 @@ __Startup Scene__
 - [x] buttonsystem considers time between presses
  - [x] for all types of presses
 - [x] press 'p' to start game
-- [x] press 's' to cycle through skins
- - [x] skin carries into game scene
- - [ ] set all variables that controls the skins behaviour
+- [x] press 'w' to cycle through worlds
+ - [x] world carries into game scene
+ - [ ] set all variables that controls the world's behaviour
 - [x] press '1' for single player
 - [x] press '2' for multiplayer
 - [ ] press 'l' to load previous game
 - [x] display both players controls
-- [ ] press 'shift' to enter player control setter mode
+ - [ ] controls are the user's choice
+ - [ ] press 'shift' to enter player control setter mode
 - [ ] press 'tab' to view scoreboard
  - [ ] make file-stored scoreboard info
 - [x] music in background
@@ -32,19 +33,22 @@ __Game Scene__
  - [x] background graphic
  - [x] player 1 and 2 graphics
  - [x] asteroid graphic
+   - [ ] randomly pick from several asteroid graphics
     - [x] rotates based on latitudinal direction and speed
- - [ ] randomly pick from several asteroid graphics
+    - [ ] comes from the sides specified by the world
+    - [ ] make_background_asteroids
  - [x] platform graphic
  - [x] platform stops player when landed
  - [x] platform backgroun graphic
  - [x] ground graphics
- - [x] skins
+ - [x] worlds
     - [ ] updated graphics
-    - [ ] skins made into worlds
+    - [x] skins made into worlds
     - [ ] different behaviour and gameplay for worlds
 - [x] controls for both players
  - [x] fuel consideration
  - [x] slight difference in gameplay
+ - [ ] can choose player_lander in singleplayer mode
 - [x] collision detection
  - [ ] upgraded detection algorithm
 - [x] asteroids creation

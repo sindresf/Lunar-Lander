@@ -19,13 +19,13 @@ class CollisionSystem < System
 
   def update_bounding_polygons(entity_mgr, entities)
     entities.each do |e|
-      spatial_component    = entity_mgr.get_component_of_type(e, SpatialState)
+      position_component    = entity_mgr.get_component_of_type(e, Position)
       renderable_component = entity_mgr.get_component_of_type(e, Renderable)
-      collidable_component = entity_mgr.get_component_of_type(e, PolygonCollidable)
+      collidable_component = entity_mgr.get_component_of_type(e, Collision)
 
-      collidable_component.bounding_polygon = make_polygon(spatial_component.x,
+      collidable_component.bounding_polygon = make_polygon(position_component.x,
       renderable_component.width,
-      spatial_component.y,
+      position_component.y,
       renderable_component.height,
       renderable_component.rotation,
       renderable_component.scale)
@@ -35,13 +35,13 @@ class CollisionSystem < System
   def process_one_game_tick(delta, entity_mgr)
     collidable_entities = []
 
-    polygon_entities = entity_mgr.get_all_entities_with_component_of_type PolygonCollidable
-    update_bounding_polygons(entity_mgr,polygon_entities)
+    polygon_entities = entity_mgr.get_all_entities_with_component_of_type Collision
+    update_bounding_polygons(entity_mgr, polygon_entities)
     collidable_entities += polygon_entities
 
     bounding_areas={}
     collidable_entities.each do |e|
-      bounding_areas[e]=entity_mgr.get_component_of_type(e, PolygonCollidable).bounding_polygon
+      bounding_areas[e]=entity_mgr.get_component_of_type(e, Collision).bounding_polygon
     end
 
     # Naive O(n^2) (kinda)

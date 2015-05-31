@@ -8,7 +8,7 @@ require 'systems/useroptionsystem'
 require 'systems/renderingsystem'
 require 'components/useroption'
 require 'components/renderable'
-require 'components/spatialstate'
+require 'components/position'
 require 'helper/WorldMaker'
 
 class StartupState
@@ -24,25 +24,25 @@ class StartupState
     @option_entity_manager = Lunar_lander_em.new @game
 
     bg_image = @option_entity_manager.create_tagged_entity 'background'
-    @option_entity_manager.add_component bg_image, Renderable.new(@world.skin, 'startup.png', 1.0, 0)
-    @option_entity_manager.add_component bg_image, SpatialState.new(0 ,0, 0, 0)
+    @option_entity_manager.add_component bg_image, Renderable.new(@world.skin, 'startup.png', 1.0, 0, 1)
+    @option_entity_manager.add_component bg_image, Position.new(0 ,0)
 
     lunar_lander = @option_entity_manager.create_tagged_entity 'lunar_lander'
-    @option_entity_manager.add_component lunar_lander, Renderable.new(@world.skin, 'lunarlander.png', 1.0, 0)
+    @option_entity_manager.add_component lunar_lander, Renderable.new(@world.skin, 'lunarlander.png', 1.0, 0, 2)
     x_center = 900 / 2
     y_center = 135
     x =  x_center - (@option_entity_manager.get_component_of_type(lunar_lander, Renderable).width / 2)
     y = y_center - (@option_entity_manager.get_component_of_type(lunar_lander, Renderable).height / 2)
-    @option_entity_manager.add_component lunar_lander, SpatialState.new(x, y, 0, 0)
+    @option_entity_manager.add_component lunar_lander, Position.new(x, y)
 
     skin_option = @option_entity_manager.create_tagged_entity 'option'
-    @option_entity_manager.add_component skin_option, UserOption.new('skin')
+    @option_entity_manager.add_component skin_option, UserOption.new('world')
 
     start_option = @option_entity_manager.create_tagged_entity 'option'
     @option_entity_manager.add_component start_option, UserOption.new('start')
 
     @rendering_system = RenderingSystem.new @game
-    @user_option_system = UserOptionSystem.new @game, self, @world.skin, @bg_song
+    @user_option_system = UserOptionSystem.new @game, self, @world, @bg_song
 
     @camera = OrthographicCamera.new
     @camera.setToOrtho(false, 900, 600);
@@ -96,7 +96,7 @@ class StartupState
     end
 
     @font.draw(@batch, "P to play!", 8, 100);
-    @font.draw(@batch, "S to skin", 8, 80);
+    @font.draw(@batch, "w to jump worlds!", 8, 80);
     @font.draw(@batch, "1/2 to choose players", 8, 60);
 
     if @user_option_system.multiplayer

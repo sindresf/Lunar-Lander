@@ -1,6 +1,6 @@
 require_relative 'component'
 
-class PolygonCollidable < Component
+class Collision < Component
   attr_accessor :bounding_polygon
   def marshal_dump
     [@id]

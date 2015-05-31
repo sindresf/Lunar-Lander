@@ -1,6 +1,6 @@
 require_relative 'component'
 
-class PlayerInput < Component
+class Controls < Component
   attr_reader :responsive_keys
   def initialize(keys)
     super()

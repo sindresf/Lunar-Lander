@@ -8,7 +8,7 @@ class EngineSystem < System
       fuel_component   = entity_mgr.get_component_of_type(entity, Fuel)
 
       if engine_component.on && fuel_component.amount > 0
-        location_component   = entity_mgr.get_component_of_type(entity, SpatialState)
+        velocity_component   = entity_mgr.get_component_of_type(entity, Velocity)
         renderable_component = entity_mgr.get_component_of_type(entity, Renderable)
 
         amount = engine_component.thrust*delta
@@ -18,8 +18,8 @@ class EngineSystem < System
         x_vector = -amount * Math.sin(current_rotation * Math::PI / 180.0);
         y_vector = -amount * Math.cos(current_rotation * Math::PI / 180.0);
 
-        location_component.dy += y_vector
-        location_component.dx += x_vector
+        velocity_component.horizontal += x_vector
+        velocity_component.vertical += y_vector
 
         engine_component.on=false
       end
