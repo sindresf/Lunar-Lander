@@ -9,12 +9,13 @@ require 'systems/renderingsystem'
 require 'components/useroption'
 require 'components/renderable'
 require 'components/spatialstate'
+require 'helper/WorldMaker'
 
 class StartupState
   include Screen
   def initialize(game)
     @game = game
-    @skin = "firstskin/"
+    @world = WorldMaker.make 'first'
     @bg_song = Gdx.audio.newMusic(Gdx.files.internal("res/music/ghostwriter.mp3"))
     @bg_song.setVolume 0.25
   end
@@ -23,11 +24,11 @@ class StartupState
     @option_entity_manager = Lunar_lander_em.new @game
 
     bg_image = @option_entity_manager.create_tagged_entity 'background'
-    @option_entity_manager.add_component bg_image, Renderable.new(@skin, 'startup.png', 1.0, 0)
+    @option_entity_manager.add_component bg_image, Renderable.new(@world.skin, 'startup.png', 1.0, 0)
     @option_entity_manager.add_component bg_image, SpatialState.new(0 ,0, 0, 0)
 
     lunar_lander = @option_entity_manager.create_tagged_entity 'lunar_lander'
-    @option_entity_manager.add_component lunar_lander, Renderable.new(@skin, 'lunarlander.png', 1.0, 0)
+    @option_entity_manager.add_component lunar_lander, Renderable.new(@world.skin, 'lunarlander.png', 1.0, 0)
     x_center = 900 / 2
     y_center = 135
     x =  x_center - (@option_entity_manager.get_component_of_type(lunar_lander, Renderable).width / 2)
@@ -35,13 +36,13 @@ class StartupState
     @option_entity_manager.add_component lunar_lander, SpatialState.new(x, y, 0, 0)
 
     skin_option = @option_entity_manager.create_tagged_entity 'option'
-    @option_entity_manager.add_component skin_option, UserOption.new('skin', 'firstskin/')
+    @option_entity_manager.add_component skin_option, UserOption.new('skin')
 
     start_option = @option_entity_manager.create_tagged_entity 'option'
     @option_entity_manager.add_component start_option, UserOption.new('start')
 
     @rendering_system = RenderingSystem.new @game
-    @user_option_system = UserOptionSystem.new @game, self, @skin, @bg_song
+    @user_option_system = UserOptionSystem.new @game, self, @world.skin, @bg_song
 
     @camera = OrthographicCamera.new
     @camera.setToOrtho(false, 900, 600);

@@ -1,6 +1,7 @@
 require_relative 'system'
 require_relative 'musicfadingsystem'
 require 'playing_state'
+require 'WorldMaker'
 
 class UserOptionSystem < System
   SKIN_OPTIONS = ['firstskin/', 'solidskin/', 'neonskin/']

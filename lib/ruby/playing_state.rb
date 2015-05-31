@@ -28,31 +28,16 @@ require_relative 'systems/system'
 
 class PlayingState
   include Screen
-  def initialize(game, menu_screen, skin, multiplayer, muted)
+  def initialize(game, menu_screen, world, multiplayer, muted)
     @game = game
-    @skin = skin
+    @world = world
     @menu_screen = menu_screen
-    @bg_song = nil
+    @bg_song = @world.music
     @multiplayer = multiplayer
     @muted = muted
   end
 
-  def pick_song()
-    case @skin
-    when 'firstskin/'
-      @bg_song = Gdx.audio.newMusic Gdx.files.internal("res/music/portivolare.mp3")
-      @bg_song.setVolume 0.25
-    when 'neonskin/'
-      @bg_song = Gdx.audio.newMusic Gdx.files.internal("res/music/flux.mp3")
-      @bg_song.setVolume 0.85
-    when 'solidskin/'
-      @bg_song = Gdx.audio.newMusic Gdx.files.internal("res/music/greenbackboogie.mp3")
-      @bg_song.setVolume 0.65
-    end
-  end
-
   def show
-    pick_song()
     #if File.size? 'savedgame.dat'
     #   save_file = File.open( 'savedgame.dat' )
     #  @entity_manager = Marshal::load(save_file)
@@ -61,49 +46,23 @@ class PlayingState
     # else
     @entity_manager = Lunar_lander_em.new @game
 
-    # to go into the World entities component list
-    pull = 0.0045 # m/s^2
-
-    ground = @entity_manager.create_tagged_entity 'ground'
-    @entity_manager.add_component ground, SpatialState.new(0, 0, 0, 0)
-    @entity_manager.add_component ground, Renderable.new(@skin, "ground.png", 1, 0)
-    @entity_manager.add_component ground, PolygonCollidable.new
-
-    platformbackground = @entity_manager.create_tagged_entity 'platform_bg'
-    @entity_manager.add_component platformbackground, SpatialState.new(150, 145, 0, 0)
-    @entity_manager.add_component platformbackground, Renderable.new(@skin, "platformbackground.png", 1.0, 0)
-    @entity_manager.add_component platformbackground, Pad.new
-
-    p1_lander = @entity_manager.create_tagged_entity 'p1_lander'
-    @entity_manager.add_component p1_lander, SpatialState.new(400, 350, 0, 0)
-    @entity_manager.add_component p1_lander, Engine.new(0.01)
-    @entity_manager.add_component p1_lander, Fuel.new(250)
-    @entity_manager.add_component p1_lander, Renderable.new(@skin, "crashlander1.png", 1.2, 0)
-    @entity_manager.add_component p1_lander, PlayerInput.new([Input::Keys::A, Input::Keys::S, Input::Keys::D])
-    @entity_manager.add_component p1_lander, GravitySensitive.new(pull)
-    @entity_manager.add_component p1_lander, Motion.new
-    @entity_manager.add_component p1_lander, PolygonCollidable.new
-    @entity_manager.add_component p1_lander, Landable.new
+    add_world_entity_commons
 
     if @multiplayer
       p2_lander = @entity_manager.create_tagged_entity('p2_lander')
       @entity_manager.add_component p2_lander, SpatialState.new(70, 200, 0, 0)
       @entity_manager.add_component p2_lander, Engine.new(0.025)
       @entity_manager.add_component p2_lander, Fuel.new(100)
-      @entity_manager.add_component p2_lander, Renderable.new(@skin, "crashlander2.png", 1.2, 0)
+      @entity_manager.add_component p2_lander, Renderable.new(@world.skin, "crashlander2.png", 1.2, 0)
       @entity_manager.add_component p2_lander, PlayerInput.new([Input::Keys::J, Input::Keys::K, Input::Keys::L])
       @entity_manager.add_component p2_lander, Motion.new
       @entity_manager.add_component p2_lander, PolygonCollidable.new
       @entity_manager.add_component p2_lander, Landable.new
+      if @world.has_wind
+        @entity_manager.add_component p2_lander, Aerodynamics.new(0.12)
+      end
     end
 
-    platform = @entity_manager.create_tagged_entity 'platform'
-    @entity_manager.add_component platform, SpatialState.new(150, 145, 0, 0)
-    @entity_manager.add_component platform, Renderable.new(@skin, "platform.png", 1.0, 0)
-    @entity_manager.add_component platform, PolygonCollidable.new
-    upper_y = 145 + @entity_manager.get_component_of_type(platform, Renderable).height
-    upper_x = 150 + @entity_manager.get_component_of_type(platform, Renderable).width
-    @entity_manager.add_component platform, Solid.new(150, upper_x, upper_y)
     # end
     #$logger.debug @entity_manager.dump_details
 
@@ -114,10 +73,10 @@ class PlayingState
     @rendering_system   = RenderingSystem.new self
     @collision_system   = CollisionSystem.new self
     @landing_system     = LandingSystem.new self
-    @asteroid_system    = AsteroidSystem.new self, @skin
+    @asteroid_system    = AsteroidSystem.new self, @world.skin
 
     #set background
-    @bg_image = Texture.new(Gdx.files.internal("res/images/" + @skin + "background.png"))
+    @bg_image = Texture.new(Gdx.files.internal("res/images/" + @world.skin + "background.png"))
 
     @game_over=false
     # win condition
@@ -133,6 +92,42 @@ class PlayingState
     if !@muted
       @bg_song.play
     end
+  end
+
+  def add_world_entity_commons
+    ground = @entity_manager.create_tagged_entity 'ground'
+    @entity_manager.add_component ground, SpatialState.new(0, 0, 0, 0)
+    @entity_manager.add_component ground, Renderable.new(@world.skin, "ground.png", 1, 0)
+    @entity_manager.add_component ground, PolygonCollidable.new
+
+    platformbackground = @entity_manager.create_tagged_entity 'platform_bg'
+    @entity_manager.add_component platformbackground, SpatialState.new(150, 145, 0, 0)
+    @entity_manager.add_component platformbackground, Renderable.new(@world.skin, "platformbackground.png", 1.0, 0)
+    @entity_manager.add_component platformbackground, Pad.new
+
+    p1_lander = @entity_manager.create_tagged_entity 'p1_lander'
+    @entity_manager.add_component p1_lander, SpatialState.new(400, 350, 0, 0)
+    @entity_manager.add_component p1_lander, Engine.new(0.01)
+    @entity_manager.add_component p1_lander, Fuel.new(250)
+    @entity_manager.add_component p1_lander, Renderable.new(@world.skin, "crashlander1.png", 1.2, 0)
+    @entity_manager.add_component p1_lander, PlayerInput.new([Input::Keys::A, Input::Keys::S, Input::Keys::D])
+    if @world.has_gravity
+      @entity_manager.add_component p1_lander, GravitySensitive.new(@world.gravity_strength)
+    end
+    if @world.has_wind
+      @entity_manager.add_component p1_lander, Aerodynamics.new(0.12)
+    end
+    @entity_manager.add_component p1_lander, Motion.new
+    @entity_manager.add_component p1_lander, PolygonCollidable.new
+    @entity_manager.add_component p1_lander, Landable.new
+
+    platform = @entity_manager.create_tagged_entity 'platform'
+    @entity_manager.add_component platform, SpatialState.new(150, 145, 0, 0)
+    @entity_manager.add_component platform, Renderable.new(@world.skin, "platform.png", 1.0, 0)
+    @entity_manager.add_component platform, PolygonCollidable.new
+    upper_y = 145 + @entity_manager.get_component_of_type(platform, Renderable).height
+    upper_x = 150 + @entity_manager.get_component_of_type(platform, Renderable).width
+    @entity_manager.add_component platform, Solid.new(150, upper_x, upper_y)
   end
 
   # Called when this screen is no longer the current screen for a Game.
