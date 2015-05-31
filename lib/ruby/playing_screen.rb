@@ -126,7 +126,7 @@ class PlayingScreen
     @entity_manager.add_component p1_lander, Renderable.new(@world.skin, "crashlander1.png", 1.2, 0, self.PLAYER1)
     @entity_manager.add_component p1_lander, Controls.new([Input::Keys::A, Input::Keys::S, Input::Keys::D])
     if @world.has_gravity
-      @entity_manager.add_component p1_lander, GravitySensitive.new(@world.gravity_strength)
+      @entity_manager.add_component p1_lander, GravitySensitive.new
     end
     if @world.has_wind
       @entity_manager.add_component p1_lander, Aerodynamics.new(0.12)

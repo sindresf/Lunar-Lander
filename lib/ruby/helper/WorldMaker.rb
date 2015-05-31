@@ -1,10 +1,9 @@
 require 'helper/world'
 
 module WorldMaker
-
-  GRAVITY_STANDARD = 0.0045
-  ASTEROID_FREQ_STANDARD = 40
-  ASTEROID_SIDE_STANDARD = 'left'
+  GRAVITY_STANDARD ||= 0.0045
+  ASTEROID_FREQ_STANDARD ||= 40
+  ASTEROID_SIDE_STANDARD ||= 'left'
   def WorldMaker.make(world)
     case world
     when 'first'
