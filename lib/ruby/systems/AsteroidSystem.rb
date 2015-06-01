@@ -1,31 +1,44 @@
 require_relative 'system'
 
 class AsteroidSystem < System
-  HOW_OFTEN = 80 # framerate = 60 -> statistically an asteroid a sec
+  SIDE_NR = [0,1,2,3]
+
   def initialize(game, world)
     @game = game
     @world = world
+    @make_freq = @world.asteroid_freq # TODO times sides?
   end
 
-  def generate_new_asteroids(delta, entity_mgr)
-    make = rand(HOW_OFTEN)
+  def generate_new_asteroids(delta, entity_mgr) # TODO make this ALSO make background, or seperate thing?
+    make = rand(@make_freq)
     #TODO make dependent on world asteroid origins
-    if make == 0 # make beyond the left side asteroid
-      starting_x = -100
-      starting_y = rand(950) - 150
-      starting_dx = rand(15) + 2
-      if starting_y > 160
-        starting_dy = rand(20) - 10
-      else
-        starting_dy = rand(20) + 1
+
+    @world.asteroid_sides.each do |side|
+      if side == 'left' && make == SIDE_NR[0] # TODO make them come from the left
+        # TODO encapsulate in set_left_stuff method
+        starting_x = -100
+        starting_y = rand(950) - 150
+        starting_dx = rand(15) + 2
+        if starting_y > 160
+          starting_dy = rand(20) - 10
+        else
+          starting_dy = rand(20) + 1
+        end
+        make_asteroid(starting_dx, starting_dy, entity_mgr, starting_x, starting_y)
+      elsif side == 'up' && make == SIDE_NR[1] # TODO make them come from above
+        # TODO encapsulate in set_up_stuff method
+        starting_x = rand(500)
+        starting_y = 1000
+        starting_dx = rand(7) + 2
+        starting_dy = rand(8) - 10
+        make_asteroid(starting_dx, starting_dy, entity_mgr, starting_x, starting_y)
+      elsif side == 'right' && make == SIDE_NR[2] # TODO make them come from the right
+        # TODO encapsulate in set_right_stuff method
+        puts 'lol, the fuck'
+      elsif side == 'down' && make == SIDE_NR[3] # TODO make them come from below (special planet stuff)
+        # TODO encapsulate in set_below_stuff method
+        puts 'lol, the fuck'
       end
-      make_asteroid(starting_dx, starting_dy, entity_mgr, starting_x, starting_y)
-    elsif make == 5 # make from above asteroid
-      starting_x = rand(500)
-      starting_y = 1000
-      starting_dx = rand(7) + 2
-      starting_dy = rand(8) - 10
-      make_asteroid(starting_dx, starting_dy, entity_mgr, starting_x, starting_y)
     end
   end
 
