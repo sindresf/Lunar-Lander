@@ -2,7 +2,7 @@ require 'helper/world'
 
 module WorldMaker
   GRAVITY_STANDARD ||= 0.0045
-  ASTEROID_FREQ_STANDARD ||= 40
+  ASTEROID_FREQ_STANDARD ||= 80
   ASTEROID_SIDE_STANDARD ||= ['left']
 
   def WorldMaker.make(world)
@@ -36,7 +36,7 @@ module WorldMaker
     world.eng_y = 0
     world.gravity_strength = GRAVITY_STANDARD
     world.asteroid_freq = ASTEROID_FREQ_STANDARD
-    world.asteroid_sides = ['left', 'up']
+    world.asteroid_sides = ['left', 'above']
     world.music = Gdx.audio.newMusic Gdx.files.internal("res/music/flux.mp3")
     world.music.setVolume 0.85
     return world
@@ -48,7 +48,7 @@ module WorldMaker
     world.eng_y = 0
     world.gravity_strength = GRAVITY_STANDARD
     world.asteroid_freq = ASTEROID_FREQ_STANDARD
-    world.asteroid_sides = ASTEROID_SIDE_STANDARD
+    world.asteroid_sides = ['left', 'right']
     world.music = Gdx.audio.newMusic Gdx.files.internal("res/music/greenbackboogie.mp3")
     world.music.setVolume 0.65
     return world
