@@ -3,7 +3,7 @@ require_relative 'system'
 class Physics < System
   # This constant could conceivably live in the gravity component...
   MOVE_SCALER = 0.013
-  STOP_ACCEPT = 30 # TODO this needs to be SO much better
+  STOP_ACCEPT = 15 # TODO this needs to be SO much better
   def initialize(game, gravity_ACCELERATION)
     @game = game
     @ACCELERATION = -gravity_ACCELERATION
@@ -27,7 +27,8 @@ class Physics < System
       #test for landing on solid "surfaces"
       if !landable_component.nil?
         solid_surfaces.each do |surface|
-          if (position_component.x >= surface[0] - STOP_ACCEPT && position_component.x <= surface[1] + STOP_ACCEPT) &&
+          # TODO make a check for Around Surface center, is now around surface left edge
+          if (position_component.x >= (surface[0] - STOP_ACCEPT) && position_component.x <= surface[1] + STOP_ACCEPT) &&
           (position_component.y >= surface[2] - 1 && position_component.y <= surface[2])
             stop_movement = true
           else
