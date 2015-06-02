@@ -2,12 +2,11 @@ require_relative 'system'
 
 class Physics < System
   # This constant could conceivably live in the gravity component...
-  DOWN = Math.cos(Math::PI)
   MOVE_SCALER = 0.013
   STOP_ACCEPT = 30 # TODO this needs to be SO much better
   def initialize(game, gravity_ACCELERATION)
     @game = game
-    @ACCELERATION = gravity_ACCELERATION
+    @ACCELERATION = -gravity_ACCELERATION
   end
 
   def process_one_game_tick(delta, entity_mgr, movement_system)

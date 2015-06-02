@@ -1,7 +1,6 @@
 require_relative 'system'
 
 class MovementSystem < System
-  DOWN = Math.cos(Math::PI)
   MOVE_SCALER = 0.013
   def process_one_game_tick(delta, entity_mgr)
 
@@ -14,7 +13,7 @@ class MovementSystem < System
       position_component.x += (amount)
 
       amount = MOVE_SCALER * delta * velocity_component.vertical
-      position_component.y += (amount * DOWN)
+      position_component.y += amount
     end
   end
 end

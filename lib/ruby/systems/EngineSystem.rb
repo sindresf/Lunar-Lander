@@ -16,7 +16,7 @@ class EngineSystem < System
         current_rotation   = renderable_component.rotation
 
         x_vector = -amount * Math.sin(current_rotation * Math::PI / 180.0);
-        y_vector = -amount * Math.cos(current_rotation * Math::PI / 180.0);
+        y_vector = amount * Math.cos(current_rotation * Math::PI / 180.0);
 
         velocity_component.horizontal += x_vector
         velocity_component.vertical += y_vector
