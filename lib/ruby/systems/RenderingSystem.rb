@@ -7,9 +7,9 @@ class RenderingSystem < System
   end
 
   def process_one_game_tick(delta, entity_mgr, camera, batch, font)
-    rot_ast = false
+    should_rotate_asteroid = false
     if Time.now - @time >= 0.05
-      rot_ast = true
+      should_rotate_asteroid = true
       @time = Time.now
     end
     entities = entity_mgr.get_all_entities_with_components_of_type([Renderable, Position])
@@ -18,10 +18,10 @@ class RenderingSystem < System
       velocity_component = entity_mgr.get_component_of_type(e, Velocity)
       render_comp = entity_mgr.get_component_of_type(e, Renderable)
 
-      if entity_mgr.get_tag(e) == 'asteroid' && rot_ast
-        clock_dir = 1 # wise
+      if entity_mgr.get_tag(e) == 'asteroid' && should_rotate_asteroid
+        clock_dir = -1 # anti - wise
         if velocity_component.vertical >= 0
-          clock_dir = -1 # anti -wise
+          clock_dir = 1 # wise
         end
         render_comp.rotate(delta * (clock_dir * (0.04 + (0.01 * velocity_component.horizontal))))
       end

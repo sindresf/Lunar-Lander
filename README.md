@@ -55,6 +55,7 @@ __Game Scene__
  - [x] asteroids removal
    - [x] off screen
    - [x] hitting ground
+ - [x] asteroids from all sides
  - [ ] upgraded creation algorithm
 - [ ] wind effect
 - [ ] player life points 
@@ -71,7 +72,7 @@ __Game Scene__
  - [ ] for landing
 
 __Transition Scene__
-- [ ] create
+- [x] create
 - [ ] music in background
  - [ ] same as startup screen *or* 'world' specific 
 - [ ] make a up-scroller for world transition 
