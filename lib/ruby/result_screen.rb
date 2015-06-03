@@ -11,21 +11,14 @@ require 'components/renderable'
 require 'components/position'
 require 'helper/WorldMaker'
 
-class StartupScreen
+class ResultScreen
   include Screen
   def initialize(game)
     @game = game
     @world = WorldMaker.make 'first'
-    @bg_song = Gdx.audio.newMusic(Gdx.files.internal("res/music/ghostwriter.mp3"))
+    @bg_song = Gdx.audio.newMusic(Gdx.files.internal("res/music/wearethechampions.mp3"))
     @bg_song.setVolume 0.25
-    @bg_song.setLooping false
-    loop = @bg_song.isLooping
-    if !loop
-      Gdx.audio.music.setPan(-0.8, 0.80)
-      @bg_song.setPosition(20) # seconds
-    else
-      puts "god hates me"
-    end
+    @bg_song.setPosition 0.5
   end
 
   def show
@@ -137,4 +130,3 @@ class StartupScreen
     @bg_song.dispose
   end
 end
-

@@ -60,9 +60,9 @@ class TransitionScreen
     add_transition_world_entity_commons
 
     # TODO make this fit
-    if false # @multiplayer
+    if @multiplayer
       p2_lander = @entity_manager.create_tagged_entity('p2_lander')
-      @entity_manager.add_component p2_lander, Position.new(450, 750)
+      @entity_manager.add_component p2_lander, Position.new(700, 90)
       @entity_manager.add_component p2_lander, Renderable.new(@world.skin, "crashlander2.png", 1.2, 0, self.PLAYER2)
       @entity_manager.add_component p2_lander, Controls.new([Input::Keys::J, Input::Keys::L])
       @entity_manager.add_component p2_lander, Velocity.new
@@ -86,7 +86,7 @@ class TransitionScreen
 
     # game spesific 'surroundings'
     @camera = OrthographicCamera.new
-    @camera.setToOrtho(false, 600, 900); # remember this shitt if it doesn't work
+    @camera.setToOrtho(false, 900, 600); # remember this shitt if it doesn't work
     @batch = SpriteBatch.new
     @font = BitmapFont.new
     if !@muted
@@ -96,7 +96,11 @@ class TransitionScreen
 
   def add_transition_world_entity_commons
     p1_lander = @entity_manager.create_tagged_entity 'p1_lander'
-    @entity_manager.add_component p1_lander, Position.new(110, 75)
+    if @multiplayer
+      @entity_manager.add_component p1_lander, Position.new(110, 90)
+    else
+      @entity_manager.add_component p1_lander, Position.new(420, 90)
+    end
     @entity_manager.add_component p1_lander, Renderable.new(@world.skin, "crashlander1.png", 1.2, 0, self.PLAYER1)
     @entity_manager.add_component p1_lander, Controls.new([Input::Keys::A, Input::Keys::D])
     @entity_manager.add_component p1_lander, Velocity.new
@@ -161,7 +165,7 @@ class TransitionScreen
     elsif Gdx.input.isKeyPressed(Input::Keys::ENTER)
       @bg_song.stop
       @bg_song.dispose
-      @game.setScreen @menu_screen
+      @game.setScreen PlayingScreen.new(@game, @menu_screen, @world, @multiplayer, @muted)
     end
 
   end

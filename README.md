@@ -35,7 +35,7 @@ __Game Scene__
  - [x] asteroid graphic
    - [ ] randomly pick from several asteroid graphics
     - [x] rotates based on latitudinal direction and speed
-    - [ ] comes from the sides specified by the world
+    - [x] comes from the sides specified by the world
     - [ ] make_background_asteroids
  - [x] platform graphic
  - [x] platform stops player when landed
@@ -74,12 +74,12 @@ __Game Scene__
 __Transition Scene__
 - [x] create
 - [ ] music in background
- - [ ] same as startup screen *or* 'world' specific 
+ - [x] same as 'world'
 - [ ] make a up-scroller for world transition 
  - [ ] rename the project "**Intergalactic whatnots**" at this point
 
 __Win/loss Scene__
-- [ ] create
+- [x] create
  - [ ] type in score name for scoreboard
 - [ ] scoring
  - [ ] consider: time

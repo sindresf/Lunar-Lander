@@ -209,10 +209,6 @@ class PlayingScreen
       @bg_song.stop
       @bg_song.dispose
       @game.setScreen @menu_screen
-    elsif Gdx.input.isKeyPressed(Input::Keys::ENTER)
-      @bg_song.stop
-      @bg_song.dispose
-      @game.setScreen @menu_screen
     end
 
   end
