@@ -4,7 +4,7 @@ class Physics < System
   # This constant could conceivably live in the gravity component...
   MOVE_SCALER = 0.013
   STOP_ACCEPT = 15 # TODO this needs to be SO much better
-  def initialize(game, gravity_ACCELERATION)
+  def initialize(game, gravity_ACCELERATION = 0)
     @game = game
     @ACCELERATION = -gravity_ACCELERATION
   end

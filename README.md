@@ -15,13 +15,13 @@ __Startup Scene__
 - [x] press 'p' to start game
 - [x] press 'w' to cycle through worlds
  - [x] world carries into game scene
- - [ ] set all variables that controls the world's behaviour
+ - [x] set all variables that controls the world's behaviour
 - [x] press '1' for single player
 - [x] press '2' for multiplayer
 - [ ] press 'l' to load previous game
 - [x] display both players controls
- - [ ] controls are the user's choice
  - [ ] press 'shift' to enter player control setter mode
+ - [ ] controls are the user's choice
 - [ ] press 'tab' to view scoreboard
  - [ ] make file-stored scoreboard info
 - [x] music in background
@@ -79,7 +79,8 @@ __Transition Scene__
 - [ ] make a up-scroller for world transition 
  - [x] scrolling background
  - [x] scrolling effect
-   - [ ] looping scrolling
+   - [x] looping scrolling
+   - [ ] jerking-free looping
  - [ ] its own controls
  - [ ] scoring that goes into gaming
  - [ ] rename the project "**Intergalactic whatnots**" at this point

@@ -13,6 +13,7 @@ require 'components/fuel'
 require 'components/gravitysensitive'
 require 'components/landable'
 require 'components/life'
+require 'components/loop'
 require 'components/motion'
 require 'components/origin'
 require 'components/pad'
@@ -31,6 +32,7 @@ require 'systems/movementsystem'
 require 'systems/musicfadingsystem'
 require 'systems/physics'
 require 'systems/renderingsystem'
+require 'systems/scrollingsystem'
 require 'systems/system'
 
 # Helpers
@@ -71,8 +73,9 @@ class TransitionScreen
     end
 
     @controls_system    = ControlsSystem.new self
-    @physics_system     = Physics.new self, @world.gravity_strength
+    @physics_system     = Physics.new self
     @movement_system    = MovementSystem.new self
+    @scrolling_system   = ScrollingSystem.new self
     @rendering_system   = RenderingSystem.new self
     @collision_system   = CollisionSystem.new self
     @asteroid_system    = AsteroidSystem.new self, @world
@@ -96,9 +99,10 @@ class TransitionScreen
     # TODO this needs to scroll too
     bg_image = @entity_manager.create_tagged_entity 'background'
     @entity_manager.add_component bg_image, Position.new(0, 0) #bottom third covers image
-    @entity_manager.add_component bg_image, Velocity.new(0,-1) # fast down
+    @entity_manager.add_component bg_image, Velocity.new(0,-1) # slow down
     @entity_manager.add_component bg_image, Renderable.new(@world.skin, "transition.png", 1.2, 0, self.background)
     @entity_manager.add_component bg_image, Motion.new
+    @entity_manager.add_component bg_image, Loop.new(-600, 0, 1)
 
     p1_lander = @entity_manager.create_tagged_entity 'p1_lander'
     if @multiplayer
@@ -117,6 +121,7 @@ class TransitionScreen
     @entity_manager.add_component scroll_effect, Velocity.new(0,-20) # fast down
     @entity_manager.add_component scroll_effect, Renderable.new(@world.skin, "scrolleffect.png", 1.2, 0, self.front_scroll)
     @entity_manager.add_component scroll_effect, Motion.new
+    @entity_manager.add_component scroll_effect, Loop.new(-1200, 0, 7)
     # TODO make loop component for this, maybe scrollsystem by itself. Yes
 
   end
@@ -136,6 +141,7 @@ class TransitionScreen
     @asteroid_system.process_one_game_tick(delta, @entity_manager)
     @controls_system.process_one_game_tick(delta, @entity_manager)
     @physics_system.process_one_game_tick(delta, @entity_manager, @movement_system)
+    @scrolling_system.process_one_game_tick(delta, @entity_manager)
     @game_over = @collision_system.process_one_game_tick(delta,@entity_manager)
 
     # Make sure you "layer" things in here from bottom to top...
