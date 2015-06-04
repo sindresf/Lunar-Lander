@@ -19,7 +19,7 @@ class ResultScreen
     @multiplayer = multiplayer
     @muted = muted
     @bg_song = Gdx.audio.newMusic(Gdx.files.internal("res/music/wearethechampions.mp3"))
-    @bg_song.setVolume 0.25
+    @bg_song.setVolume 0.8
   end
 
   def show
