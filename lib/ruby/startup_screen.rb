@@ -18,7 +18,7 @@ class StartupScreen
     @world = WorldMaker.make 'first'
     @bg_song = Gdx.audio.newMusic(Gdx.files.internal("res/music/ghostwriter.mp3"))
     @bg_song.setVolume 0.25
-    @bg_song.setLooping false
+    @bg_song.setLooping true # TODO FIGURE OUT THIS BULLSHIT! !! ! ! ! !
     loop = @bg_song.isLooping
     if !loop
       Gdx.audio.music.setPan(-0.8, 0.80)

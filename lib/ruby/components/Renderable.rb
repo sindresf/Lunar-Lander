@@ -5,7 +5,7 @@ class Renderable < Component
   extend Forwardable
   def_delegators :@image, :width, :height # Its image knows the dimensions.
   attr_accessor :image, :layer, :rotation, :scale, :skin
-  def initialize(skin, image_name, scale, rotation, layer)
+  def initialize(skin, image_name, scale, rotation, layer = 0)
     super()
     @skin = skin
     @image_name = image_name

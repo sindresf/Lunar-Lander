@@ -34,11 +34,11 @@ require 'systems/renderingsystem'
 require 'systems/system'
 
 # Helpers
-require 'helper/renderinglevels'
+require 'helper/transitionlevels'
 
 class TransitionScreen
   include Screen
-  include RenderingLevels
+  include TransitionLevels
   def initialize(game, menu_screen, world, multiplayer, muted)
     @game = game
     @world = world
@@ -61,9 +61,9 @@ class TransitionScreen
 
     # TODO make this fit
     if @multiplayer
-      p2_lander = @entity_manager.create_tagged_entity('p2_lander')
+      p2_lander = @entity_manager.create_tagged_entity 'p2_lander'
       @entity_manager.add_component p2_lander, Position.new(700, 90)
-      @entity_manager.add_component p2_lander, Renderable.new(@world.skin, "crashlander2.png", 1.2, 0, self.PLAYER2)
+      @entity_manager.add_component p2_lander, Renderable.new(@world.skin, "crashlander2.png", 1.2, 0, self.player)
       @entity_manager.add_component p2_lander, Controls.new([Input::Keys::J, Input::Keys::L])
       @entity_manager.add_component p2_lander, Velocity.new
       @entity_manager.add_component p2_lander, Motion.new
@@ -76,10 +76,6 @@ class TransitionScreen
     @rendering_system   = RenderingSystem.new self
     @collision_system   = CollisionSystem.new self
     @asteroid_system    = AsteroidSystem.new self, @world
-
-    #set background
-    @bg_image = Texture.new(Gdx.files.internal("res/images/" + @world.skin + "background.png")) # TODO image = transition_bg
-    # TODO make a transition foreground to 'scroll' past the background
 
     @game_over=false
     @elapsed=0
@@ -95,17 +91,34 @@ class TransitionScreen
   end
 
   def add_transition_world_entity_commons
+
+    #set background
+    # TODO this needs to scroll too
+    bg_image = @entity_manager.create_tagged_entity 'background'
+    @entity_manager.add_component bg_image, Position.new(0, 0) #bottom third covers image
+    @entity_manager.add_component bg_image, Velocity.new(0,-1) # fast down
+    @entity_manager.add_component bg_image, Renderable.new(@world.skin, "transition.png", 1.2, 0, self.background)
+    @entity_manager.add_component bg_image, Motion.new
+
     p1_lander = @entity_manager.create_tagged_entity 'p1_lander'
     if @multiplayer
       @entity_manager.add_component p1_lander, Position.new(110, 90)
     else
       @entity_manager.add_component p1_lander, Position.new(420, 90)
     end
-    @entity_manager.add_component p1_lander, Renderable.new(@world.skin, "crashlander1.png", 1.2, 0, self.PLAYER1)
+    @entity_manager.add_component p1_lander, Renderable.new(@world.skin, "crashlander1.png", 1.2, 0, self.player)
     @entity_manager.add_component p1_lander, Controls.new([Input::Keys::A, Input::Keys::D])
     @entity_manager.add_component p1_lander, Velocity.new
     @entity_manager.add_component p1_lander, Motion.new
     @entity_manager.add_component p1_lander, Collision.new
+
+    scroll_effect = @entity_manager.create_tagged_entity 'scroll_effect'
+    @entity_manager.add_component scroll_effect, Position.new(0, 0) #bottom third covers image
+    @entity_manager.add_component scroll_effect, Velocity.new(0,-20) # fast down
+    @entity_manager.add_component scroll_effect, Renderable.new(@world.skin, "scrolleffect.png", 1.2, 0, self.front_scroll)
+    @entity_manager.add_component scroll_effect, Motion.new
+    # TODO make loop component for this, maybe scrollsystem by itself. Yes
+
   end
 
   # Called when this screen is no longer the current screen for a Game.
@@ -130,8 +143,7 @@ class TransitionScreen
     @batch.setProjectionMatrix(@camera.combined)
     @batch.begin
 
-    @batch.draw(@bg_image, 0, 0)
-
+    @physics_system.process_one_game_tick(delta,@entity_manager,@movement_system)
     @rendering_system.process_one_game_tick(delta, @entity_manager, @camera, @batch, @font)
 
     # This shows how to do something every N seconds:

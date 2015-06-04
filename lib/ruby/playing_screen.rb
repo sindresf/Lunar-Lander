@@ -1,6 +1,7 @@
 java_import com.badlogic.gdx.Screen
 
 require 'lunar_lander_em'
+require 'result_screen'
 
 # Necesssary components
 require 'components/aerodynamic'
@@ -208,7 +209,7 @@ class PlayingScreen
       end
       @bg_song.stop
       @bg_song.dispose
-      @game.setScreen @menu_screen
+      @game.setScreen ResultScreen.new(@game, @menu_screen, @world, @multiplayer, @muted)
     end
 
   end

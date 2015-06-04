@@ -73,9 +73,15 @@ __Game Scene__
 
 __Transition Scene__
 - [x] create
-- [ ] music in background
+- [x] music in background
  - [x] same as 'world'
+ - [ ] carries over into game
 - [ ] make a up-scroller for world transition 
+ - [x] scrolling background
+ - [x] scrolling effect
+   - [ ] looping scrolling
+ - [ ] its own controls
+ - [ ] scoring that goes into gaming
  - [ ] rename the project "**Intergalactic whatnots**" at this point
 
 __Win/loss Scene__

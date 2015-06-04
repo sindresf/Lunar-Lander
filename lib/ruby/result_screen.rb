@@ -2,7 +2,6 @@ java_import com.badlogic.gdx.Screen
 java_import com.badlogic.gdx.Audio
 java_import com.badlogic.gdx.audio.Music
 
-require 'playing_screen'
 require 'lunar_lander_em'
 require 'systems/useroptionsystem'
 require 'systems/renderingsystem'
@@ -13,34 +12,32 @@ require 'helper/WorldMaker'
 
 class ResultScreen
   include Screen
-  def initialize(game)
+  def initialize(game, menu_screen, world, multiplayer, muted)
     @game = game
-    @world = WorldMaker.make 'first'
+    @menu_screen = menu_screen
+    @world = world
+    @multiplayer = multiplayer
+    @muted = muted
     @bg_song = Gdx.audio.newMusic(Gdx.files.internal("res/music/wearethechampions.mp3"))
     @bg_song.setVolume 0.25
-    @bg_song.setPosition 0.5
   end
 
   def show
-    @option_entity_manager = Lunar_lander_em.new @game
+    @result_entity_manager = Lunar_lander_em.new @game
 
-    bg_image = @option_entity_manager.create_tagged_entity 'background'
-    @option_entity_manager.add_component bg_image, Renderable.new(@world.skin, 'startup.png', 1.0, 0, 1)
-    @option_entity_manager.add_component bg_image, Position.new(0 ,0)
+    bg_image = @result_entity_manager.create_tagged_entity 'background'
+    @result_entity_manager.add_component bg_image, Renderable.new(@world.skin, 'result.png', 1.0, 0)
+    @result_entity_manager.add_component bg_image, Position.new(0 ,0)
 
-    lunar_lander = @option_entity_manager.create_tagged_entity 'lunar_lander'
-    @option_entity_manager.add_component lunar_lander, Renderable.new(@world.skin, 'lunarlander.png', 1.0, 0, 2)
-    x_center = 900 / 2
-    y_center = 135
-    x =  x_center - (@option_entity_manager.get_component_of_type(lunar_lander, Renderable).width / 2)
-    y = y_center - (@option_entity_manager.get_component_of_type(lunar_lander, Renderable).height / 2)
-    @option_entity_manager.add_component lunar_lander, Position.new(x, y)
+    # TODO make if statements for "who won" / "win/loss"
+    lunar_lander = @result_entity_manager.create_tagged_entity 'lunar_lander'
+    @result_entity_manager.add_component lunar_lander, Renderable.new(@world.skin, 'lunarlander.png', 1.0, 0, 1)
+    @result_entity_manager.add_component lunar_lander, Position.new(150, 90)
 
-    skin_option = @option_entity_manager.create_tagged_entity 'option'
-    @option_entity_manager.add_component skin_option, UserOption.new('world')
-
-    start_option = @option_entity_manager.create_tagged_entity 'option'
-    @option_entity_manager.add_component start_option, UserOption.new('start')
+    # TODO get Who won
+    lander = @result_entity_manager.create_tagged_entity 'lander'
+    @result_entity_manager.add_component lander, Position.new(420,150)
+    @result_entity_manager.add_component lander, Renderable.new(@world.skin, "crashlander1.png", 1.2, 0, 2)
 
     @rendering_system = RenderingSystem.new @game
     @user_option_system = UserOptionSystem.new @game, self, @world, @bg_song
@@ -63,50 +60,16 @@ class ResultScreen
 
     @batch.begin
 
-    @user_option_system.process_one_game_tick @option_entity_manager
-    @rendering_system.process_one_game_tick(delta, @option_entity_manager, @camera, @batch, @font)
-
-    draw_info
+    @user_option_system.process_one_game_tick @result_entity_manager
+    @rendering_system.process_one_game_tick(delta, @result_entity_manager, @camera, @batch, @font)
     @batch.end
 
-    if Gdx.input.isKeyPressed(Input::Keys::Q)
+    if Gdx.input.isKeyPressed(Input::Keys::ENTER)
       @bg_song.stop
       @bg_song.dispose
-      Gdx.app.exit
+      @game.setScreen @menu_screen
     end
 
-  end
-
-  def draw_info
-    @font.draw(@batch, "player 1 controls", 99, 420);
-    @font.draw(@batch, "thrust", 130, 382);
-    @font.draw(@batch, "s", 145, 366);
-    @font.draw(@batch, "a", 139, 355);
-    @font.draw(@batch, "turn left", 88, 341);
-    @font.draw(@batch, "d", 151, 355);
-    @font.draw(@batch, "turns right", 162, 341);
-
-    if @user_option_system.multiplayer
-      @font.draw(@batch, "player 2 controls", 699, 420);
-      @font.draw(@batch, "thrust", 730, 381);
-      @font.draw(@batch, "k", 745, 364);
-      @font.draw(@batch, "j", 738, 357);
-      @font.draw(@batch, "turn left", 684, 342);
-      @font.draw(@batch, "l", 756, 357);
-      @font.draw(@batch, "turns right", 764, 345);
-    end
-
-    @font.draw(@batch, "P to play!", 8, 100);
-    @font.draw(@batch, "w to jump worlds!", 8, 80);
-    @font.draw(@batch, "1/2 to choose players", 8, 60);
-
-    if @user_option_system.multiplayer
-      @font.draw(@batch,  "multiplayer", 36, 46);
-    else
-      @font.draw(@batch,  "singleplayer", 29, 46);
-    end
-    @font.draw(@batch, "Lunar Lander (Q to exit)", 8, 20);
-    @font.draw(@batch, "M to mute", 820, 20);
   end
 
   def resize width, height
