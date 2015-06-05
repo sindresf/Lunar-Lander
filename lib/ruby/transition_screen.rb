@@ -25,14 +25,15 @@ require 'components/velocity'
 # Necessary systems
 require 'systems/asteroidsystem'
 require 'systems/collisionsystem'
-require 'systems/controlssystem'
 require 'systems/enginesystem'
 require 'systems/landingsystem'
 require 'systems/movementsystem'
 require 'systems/musicfadingsystem'
 require 'systems/physics'
 require 'systems/renderingsystem'
+require 'systems/scrollcontrolsystem'
 require 'systems/scrollingsystem'
+require 'systems/straighteningsystem'
 require 'systems/system'
 
 # Helpers
@@ -72,7 +73,8 @@ class TransitionScreen
       @entity_manager.add_component p2_lander, Collision.new
     end
 
-    @controls_system    = ControlsSystem.new self
+    @controls_system    = ScrollControlSystem.new self, @multiplayer
+    @straighten_system    = StraighteningSystem.new self, @multiplayer
     @physics_system     = Physics.new self
     @movement_system    = MovementSystem.new self
     @scrolling_system   = ScrollingSystem.new self
@@ -140,6 +142,7 @@ class TransitionScreen
     # Nice because you can dictate the order things are processed
     @asteroid_system.process_one_game_tick(delta, @entity_manager)
     @controls_system.process_one_game_tick(delta, @entity_manager)
+    @straighten_system.process_one_game_tick(delta,@entity_manager)
     @physics_system.process_one_game_tick(delta, @entity_manager, @movement_system)
     @scrolling_system.process_one_game_tick(delta, @entity_manager)
     @game_over = @collision_system.process_one_game_tick(delta,@entity_manager)

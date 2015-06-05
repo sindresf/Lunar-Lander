@@ -2,6 +2,7 @@ require_relative 'system'
 
 class ControlsSystem < System
   # Presumably these would be DRYed into a config file... the fuck?
+  # TODO look into this config file thing
   P1_KEY_ROTL   = Input::Keys::A
   P1_KEY_THRUST = Input::Keys::S
   P1_KEY_ROTR   = Input::Keys::D

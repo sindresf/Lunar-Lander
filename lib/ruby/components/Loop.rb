@@ -1,7 +1,7 @@
 require_relative 'component'
 
 class Loop < Component
-  attr_reader :origin
+  attr_reader :origin, :loop_y_pos
   def initialize(loop_y_pos, origin_y_pos = 0, tolerance = 0)
     @loop_y_pos = loop_y_pos
     @origin = origin_y_pos

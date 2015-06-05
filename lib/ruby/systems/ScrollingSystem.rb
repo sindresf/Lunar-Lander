@@ -8,7 +8,8 @@ class ScrollingSystem < System
       position = entity_mgr.get_component_of_type(entity, Position)
 
       if loop.looping_time?(position.y.round(1))
-        position.y = loop.origin # TODO needs to consider the amount of, to not jerk
+        # offset = loop.loop_y_pos - (loop.loop_y_pos + position.y) # TODO actual think about this
+        position.y = loop.origin # + offset# TODO needs to consider the amount of, to not jerk
       end
     end
   end
