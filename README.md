@@ -82,11 +82,11 @@ __Transition Scene__
    - [x] looping scrolling
    - [ ] jerking-free looping
  - [x] its own controls
-   - [x] tilt with acceleration
-   - [x] move with acceleration
-   - [x] for single and multiplayer
-   - [ ] straightener for tilt
-   - [ ] stopper for move
+    - [x] tilt with acceleration
+    - [x] move with acceleration
+    - [x] for single and multiplayer
+    - [x] straightener for tilt
+    - [x] stopper for move
  - [ ] scoring that goes into gaming
  - [ ] rename the project "**Intergalactic whatnots**" at this point
 
