@@ -33,6 +33,7 @@ require 'systems/physics'
 require 'systems/renderingsystem'
 require 'systems/scrollcontrolsystem'
 require 'systems/scrollingsystem'
+require 'systems/solidscrolleffectsystem'
 require 'systems/straighteningsystem'
 require 'systems/system'
 
@@ -60,7 +61,7 @@ class TransitionScreen
     # else
     @entity_manager = Lunar_lander_em.new @game
 
-    add_transition_world_entity_commons
+    add_transition_world_entity_commons @world.name
 
     # TODO make this fit
     if @multiplayer
@@ -77,7 +78,17 @@ class TransitionScreen
     @straighten_system    = StraighteningSystem.new self, @multiplayer
     @physics_system     = Physics.new self
     @movement_system    = MovementSystem.new self
-    @scrolling_system   = ScrollingSystem.new self
+    @scrolling_system   = nil
+    case @world.name
+    when 'first'
+      @scrolling_system   = ScrollingSystem.new self
+    when 'neon'
+      @scrolling_system   = ScrollingSystem.new self
+    when 'solid'
+      @scrolling_system   = SolidScrollEffectSystem.new self, @world, @entity_manager
+    else
+      @scrolling_system   = ScrollingSystem.new self
+    end
     @rendering_system   = RenderingSystem.new self
     @collision_system   = CollisionSystem.new self
     @asteroid_system    = AsteroidSystem.new self, @world
@@ -95,16 +106,18 @@ class TransitionScreen
     end
   end
 
-  def add_transition_world_entity_commons
+  def add_transition_world_entity_commons(world_name)
 
     #set background
     # TODO this needs to scroll too
     bg_image = @entity_manager.create_tagged_entity 'background'
     @entity_manager.add_component bg_image, Position.new(0, 0) #bottom third covers image
-    @entity_manager.add_component bg_image, Velocity.new(0,-1) # slow down
-    @entity_manager.add_component bg_image, Renderable.new(@world.skin, "transition.png", 1.2, 0, self.background)
-    @entity_manager.add_component bg_image, Motion.new
-    @entity_manager.add_component bg_image, Loop.new(-600, 0, 1)
+    @entity_manager.add_component bg_image, Renderable.new(@world.skin, "transition.png", 1, 0, self.background)
+    if world_name != 'solid'
+      @entity_manager.add_component bg_image, Velocity.new(0,-1) # slow down
+      @entity_manager.add_component bg_image, Motion.new
+      @entity_manager.add_component bg_image, Loop.new(-600, 0, 1)
+    end
 
     p1_lander = @entity_manager.create_tagged_entity 'p1_lander'
     if @multiplayer
@@ -112,20 +125,20 @@ class TransitionScreen
     else
       @entity_manager.add_component p1_lander, Position.new(420, 90)
     end
-    @entity_manager.add_component p1_lander, Renderable.new(@world.skin, "crashlander1.png", 1.2, 0, self.player)
+    @entity_manager.add_component p1_lander, Renderable.new(@world.skin, "crashlander1.png", 1, 0, self.player)
     @entity_manager.add_component p1_lander, Controls.new([Input::Keys::A, Input::Keys::D])
     @entity_manager.add_component p1_lander, Velocity.new
     @entity_manager.add_component p1_lander, Motion.new
     @entity_manager.add_component p1_lander, Collision.new
 
-    scroll_effect = @entity_manager.create_tagged_entity 'scroll_effect'
-    @entity_manager.add_component scroll_effect, Position.new(0, 0) #bottom third covers image
-    @entity_manager.add_component scroll_effect, Velocity.new(0,-20) # fast down
-    @entity_manager.add_component scroll_effect, Renderable.new(@world.skin, "scrolleffect.png", 1.2, 0, self.front_scroll)
-    @entity_manager.add_component scroll_effect, Motion.new
-    @entity_manager.add_component scroll_effect, Loop.new(-1200, 0, 7)
-    # TODO make loop component for this, maybe scrollsystem by itself. Yes
-
+    if world_name != 'solid'
+      scroll_effect = @entity_manager.create_tagged_entity 'scroll_effect'
+      @entity_manager.add_component scroll_effect, Position.new(0, 0) #bottom third covers image
+      @entity_manager.add_component scroll_effect, Velocity.new(0,-20) # fast down
+      @entity_manager.add_component scroll_effect, Renderable.new(@world.skin, "scrolleffect.png", 1.2, 0, self.front_scroll)
+      @entity_manager.add_component scroll_effect, Motion.new
+      @entity_manager.add_component scroll_effect, Loop.new(-1200, 0, 7)
+    end
   end
 
   # Called when this screen is no longer the current screen for a Game.

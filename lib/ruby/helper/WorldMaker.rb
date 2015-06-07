@@ -19,9 +19,9 @@ module WorldMaker
   end
 
   def self.make_first
-    world = World.new("firstskin/", false, true)
-    world.eng_x = 0 # TODO don't forget these when animation comes
-    world.eng_y = 0
+    world = World.new('first', "firstskin/", false, true)
+    world.engine_x = 0 # TODO don't forget these when animation comes
+    world.engine_y = 0
     world.gravity_strength = GRAVITY_STANDARD
     world.asteroid_freq = ASTEROID_FREQ_STANDARD
     world.asteroid_sides = ASTEROID_SIDE_STANDARD
@@ -31,9 +31,9 @@ module WorldMaker
   end
 
   def self.make_neon
-    world = World.new("neonskin/", false, true)
-    world.eng_x = 0
-    world.eng_y = 0
+    world = World.new('neon', "neonskin/", false, true)
+    world.engine_x = 0
+    world.engine_y = 0
     world.gravity_strength = GRAVITY_STANDARD
     world.asteroid_freq = ASTEROID_FREQ_STANDARD
     world.asteroid_sides = ['left', 'above']
@@ -43,9 +43,9 @@ module WorldMaker
   end
 
   def self.make_solid
-    world = World.new("solidskin/", false, true)
-    world.eng_x = 0
-    world.eng_y = 0
+    world = World.new('solid', "solidskin/", false, true)
+    world.engine_x = 0
+    world.engine_y = 0
     world.gravity_strength = GRAVITY_STANDARD
     world.asteroid_freq = ASTEROID_FREQ_STANDARD
     world.asteroid_sides = ['left', 'right']
@@ -55,9 +55,9 @@ module WorldMaker
   end
 
   def self.make_whatever
-    world = World.new("whateverskin/", false, false)
-    world.eng_x = 0
-    world.eng_y = 0
+    world = World.new('whatever', "whateverskin/", false, false)
+    world.engine_x = 0
+    world.engine_y = 0
     return world
   end
 
