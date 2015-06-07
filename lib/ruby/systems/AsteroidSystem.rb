@@ -11,7 +11,6 @@ class AsteroidSystem < System
 
   def generate_new_asteroids(delta, entity_mgr) # TODO make this ALSO make background, or seperate thing?
     make = rand(@make_freq)
-    #TODO make dependent on world asteroid origins
 
     @world.asteroid_sides.each do |side|
       if is_making_left_asteroid_time?(side, make)
@@ -42,7 +41,8 @@ class AsteroidSystem < System
     else
       vertical_vel = rand(12) - 10
     end
-    make_asteroid(starting_x, starting_y, horizontal_vel, vertical_vel, 'left', entity_mgr)
+    asteroid_scale = (0.5 * (2.5 / (horizontal_vel* 0.2))) + (rand() * 0.9) # scales size on speed
+    make_asteroid(starting_x, starting_y, horizontal_vel, vertical_vel, 'left', asteroid_scale, entity_mgr)
   end
 
   def is_making_above_asteroid_time?(side, make)
@@ -57,7 +57,8 @@ class AsteroidSystem < System
       horizontal_vel= 1
     end
     vertical_vel = rand(7) - 10
-    make_asteroid(starting_x, starting_y, horizontal_vel, vertical_vel, 'above', entity_mgr)
+    asteroid_scale = (0.5 * (2.5 / (-vertical_vel* 0.2))) + (rand() * 0.9) # scales size on speed
+    make_asteroid(starting_x, starting_y, horizontal_vel, vertical_vel, 'above', asteroid_scale, entity_mgr)
   end
 
   def is_making_right_asteroid_time?(side, make)
@@ -73,7 +74,8 @@ class AsteroidSystem < System
     else
       vertical_vel = rand(12) - 10
     end
-    make_asteroid(starting_x, starting_y, horizontal_vel, vertical_vel, 'right', entity_mgr)
+    asteroid_scale = (0.5 * (2.5 / (-horizontal_vel* 0.2))) + (rand() * 0.9) # scales size on speed
+    make_asteroid(starting_x, starting_y, horizontal_vel, vertical_vel, 'right', asteroid_scale, entity_mgr)
   end
 
   def is_making_below_asteroid_time?(side, make)
@@ -81,17 +83,24 @@ class AsteroidSystem < System
   end
 
   def make_below_asteroid(entity_mgr)
-    make_asteroid(starting_x, starting_y, horizontal_vel, vertical_vel, 'below', entity_mgr)
+    starting_x = rand(500) + 200
+    starting_y = -100
+    horizontal_vel= rand(10) - 5
+    if horizontal_vel== 0
+      horizontal_vel= 1
+    end
+    vertical_vel = rand(7) + 3
+    asteroid_scale = (0.5 * (2.5 / (vertical_vel* 0.2))) + (rand() * 0.9) # scales size on speed
+    make_asteroid(starting_x, starting_y, horizontal_vel, vertical_vel, 'below', asteroid_scale, entity_mgr)
   end
 
-  def make_asteroid(x, y, horizontal_vel, vertical_vel, origin, entity_mgr)
-    asteroid_scale = (0.5 * (2.5 / (horizontal_vel* 0.2))) + (rand() * 0.9) # scales size on speed
+  def make_asteroid(x, y, horizontal_vel, vertical_vel, origin, scale, entity_mgr)
     asteroid_rotation = 8.0 + rand(48)
     asteroid = entity_mgr.create_tagged_entity 'asteroid'
     entity_mgr.add_component asteroid, Position.new(x, y)
     entity_mgr.add_component asteroid, Velocity.new(horizontal_vel, vertical_vel)
     # TODO incorporate this renderable levels thingsy
-    entity_mgr.add_component asteroid, Renderable.new(@world.skin, "asteroid.png", asteroid_scale, asteroid_rotation, 10)
+    entity_mgr.add_component asteroid, Renderable.new(@world.skin, "asteroid.png", scale, asteroid_rotation, 10)
     entity_mgr.add_component asteroid, Collision.new
     entity_mgr.add_component asteroid, Motion.new
     entity_mgr.add_component asteroid, Origin.new(origin)
