@@ -194,8 +194,7 @@ class TransitionScreen
       @bg_song.dispose
       @game.setScreen @menu_screen
     elsif Gdx.input.isKeyPressed(Input::Keys::ENTER)
-      @bg_song.stop
-      @bg_song.dispose
+
       @game.setScreen PlayingScreen.new(@game, @menu_screen, @world, @multiplayer, @muted)
     end
 

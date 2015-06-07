@@ -75,7 +75,7 @@ __Transition Scene__
 - [x] create
 - [x] music in background
  - [x] same as 'world'
- - [ ] carries over into game
+ - [x] carries over into game
 - [ ] make a up-scroller for world transition 
  - [x] scrolling background
  - [x] scrolling effect

@@ -106,7 +106,7 @@ class PlayingScreen
     @camera.setToOrtho(false, 900, 600);
     @batch = SpriteBatch.new
     @font = BitmapFont.new
-    if !@muted
+    if !@muted && !@bg_song.isPlaying
       @bg_song.play
     end
   end
