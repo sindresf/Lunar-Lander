@@ -24,6 +24,7 @@ require 'components/solid'
 require 'components/velocity'
 
 # Necessary systems
+require 'systems/asteroidrotationsystem'
 require 'systems/cleanupasteroidsystem'
 require 'systems/collisionsystem'
 require 'systems/enginesystem'
@@ -70,23 +71,24 @@ class TransitionScreen
       @entity_manager.add_component p2_lander, Collision.new
     end
 
-    @controls_system      = ScrollControlSystem.new self, @multiplayer
-    @straighten_system    = StraighteningSystem.new self, @multiplayer
-    @physics_system       = Physics.new self
-    @movement_system      = MovementSystem.new self
+    @controls_system         = ScrollControlSystem.new self, @multiplayer
+    @straighten_system       = StraighteningSystem.new self, @multiplayer
+    @physics_system          = Physics.new self
+    @movement_system         = MovementSystem.new self
     case @world.name
     when 'first'
-      @scrolling_system   = ScrollingSystem.new self
+      @scrolling_system      = ScrollingSystem.new self
     when 'neon'
-      @scrolling_system   = ScrollingSystem.new self
+      @scrolling_system      = ScrollingSystem.new self
     when 'solid'
-      @scrolling_system   = SolidScrollEffectSystem.new self, @world, @entity_manager
+      @scrolling_system      = SolidScrollEffectSystem.new self, @world, @entity_manager
     else
-      @scrolling_system   = ScrollingSystem.new self
+      @scrolling_system      = ScrollingSystem.new self
     end
-    @rendering_system     = RenderingSystem.new self
-    @collision_system     = CollisionSystem.new self
-    @make_asteroid_system = MakeAsteroidSystem.new self, @world
+    @rendering_system        = RenderingSystem.new self, self.LEVELS
+    @collision_system        = CollisionSystem.new self
+    @make_asteroid_system    = MakeAsteroidSystem.new self, @world
+    @rotate_asteroids_system = AsteroidRotationSystem.new self
     @cleanup_asteroid_system = CleanupAsteroidSystem.new self
 
     @game_over=false
@@ -164,6 +166,7 @@ class TransitionScreen
     @batch.begin
 
     @physics_system.process_one_game_tick(delta,@entity_manager,@movement_system)
+    @rotate_asteroids_system.process_one_game_tick(delta, @entity_manager)
     @rendering_system.process_one_game_tick(delta, @entity_manager, @camera, @batch, @font)
 
     # This shows how to do something every N seconds:

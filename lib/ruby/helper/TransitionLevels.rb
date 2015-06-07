@@ -6,5 +6,7 @@ module TransitionLevels
   front_objects ||= 4
   front_scroll ||= 5
 
-  attr_reader :background, :bg_scroll, :bg_objects, :player, :front_objects, :front_scroll
+  LEVELS ||= 5
+
+  attr_reader :background, :bg_scroll, :bg_objects, :player, :front_objects, :front_scroll, :LEVELS
 end

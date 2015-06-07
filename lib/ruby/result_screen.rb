@@ -39,7 +39,7 @@ class ResultScreen
     @result_entity_manager.add_component lander, Position.new(420,150)
     @result_entity_manager.add_component lander, Renderable.new(@world.skin, "crashlander1.png", 1.2, 0, 2)
 
-    @rendering_system = RenderingSystem.new @game
+    @rendering_system = RenderingSystem.new @game, 3
     @user_option_system = UserOptionSystem.new @game, self, @world, @bg_song
 
     @camera = OrthographicCamera.new

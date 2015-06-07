@@ -49,7 +49,7 @@ class StartupScreen
     start_option = @option_entity_manager.create_tagged_entity 'option'
     @option_entity_manager.add_component start_option, UserOption.new('start')
 
-    @rendering_system = RenderingSystem.new @game
+    @rendering_system = RenderingSystem.new @game, 2
     @user_option_system = UserOptionSystem.new @game, self, @world, @bg_song
 
     @camera = OrthographicCamera.new

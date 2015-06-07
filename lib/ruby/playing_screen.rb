@@ -24,6 +24,7 @@ require 'components/solid'
 require 'components/velocity'
 
 # Necessary systems
+require 'systems/asteroidrotationsystem'
 require 'systems/collisionsystem'
 require 'systems/cleanupasteroidsystem'
 require 'systems/controlssystem'
@@ -88,10 +89,11 @@ class PlayingScreen
     @controls_system            = ControlsSystem.new self
     @physics_system             = Physics.new self, @world.gravity_strength
     @movement_system            = MovementSystem.new self
-    @rendering_system           = RenderingSystem.new self
+    @rendering_system           = RenderingSystem.new self, self.LEVELS
     @collision_system           = CollisionSystem.new self
     @landing_system             = LandingSystem.new self
     @make_asteroid_system       = MakeAsteroidSystem.new self, @world
+    @rotate_asteroids_system    = AsteroidRotationSystem.new self
     @cleanup_asteroid_system    = CleanupAsteroidSystem.new self
 
     #set background
@@ -179,6 +181,7 @@ class PlayingScreen
 
     @batch.draw(@bg_image, 0, 0)
 
+    @rotate_asteroids_system.process_one_game_tick(delta, @entity_manager)
     @rendering_system.process_one_game_tick(delta, @entity_manager, @camera, @batch, @font)
 
     # This shows how to do something every N seconds:
