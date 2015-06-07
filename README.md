@@ -87,6 +87,7 @@ __Transition Scene__
     - [x] for single and multiplayer
     - [x] straightener for tilt
     - [x] stopper for move
+    - [x] doesn't go through screen walls
  - [ ] scoring that goes into gaming
  - [ ] rename the project "**Intergalactic whatnots**" at this point
 

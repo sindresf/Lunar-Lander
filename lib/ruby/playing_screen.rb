@@ -19,6 +19,7 @@ require 'components/origin'
 require 'components/pad'
 require 'components/position'
 require 'components/renderable'
+require 'components/rotation'
 require 'components/solid'
 require 'components/velocity'
 
@@ -63,8 +64,9 @@ class PlayingScreen
     if @multiplayer
       p2_lander = @entity_manager.create_tagged_entity('p2_lander')
       @entity_manager.add_component p2_lander, Position.new(70, 200)
+      @entity_manager.add_component p2_lander, Rotation.new(0.1)
       thrust = 0.01
-      @entity_manager.add_component p2_lander, Engine.new(thrust, @world.eng_x, @world.eng_y)
+      @entity_manager.add_component p2_lander, Engine.new(thrust, @world.engine_x, @world.engine_y)
       @entity_manager.add_component p2_lander, Fuel.new(100)
       @entity_manager.add_component p2_lander, Renderable.new(@world.skin, "crashlander2.png", 1.2, 0, self.PLAYER2)
       @entity_manager.add_component p2_lander, Controls.new([Input::Keys::J, Input::Keys::K, Input::Keys::L])
@@ -122,8 +124,9 @@ class PlayingScreen
 
     p1_lander = @entity_manager.create_tagged_entity 'p1_lander'
     @entity_manager.add_component p1_lander, Position.new(450,450)
+    @entity_manager.add_component p1_lander, Rotation.new(0.1)
     thrust = 0.01
-    @entity_manager.add_component p1_lander, Engine.new(thrust, @world.eng_x, @world.eng_y)
+    @entity_manager.add_component p1_lander, Engine.new(thrust, @world.engine_x, @world.engine_y)
     @entity_manager.add_component p1_lander, Fuel.new(250)
     @entity_manager.add_component p1_lander, Renderable.new(@world.skin, "crashlander1.png", 1.2, 0, self.PLAYER1)
     @entity_manager.add_component p1_lander, Controls.new([Input::Keys::A, Input::Keys::S, Input::Keys::D])

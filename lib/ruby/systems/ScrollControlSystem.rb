@@ -5,8 +5,6 @@ class ScrollControlSystem < System
   P1_KEY_RIGHT  = Input::Keys::D
   P2_KEY_LEFT   = Input::Keys::J
   P2_KEY_RIGHt  = Input::Keys::L
-  MOVE_TILT = 12 # degrees of rotation while moving horizontally
-  TILT_STEP = 0.04 # "tilt acceleration"
   MOVE_ACCELERATION = 0.09
   MAX_SPEED = 4
   LEFT = -1
@@ -30,14 +28,16 @@ class ScrollControlSystem < System
   def handle_player1_controls(control_component, entity_mgr, entity, delta)
     if move_left_input?(control_component, entity_mgr, 1)
       renderable_component = entity_mgr.get_component_of_type(entity, Renderable)
-      if renderable_component.rotation < MOVE_TILT
-        renderable_component.rotate(delta * TILT_STEP)
+      rotation = entity_mgr.get_component_of_type(entity, Rotation)
+      if renderable_component.rotation < rotation.max
+        renderable_component.rotate(delta * rotation.speed)
       end
       move_in_dir(delta, LEFT, entity, entity_mgr)
     elsif move_right_input?(control_component, entity_mgr, 1)
       renderable_component = entity_mgr.get_component_of_type(entity, Renderable)
-      if renderable_component.rotation > -MOVE_TILT
-        renderable_component.rotate(delta * -TILT_STEP)
+      rotation = entity_mgr.get_component_of_type(entity, Rotation)
+      if renderable_component.rotation > -rotation.max
+        renderable_component.rotate(delta * -rotation.speed)
       end
       move_in_dir(delta, RIGHT, entity, entity_mgr)
     end
@@ -46,14 +46,16 @@ class ScrollControlSystem < System
   def handle_player2_controls(control_component, entity_mgr, entity, delta)
     if move_left_input?(control_component, entity_mgr, 2)
       renderable_component=entity_mgr.get_component_of_type(entity, Renderable)
-      if renderable_component.rotation < MOVE_TILT
-        renderable_component.rotate(delta * TILT_STEP)
+      rotation = entity_mgr.get_component_of_type(entity, Rotation)
+      if renderable_component.rotation < rotation.max
+        renderable_component.rotate(delta * rotation.speed)
       end
       move_in_dir(delta, LEFT, entity, entity_mgr)
     elsif move_right_input?(control_component, entity_mgr, 2)
       renderable_component=entity_mgr.get_component_of_type(entity, Renderable)
-      if renderable_component.rotation > -MOVE_TILT
-        renderable_component.rotate(delta * -TILT_STEP)
+      rotation = entity_mgr.get_component_of_type(entity, Rotation)
+      if renderable_component.rotation > -rotation.max
+        renderable_component.rotate(delta * -rotation.speed)
       end
       move_in_dir(delta, RIGHT, entity, entity_mgr)
     end

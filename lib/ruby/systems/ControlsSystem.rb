@@ -30,15 +30,17 @@ class ControlsSystem < System
     if Gdx.input.isKeyPressed(P1_KEY_ROTL) &&
     control_component.responsive_keys.include?(P1_KEY_ROTL)
 
-      renderable_component=entity_mgr.get_component_of_type(entity, Renderable)
-      renderable_component.rotate(delta * 0.1)
+      renderable_component = entity_mgr.get_component_of_type(entity, Renderable)
+      rotation = entity_mgr.get_component_of_type(entity, Rotation)
+      renderable_component.rotate(delta * rotation.speed)
     end
 
     if Gdx.input.isKeyPressed(P1_KEY_ROTR) &&
     control_component.responsive_keys.include?(P1_KEY_ROTR)
 
-      renderable_component=entity_mgr.get_component_of_type(entity, Renderable)
-      renderable_component.rotate(delta * -0.1)
+      renderable_component = entity_mgr.get_component_of_type(entity, Renderable)
+      rotation = entity_mgr.get_component_of_type(entity, Rotation)
+      renderable_component.rotate(delta * - rotation.speed)
     end
   end
 

@@ -19,6 +19,7 @@ require 'components/origin'
 require 'components/pad'
 require 'components/position'
 require 'components/renderable'
+require 'components/rotation'
 require 'components/solid'
 require 'components/velocity'
 
@@ -53,12 +54,6 @@ class TransitionScreen
   end
 
   def show
-    #if File.size? 'savedgame.dat'
-    #   save_file = File.open( 'savedgame.dat' )
-    #  @entity_manager = Marshal::load(save_file)
-    #   save_file.close
-    #   @entity_manager.game = self
-    # else
     @entity_manager = Lunar_lander_em.new @game
 
     add_transition_world_entity_commons @world.name
@@ -66,6 +61,7 @@ class TransitionScreen
     # TODO make this fit
     if @multiplayer
       p2_lander = @entity_manager.create_tagged_entity 'p2_lander'
+      @entity_manager.add_component p2_lander, Rotation.new(0.04, 12)
       @entity_manager.add_component p2_lander, Position.new(700, 90)
       @entity_manager.add_component p2_lander, Renderable.new(@world.skin, "crashlander2.png", 1, 0, self.player)
       @entity_manager.add_component p2_lander, Controls.new([Input::Keys::J, Input::Keys::L])
@@ -125,6 +121,7 @@ class TransitionScreen
     else
       @entity_manager.add_component p1_lander, Position.new(420, 90)
     end
+    @entity_manager.add_component p1_lander, Rotation.new(0.04, 12)
     @entity_manager.add_component p1_lander, Renderable.new(@world.skin, "crashlander1.png", 1, 0, self.player)
     @entity_manager.add_component p1_lander, Controls.new([Input::Keys::A, Input::Keys::D])
     @entity_manager.add_component p1_lander, Velocity.new
