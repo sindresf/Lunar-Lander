@@ -81,13 +81,23 @@ class ScrollControlSystem < System
 
   def move_in_dir(delta, dir, entity, entity_mgr)
     velocity = entity_mgr.get_component_of_type(entity, Velocity)
+    position = entity_mgr.get_component_of_type(entity, Position)
     if dir == -1
-      if velocity.horizontal >= -MAX_SPEED
-        velocity.horizontal += MOVE_ACCELERATION * dir * delta
+      if position.x >= 1
+        if velocity.horizontal >= -MAX_SPEED
+          velocity.horizontal += MOVE_ACCELERATION * dir * delta
+        end
+      else
+        velocity.horizontal = 0
       end
     elsif dir == 1
-      if velocity.horizontal <= MAX_SPEED
-        velocity.horizontal += MOVE_ACCELERATION * dir * delta
+      renderable_component = entity_mgr.get_component_of_type(entity, Renderable)
+      if position.x + renderable_component.width <= 899
+        if velocity.horizontal <= MAX_SPEED
+          velocity.horizontal += MOVE_ACCELERATION * dir * delta
+        end
+      else
+        velocity.horizontal = 0
       end
     end
 

@@ -67,7 +67,7 @@ class TransitionScreen
     if @multiplayer
       p2_lander = @entity_manager.create_tagged_entity 'p2_lander'
       @entity_manager.add_component p2_lander, Position.new(700, 90)
-      @entity_manager.add_component p2_lander, Renderable.new(@world.skin, "crashlander2.png", 1.2, 0, self.player)
+      @entity_manager.add_component p2_lander, Renderable.new(@world.skin, "crashlander2.png", 1, 0, self.player)
       @entity_manager.add_component p2_lander, Controls.new([Input::Keys::J, Input::Keys::L])
       @entity_manager.add_component p2_lander, Velocity.new
       @entity_manager.add_component p2_lander, Motion.new
@@ -135,7 +135,7 @@ class TransitionScreen
       scroll_effect = @entity_manager.create_tagged_entity 'scroll_effect'
       @entity_manager.add_component scroll_effect, Position.new(0, 0) #bottom third covers image
       @entity_manager.add_component scroll_effect, Velocity.new(0,-20) # fast down
-      @entity_manager.add_component scroll_effect, Renderable.new(@world.skin, "scrolleffect.png", 1.2, 0, self.front_scroll)
+      @entity_manager.add_component scroll_effect, Renderable.new(@world.skin, "scrolleffect.png", 1, 0, self.front_scroll)
       @entity_manager.add_component scroll_effect, Motion.new
       @entity_manager.add_component scroll_effect, Loop.new(-1200, 0, 7)
     end
