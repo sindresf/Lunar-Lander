@@ -24,10 +24,11 @@ require 'components/solid'
 require 'components/velocity'
 
 # Necessary systems
-require 'systems/asteroidsystem'
+require 'systems/cleanupasteroidsystem'
 require 'systems/collisionsystem'
 require 'systems/enginesystem'
 require 'systems/landingsystem'
+require 'systems/makeasteroidsystem'
 require 'systems/movementsystem'
 require 'systems/musicfadingsystem'
 require 'systems/physics'
@@ -58,7 +59,6 @@ class TransitionScreen
 
     add_transition_world_entity_commons @world.name
 
-    # TODO make this fit
     if @multiplayer
       p2_lander = @entity_manager.create_tagged_entity 'p2_lander'
       @entity_manager.add_component p2_lander, Rotation.new(0.04, 12)
@@ -70,11 +70,10 @@ class TransitionScreen
       @entity_manager.add_component p2_lander, Collision.new
     end
 
-    @controls_system    = ScrollControlSystem.new self, @multiplayer
+    @controls_system      = ScrollControlSystem.new self, @multiplayer
     @straighten_system    = StraighteningSystem.new self, @multiplayer
-    @physics_system     = Physics.new self
-    @movement_system    = MovementSystem.new self
-    @scrolling_system   = nil
+    @physics_system       = Physics.new self
+    @movement_system      = MovementSystem.new self
     case @world.name
     when 'first'
       @scrolling_system   = ScrollingSystem.new self
@@ -85,9 +84,10 @@ class TransitionScreen
     else
       @scrolling_system   = ScrollingSystem.new self
     end
-    @rendering_system   = RenderingSystem.new self
-    @collision_system   = CollisionSystem.new self
-    @asteroid_system    = AsteroidSystem.new self, @world
+    @rendering_system     = RenderingSystem.new self
+    @collision_system     = CollisionSystem.new self
+    @make_asteroid_system = MakeAsteroidSystem.new self, @world
+    @cleanup_asteroid_system = CleanupAsteroidSystem.new self
 
     @game_over=false
     @elapsed=0
@@ -150,12 +150,13 @@ class TransitionScreen
     delta = gdx_delta * 1000
 
     # Nice because you can dictate the order things are processed
-    @asteroid_system.process_one_game_tick(delta, @entity_manager)
+    @make_asteroid_system.process_one_game_tick(delta, @entity_manager)
     @controls_system.process_one_game_tick(delta, @entity_manager)
     @straighten_system.process_one_game_tick(delta,@entity_manager)
     @physics_system.process_one_game_tick(delta, @entity_manager, @movement_system)
     @scrolling_system.process_one_game_tick(delta, @entity_manager)
     @game_over = @collision_system.process_one_game_tick(delta,@entity_manager)
+    @cleanup_asteroid_system.process_one_game_tick(delta, @entity_manager)
 
     # Make sure you "layer" things in here from bottom to top...
     @camera.update
@@ -172,8 +173,8 @@ class TransitionScreen
       @elapsed = 0
     end
 
-    @font.draw(@batch, "FPS: #{Gdx.graphics.getFramesPerSecond}", 8, 25);
-    @font.draw(@batch, "ESC to exit", 8, 10);
+    @font.draw(@batch, "FPS: #{Gdx.graphics.getFramesPerSecond}", 8, 45);
+    @font.draw(@batch, "ESC to exit", 8, 20);
 
     @batch.end
 
@@ -194,10 +195,8 @@ class TransitionScreen
       @bg_song.dispose
       @game.setScreen @menu_screen
     elsif Gdx.input.isKeyPressed(Input::Keys::ENTER)
-
       @game.setScreen PlayingScreen.new(@game, @menu_screen, @world, @multiplayer, @muted)
     end
-
   end
 
   def resize width, height

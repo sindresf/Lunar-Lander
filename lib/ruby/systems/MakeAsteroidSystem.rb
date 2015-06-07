@@ -1,6 +1,6 @@
 require_relative 'system'
 
-class AsteroidSystem < System
+class MakeAsteroidSystem < System
   SIDE_NR = [0,1,2,3]
 
   def initialize(game, world)
@@ -99,6 +99,13 @@ class AsteroidSystem < System
     asteroid = entity_mgr.create_tagged_entity 'asteroid'
     entity_mgr.add_component asteroid, Position.new(x, y)
     entity_mgr.add_component asteroid, Velocity.new(horizontal_vel, vertical_vel)
+    rotation_coeff = horizontal_vel * 0.1
+    if vertical_vel <= 0
+      entity_mgr.add_component asteroid, Rotation.new(-0.09 * rotation_coeff)
+    else
+      entity_mgr.add_component asteroid, Rotation.new(0.09 * rotation_coeff)
+    end
+
     # TODO incorporate this renderable levels thingsy
     entity_mgr.add_component asteroid, Renderable.new(@world.skin, "asteroid.png", scale, asteroid_rotation, 10)
     entity_mgr.add_component asteroid, Collision.new
@@ -106,79 +113,9 @@ class AsteroidSystem < System
     entity_mgr.add_component asteroid, Origin.new(origin)
   end
 
-  def cleanup_asteroids(delta, entity_mgr)
-    asteroid_entities = entity_mgr.get_all_entities_tagged_with('asteroid') || []
-
-    asteroid_entities.each do |a|
-      killed = false
-      origin = entity_mgr.get_component_of_type(a, Origin)
-      case origin.origin
-      when 'left'
-        if kill_when_above a, entity_mgr
-        elsif kill_beyond_right a, entity_mgr
-        elsif kill_on_ground_hit a, entity_mgr
-        end
-      when 'above'
-        if kill_beyond_left a, entity_mgr
-        elsif kill_beyond_right a, entity_mgr
-        elsif  kill_on_ground_hit a, entity_mgr
-        end
-      when 'right'
-        if  kill_when_above a, entity_mgr
-        elsif kill_beyond_left a, entity_mgr
-        elsif kill_on_ground_hit a, entity_mgr
-        end
-      when 'below'
-        if kill_beyond_left a, entity_mgr
-        elsif kill_beyond_right a, entity_mgr
-        elsif kill_when_above a, entity_mgr
-        end
-      end
-    end
-  end
-
-  def kill_on_ground_hit(asteroid, entity_mgr)
-    ground_hit = 110 + (rand(40) - 20)
-    position = entity_mgr.get_component_of_type(asteroid, Position)
-    if position.y < ground_hit && position.y > 0
-      entity_mgr.kill_entity(asteroid)
-      return true
-    end
-    return false
-  end
-
-  def kill_beyond_left(asteroid, entity_mgr)
-    image = entity_mgr.get_component_of_type(asteroid, Renderable)
-    position = entity_mgr.get_component_of_type(asteroid, Position)
-    asteroid_right = position.x + image.width
-    if asteroid_right < 0
-      entity_mgr.kill_entity(asteroid)
-      return true
-    end
-    return false
-  end
-
-  def kill_when_above(asteroid,entity_mgr)
-    position = entity_mgr.get_component_of_type(asteroid, Position)
-    if position.y > 600
-      entity_mgr.kill_entity(asteroid)
-      return true
-    end
-    return false
-  end
-
-  def kill_beyond_right(asteroid, entity_mgr)
-    position = entity_mgr.get_component_of_type(asteroid, Position)
-    if position.x > 900
-      entity_mgr.kill_entity(asteroid)
-      return true
-    end
-    return false
-  end
-
   def process_one_game_tick(delta, entity_mgr)
     # TODO generate_new_background_asteroid(delta, entity_mgr)
     generate_new_asteroids(delta, entity_mgr)
-    cleanup_asteroids(delta, entity_mgr)
+
   end
 end

@@ -24,11 +24,12 @@ require 'components/solid'
 require 'components/velocity'
 
 # Necessary systems
-require 'systems/asteroidsystem'
 require 'systems/collisionsystem'
+require 'systems/cleanupasteroidsystem'
 require 'systems/controlssystem'
 require 'systems/enginesystem'
 require 'systems/landingsystem'
+require 'systems/makeasteroidsystem'
 require 'systems/movementsystem'
 require 'systems/musicfadingsystem'
 require 'systems/physics'
@@ -83,14 +84,15 @@ class PlayingScreen
     #$logger.debug @entity_manager.dump_details
 
     # Initialize any runnable systems
-    @engine_system      = EngineSystem.new self
-    @controls_system    = ControlsSystem.new self
-    @physics_system     = Physics.new self, @world.gravity_strength
-    @movement_system    = MovementSystem.new self
-    @rendering_system   = RenderingSystem.new self
-    @collision_system   = CollisionSystem.new self
-    @landing_system     = LandingSystem.new self
-    @asteroid_system    = AsteroidSystem.new self, @world
+    @engine_system              = EngineSystem.new self
+    @controls_system            = ControlsSystem.new self
+    @physics_system             = Physics.new self, @world.gravity_strength
+    @movement_system            = MovementSystem.new self
+    @rendering_system           = RenderingSystem.new self
+    @collision_system           = CollisionSystem.new self
+    @landing_system             = LandingSystem.new self
+    @make_asteroid_system       = MakeAsteroidSystem.new self, @world
+    @cleanup_asteroid_system    = CleanupAsteroidSystem.new self
 
     #set background
     @bg_image = Texture.new(Gdx.files.internal("res/images/" + @world.skin + "background.png"))
@@ -162,10 +164,11 @@ class PlayingScreen
     delta = gdx_delta * 1000
 
     # Nice because you can dictate the order things are processed
-    @asteroid_system.process_one_game_tick(delta, @entity_manager)
+    @make_asteroid_system.process_one_game_tick(delta, @entity_manager)
     @controls_system.process_one_game_tick(delta, @entity_manager)
     @engine_system.process_one_game_tick(delta, @entity_manager)
     @physics_system.process_one_game_tick(delta, @entity_manager, @movement_system)
+    @cleanup_asteroid_system .process_one_game_tick(delta,@entity_manager)
     @game_over = @collision_system.process_one_game_tick(delta,@entity_manager)
     @landed = @landing_system.process_one_game_tick(delta,@entity_manager)
 
