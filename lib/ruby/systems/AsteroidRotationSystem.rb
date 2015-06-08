@@ -8,7 +8,7 @@ class AsteroidRotationSystem < System
   end
 
   def process_one_game_tick(delta, entity_mgr)
-    asteroids = entity_mgr.get_all_entities_with_component_of_type Rotation
+    asteroids = entity_mgr.get_all_entities_with_components_of_type([Rotation, Origin])
     check_time
     if @should_rotate_asteroids
       asteroids.each do |asteroid|

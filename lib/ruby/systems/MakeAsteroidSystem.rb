@@ -107,7 +107,7 @@ class MakeAsteroidSystem < System
     end
 
     # TODO incorporate this renderable levels thingsy
-    entity_mgr.add_component asteroid, Renderable.new(@world.skin, "asteroid.png", scale, asteroid_rotation, 10)
+    entity_mgr.add_component asteroid, Renderable.new(@world.skin, "asteroid.png", scale, asteroid_rotation, 1)
     entity_mgr.add_component asteroid, Collision.new
     entity_mgr.add_component asteroid, Motion.new
     entity_mgr.add_component asteroid, Origin.new(origin)
