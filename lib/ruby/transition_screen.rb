@@ -64,7 +64,7 @@ class TransitionScreen
       p2_lander = @entity_manager.create_tagged_entity 'p2_lander'
       @entity_manager.add_component p2_lander, Rotation.new(0.04, 12)
       @entity_manager.add_component p2_lander, Position.new(700, 90)
-      @entity_manager.add_component p2_lander, Renderable.new(@world.skin, "crashlander2.png", 1, 0, self.player)
+      @entity_manager.add_component p2_lander, Renderable.new(@world.skin, "crashlander2.png", 1, 0, PLAYER)
       @entity_manager.add_component p2_lander, Controls.new([Input::Keys::J, Input::Keys::L])
       @entity_manager.add_component p2_lander, Velocity.new
       @entity_manager.add_component p2_lander, Motion.new
@@ -85,7 +85,7 @@ class TransitionScreen
     else
       @scrolling_system      = ScrollingSystem.new self
     end
-    @rendering_system        = RenderingSystem.new self, self.LEVELS
+    @rendering_system        = RenderingSystem.new self
     @collision_system        = CollisionSystem.new self
     @make_asteroid_system    = MakeAsteroidSystem.new self, @world
     @rotate_asteroids_system = AsteroidRotationSystem.new self
@@ -110,7 +110,7 @@ class TransitionScreen
     # TODO this needs to scroll too
     bg_image = @entity_manager.create_tagged_entity 'background'
     @entity_manager.add_component bg_image, Position.new(0, 0) #bottom third covers image
-    @entity_manager.add_component bg_image, Renderable.new(@world.skin, "transition.png", 1, 0, self.background)
+    @entity_manager.add_component bg_image, Renderable.new(@world.skin, "transition.png", 1, 0, BACKGROUND)
     if world_name != 'solid'
       @entity_manager.add_component bg_image, Velocity.new(0,-1) # slow down
       @entity_manager.add_component bg_image, Motion.new
@@ -124,7 +124,7 @@ class TransitionScreen
       @entity_manager.add_component p1_lander, Position.new(420, 90)
     end
     @entity_manager.add_component p1_lander, Rotation.new(0.04, 12)
-    @entity_manager.add_component p1_lander, Renderable.new(@world.skin, "crashlander1.png", 1, 0, self.player)
+    @entity_manager.add_component p1_lander, Renderable.new(@world.skin, "crashlander1.png", 1, 0, PLAYER)
     @entity_manager.add_component p1_lander, Controls.new([Input::Keys::A, Input::Keys::D])
     @entity_manager.add_component p1_lander, Velocity.new
     @entity_manager.add_component p1_lander, Motion.new
@@ -134,7 +134,7 @@ class TransitionScreen
       scroll_effect = @entity_manager.create_tagged_entity 'scroll_effect'
       @entity_manager.add_component scroll_effect, Position.new(0, 0) #bottom third covers image
       @entity_manager.add_component scroll_effect, Velocity.new(0,-20) # fast down
-      @entity_manager.add_component scroll_effect, Renderable.new(@world.skin, "scrolleffect.png", 1, 0, self.front_scroll)
+      @entity_manager.add_component scroll_effect, Renderable.new(@world.skin, "scrolleffect.png", 1, 0, FRONT_SCROLL)
       @entity_manager.add_component scroll_effect, Motion.new
       @entity_manager.add_component scroll_effect, Loop.new(-1200, 0, 7)
     end
@@ -167,7 +167,7 @@ class TransitionScreen
 
     @physics_system.process_one_game_tick(delta,@entity_manager,@movement_system)
     @rotate_asteroids_system.process_one_game_tick(delta, @entity_manager)
-    @rendering_system.process_one_game_tick(delta, @entity_manager, @camera, @batch, @font)
+    @rendering_system.process_one_game_tick(LEVEL_COUNT, @entity_manager, @batch, @font)
 
     # This shows how to do something every N seconds:
     @elapsed += delta;

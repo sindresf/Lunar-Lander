@@ -39,7 +39,7 @@ class ResultScreen
     @result_entity_manager.add_component lander, Position.new(420,150)
     @result_entity_manager.add_component lander, Renderable.new(@world.skin, "crashlander1.png", 1.2, 0, 2)
 
-    @rendering_system = RenderingSystem.new @game, 3
+    @rendering_system = RenderingSystem.new @game
     @user_option_system = UserOptionSystem.new @game, self, @world, @bg_song
 
     @camera = OrthographicCamera.new
@@ -61,7 +61,7 @@ class ResultScreen
     @batch.begin
 
     @user_option_system.process_one_game_tick @result_entity_manager
-    @rendering_system.process_one_game_tick(delta, @result_entity_manager, @camera, @batch, @font)
+    @rendering_system.process_one_game_tick(3, @result_entity_manager, @batch, @font)
     @batch.end
 
     if Gdx.input.isKeyPressed(Input::Keys::ENTER)

@@ -1,12 +1,10 @@
 module TransitionLevels
-  background ||= 0
-  bg_scroll ||= 1
-  bg_objects ||= 2
-  player ||= 3
-  front_objects ||= 4
-  front_scroll ||= 5
-
-  LEVELS ||= 5
-
-  attr_reader :background, :bg_scroll, :bg_objects, :player, :front_objects, :front_scroll, :LEVELS
+  attr_reader :BACKGROUND, :BG_SCROLL, :BG_OBJECTS, :PLAYER, :FRONT_OBJECTS, :FRONT_SCROLL, :LEVEL_COUNT
+  BACKGROUND ||= 0
+  BG_SCROLL ||= 1 # just for show
+  BG_OBJECTS ||= 2 # interactives
+  PLAYER ||= 3
+  FRONT_OBJECTS ||= 4 # interactives
+  FRONT_SCROLL ||= 5 # just for show
+  LEVEL_COUNT ||= 6
 end

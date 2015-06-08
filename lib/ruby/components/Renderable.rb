@@ -34,11 +34,11 @@ class Renderable < Component
   end
 
   def marshal_dump
-    [@id, @image_path, @scale, @rotation]
+    [@layer, @id, @image_name, @image_path, @scale, @rotation]
   end
 
   def marshal_load(array)
-    @id, @image_path, @scale, @rotation = array
+    @layer, @id, @image_name, @image_path, @scale, @rotation = array
     @image = Texture.new(Gdx.files.internal(image_path))
   end
 end

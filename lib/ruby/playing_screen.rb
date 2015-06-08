@@ -70,7 +70,7 @@ class PlayingScreen
       thrust = 0.01
       @entity_manager.add_component p2_lander, Engine.new(thrust, @world.engine_x, @world.engine_y)
       @entity_manager.add_component p2_lander, Fuel.new(100)
-      @entity_manager.add_component p2_lander, Renderable.new(@world.skin, "crashlander2.png", 1.2, 0, self.PLAYER2)
+      @entity_manager.add_component p2_lander, Renderable.new(@world.skin, "crashlander2.png", 1.2, 0, PLAYER2)
       @entity_manager.add_component p2_lander, Controls.new([Input::Keys::J, Input::Keys::K, Input::Keys::L])
       if @world.has_wind
         @entity_manager.add_component p2_lander, Aerodynamics.new(0.12)
@@ -89,7 +89,7 @@ class PlayingScreen
     @controls_system            = ControlsSystem.new self
     @physics_system             = Physics.new self, @world.gravity_strength
     @movement_system            = MovementSystem.new self
-    @rendering_system           = RenderingSystem.new self, self.LEVELS
+    @rendering_system           = RenderingSystem.new self
     @collision_system           = CollisionSystem.new self
     @landing_system             = LandingSystem.new self
     @make_asteroid_system       = MakeAsteroidSystem.new self, @world
@@ -118,12 +118,12 @@ class PlayingScreen
   def add_world_entity_commons
     ground = @entity_manager.create_tagged_entity 'ground'
     @entity_manager.add_component ground, Position.new(0, 0)
-    @entity_manager.add_component ground, Renderable.new(@world.skin, "ground.png", 1, 0, self.GROUND)
+    @entity_manager.add_component ground, Renderable.new(@world.skin, "ground.png", 1, 0, GROUND)
     @entity_manager.add_component ground, Collision.new
 
     platformbackground = @entity_manager.create_tagged_entity 'platform_bg'
     @entity_manager.add_component platformbackground, Position.new(150, 145)
-    @entity_manager.add_component platformbackground, Renderable.new(@world.skin, "platformbackground.png", 1.0, 0, self.PLATFORM_BACKGROUND)
+    @entity_manager.add_component platformbackground, Renderable.new(@world.skin, "platformbackground.png", 1.0, 0, PLATFORM_BACKGROUND)
     @entity_manager.add_component platformbackground, Pad.new
 
     p1_lander = @entity_manager.create_tagged_entity 'p1_lander'
@@ -132,7 +132,7 @@ class PlayingScreen
     thrust = 0.01
     @entity_manager.add_component p1_lander, Engine.new(thrust, @world.engine_x, @world.engine_y)
     @entity_manager.add_component p1_lander, Fuel.new(250)
-    @entity_manager.add_component p1_lander, Renderable.new(@world.skin, "crashlander1.png", 1.2, 0, self.PLAYER1)
+    @entity_manager.add_component p1_lander, Renderable.new(@world.skin, "crashlander1.png", 1.2, 0, PLAYER1)
     @entity_manager.add_component p1_lander, Controls.new([Input::Keys::A, Input::Keys::S, Input::Keys::D])
     if @world.has_gravity
       @entity_manager.add_component p1_lander, GravitySensitive.new
@@ -147,7 +147,7 @@ class PlayingScreen
 
     platform = @entity_manager.create_tagged_entity 'platform'
     @entity_manager.add_component platform, Position.new(150, 145)
-    @entity_manager.add_component platform, Renderable.new(@world.skin, "platform.png", 1.0, 0, self.PLATFORM)
+    @entity_manager.add_component platform, Renderable.new(@world.skin, "platform.png", 1.0, 0, PLATFORM)
     upper_y = 145 + @entity_manager.get_component_of_type(platform, Renderable).height
     upper_x = 150 + @entity_manager.get_component_of_type(platform, Renderable).width
     @entity_manager.add_component platform, Solid.new(150, upper_x, upper_y)
@@ -182,7 +182,7 @@ class PlayingScreen
     @batch.draw(@bg_image, 0, 0)
 
     @rotate_asteroids_system.process_one_game_tick(delta, @entity_manager)
-    @rendering_system.process_one_game_tick(delta, @entity_manager, @camera, @batch, @font)
+    @rendering_system.process_one_game_tick(LEVELS, @entity_manager, @batch, @font)
 
     # This shows how to do something every N seconds:
     @elapsed += delta;
