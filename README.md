@@ -56,7 +56,8 @@ __Game Scene__
    - [x] off screen
    - [x] hitting ground
  - [x] asteroids from all sides
- - [ ] upgraded creation algorithm
+ - [x] upgraded creation algorithm
+   - [x] asteroids spread across their levels
 - [ ] wind effect
 - [ ] player life points 
 - [ ] animations
@@ -76,7 +77,7 @@ __Transition Scene__
 - [x] music in background
  - [x] same as 'world'
  - [x] carries over into game
-- [ ] make a up-scroller for world transition 
+- [x] make a up-scroller for world transition 
  - [x] scrolling background
  - [x] scrolling effect
    - [x] looping scrolling

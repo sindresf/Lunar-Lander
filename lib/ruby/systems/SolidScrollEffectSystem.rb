@@ -1,6 +1,8 @@
 require_relative 'system'
+require 'helper/transitionlevels'
 
 class SolidScrollEffectSystem < System
+  include TransitionLevels
   AMOUNT = 12
   BACKGROUND_AMOUNT = 25
   INIT_POPULATION = 30
@@ -38,7 +40,7 @@ class SolidScrollEffectSystem < System
     asteroid = entity_mgr.create_tagged_entity 'dot'
     entity_mgr.add_component asteroid, Position.new(x, y)
     entity_mgr.add_component asteroid, Velocity.new(0.05, vertical_vel)
-    entity_mgr.add_component asteroid, Renderable.new(@world.skin, "scrolleffectpartical.png", 0.1, 0, 1)
+    entity_mgr.add_component asteroid, Renderable.new(@world.skin, "scrolleffectpartical.png", 0.1, 0, BG_SCROLL)
     entity_mgr.add_component asteroid, Motion.new
   end
 
@@ -77,7 +79,7 @@ class SolidScrollEffectSystem < System
     asteroid = entity_mgr.create_tagged_entity 'particle'
     entity_mgr.add_component asteroid, Position.new(x, y)
     entity_mgr.add_component asteroid, Velocity.new(horizontal_vel, vertical_vel)
-    entity_mgr.add_component asteroid, Renderable.new(@world.skin, "scrolleffectpartical.png", 1, 0, 10)
+    entity_mgr.add_component asteroid, Renderable.new(@world.skin, "scrolleffectpartical.png", 1, 0, FRONT_SCROLL)
     entity_mgr.add_component asteroid, Motion.new
   end
 
@@ -86,7 +88,7 @@ class SolidScrollEffectSystem < System
     entity_mgr.add_component asteroid, Position.new(x, y)
     entity_mgr.add_component asteroid, Velocity.new(horizontal_vel, vertical_vel)
     scale = 0.25 + rand(12) * 0.0125
-    entity_mgr.add_component asteroid, Renderable.new(@world.skin, "scrolleffectpartical.png", scale, 0, 1)
+    entity_mgr.add_component asteroid, Renderable.new(@world.skin, "scrolleffectpartical.png", scale, 0, BG_SCROLL)
     entity_mgr.add_component asteroid, Motion.new
   end
 

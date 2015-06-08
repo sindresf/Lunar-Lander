@@ -26,7 +26,7 @@ class ResultScreen
     @result_entity_manager = Lunar_lander_em.new @game
 
     bg_image = @result_entity_manager.create_tagged_entity 'background'
-    @result_entity_manager.add_component bg_image, Renderable.new(@world.skin, 'result.png', 1.0, 0)
+    @result_entity_manager.add_component bg_image, Renderable.new(@world.skin, 'result.png', 1.0, 0, 0)
     @result_entity_manager.add_component bg_image, Position.new(0 ,0)
 
     # TODO make if statements for "who won" / "win/loss"

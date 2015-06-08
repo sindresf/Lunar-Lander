@@ -18,7 +18,9 @@ class RenderingSystem < System
     drawables = entity_mgr.get_all_entities_with_components_of_type([Renderable, Position])
     drawables.each do |drawable|
       renderable_component = entity_mgr.get_component_of_type(drawable, Renderable)
+      print "#{renderable_component.layer}"
       if renderable_component.layer == level
+        puts " #{renderable_component.layer}, drawing #{entity_mgr.get_tag(drawable)}"
         draw_entity(drawable, entity_mgr, batch)
         if !is_plural_level
           return
@@ -45,6 +47,8 @@ class RenderingSystem < System
       elsif level == BG_OBJECTS
         return true
       elsif level == FRONT_OBJECTS
+        return true
+      elsif level == FRONT_SCROLL
         return true
       elsif level == FRONT_SCROLL
         return true

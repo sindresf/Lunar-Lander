@@ -3,8 +3,9 @@ module TransitionLevels
   BACKGROUND ||= 0
   BG_SCROLL ||= 1 # just for show
   BG_OBJECTS ||= 2 # interactives
-  PLAYER ||= 3
-  FRONT_OBJECTS ||= 4 # interactives
-  FRONT_SCROLL ||= 5 # just for show
-  LEVEL_COUNT ||= 6
+  PLAYER1 ||= 3
+  PLAYER2 ||= 4
+  FRONT_OBJECTS ||= 5 # interactives
+  FRONT_SCROLL ||= 6 # just for show
+  LEVEL_COUNT ||= 7
 end

@@ -64,7 +64,7 @@ class TransitionScreen
       p2_lander = @entity_manager.create_tagged_entity 'p2_lander'
       @entity_manager.add_component p2_lander, Rotation.new(0.04, 12)
       @entity_manager.add_component p2_lander, Position.new(700, 90)
-      @entity_manager.add_component p2_lander, Renderable.new(@world.skin, "crashlander2.png", 1, 0, PLAYER)
+      @entity_manager.add_component p2_lander, Renderable.new(@world.skin, "crashlander2.png", 1, 0, PLAYER2)
       @entity_manager.add_component p2_lander, Controls.new([Input::Keys::J, Input::Keys::L])
       @entity_manager.add_component p2_lander, Velocity.new
       @entity_manager.add_component p2_lander, Motion.new
@@ -87,7 +87,7 @@ class TransitionScreen
     end
     @rendering_system        = RenderingSystem.new self
     @collision_system        = CollisionSystem.new self
-    @make_asteroid_system    = MakeAsteroidSystem.new self, @world
+    @make_asteroid_system    = MakeAsteroidSystem.new self, @world, true # is transitioning
     @rotate_asteroids_system = AsteroidRotationSystem.new self
     @cleanup_asteroid_system = CleanupAsteroidSystem.new self
 
@@ -124,7 +124,7 @@ class TransitionScreen
       @entity_manager.add_component p1_lander, Position.new(420, 90)
     end
     @entity_manager.add_component p1_lander, Rotation.new(0.04, 12)
-    @entity_manager.add_component p1_lander, Renderable.new(@world.skin, "crashlander1.png", 1, 0, PLAYER)
+    @entity_manager.add_component p1_lander, Renderable.new(@world.skin, "crashlander1.png", 1, 0, PLAYER1)
     @entity_manager.add_component p1_lander, Controls.new([Input::Keys::A, Input::Keys::D])
     @entity_manager.add_component p1_lander, Velocity.new
     @entity_manager.add_component p1_lander, Motion.new

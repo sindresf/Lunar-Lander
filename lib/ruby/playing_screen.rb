@@ -92,7 +92,7 @@ class PlayingScreen
     @rendering_system           = RenderingSystem.new self
     @collision_system           = CollisionSystem.new self
     @landing_system             = LandingSystem.new self
-    @make_asteroid_system       = MakeAsteroidSystem.new self, @world
+    @make_asteroid_system       = MakeAsteroidSystem.new self, @world, false # is not transitioning
     @rotate_asteroids_system    = AsteroidRotationSystem.new self
     @cleanup_asteroid_system    = CleanupAsteroidSystem.new self
 
