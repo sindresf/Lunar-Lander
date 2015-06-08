@@ -41,26 +41,30 @@ class CollisionSystem < System
 
     bounding_areas={}
     collidable_entities.each do |e|
-      bounding_areas[e]=entity_mgr.get_component_of_type(e, Collision).bounding_polygon
+      bounding_areas[e] = entity_mgr.get_component_of_type(e, Collision).bounding_polygon
     end
 
-    # Naive O(n^2) (kinda)
+    player_entities = []
+
+    polygon_entities = entity_mgr.get_all_entities_with_component_of_type Controls
+    update_bounding_polygons(entity_mgr, polygon_entities)
+    player_entities += polygon_entities
+
+    player_bounding_areas={}
+    player_entities.each do |e|
+      player_bounding_areas[e] = entity_mgr.get_component_of_type(e, Collision).bounding_polygon
+    end
+
     bounding_areas.each_key do |entity|
-      bounding_areas.each_key do |other|
-        #All the don't care situations
-        # list in occurrence order for max efficiency
-        next if is_asteroid_clash?(entity_mgr, entity, other)
-        next if is_just_asteroid_hitting_ground?(entity_mgr, entity, other)
-        next if is_just_asteroid_hitting_platform?(entity_mgr, entity, other)
-        next if is_same_polygon?(entity, other)
-        next if is_just_platform_on_ground?(entity_mgr, entity, other)
-        next if is_player_clash?(entity_mgr, entity, other)
+      player_bounding_areas.each_key do |player|
+        next if is_same_polygon?(entity, player)
+        next if is_player_clash?(entity_mgr, entity, player)
 
         #OK, so we care, check it out
-        if is_crash?(bounding_areas, entity, other)
-          if is_player1_crash?(entity_mgr, entity, other)
+        if is_crash?(bounding_areas, entity, player)
+          if is_player1_crash?(entity_mgr, entity, player)
             return true
-          elsif is_player2_crash?(entity_mgr, entity, other)
+          elsif is_player2_crash?(entity_mgr, entity, player)
             return true
           else
             return false
@@ -72,40 +76,24 @@ class CollisionSystem < System
   end
 
   # Helper ifs for readability
-  def is_same_polygon?(entity, other)
-    return entity == other
-  end
-
-  def is_asteroid_clash?(entity_mgr, entity, other)
-    return (entity_mgr.get_tag(entity) == 'asteroid') && (entity_mgr.get_tag(other) == 'asteroid')
-  end
-
-  def is_just_platform_on_ground?(entity_mgr, entity, other)
-    return ((entity_mgr.get_tag(entity) == 'platform') && (entity_mgr.get_tag(other) == 'ground')) || ((entity_mgr.get_tag(entity) == 'ground') && (entity_mgr.get_tag(other) == 'platform'))
-  end
-
-  def is_just_asteroid_hitting_ground?(entity_mgr, entity, other)
-    return ((entity_mgr.get_tag(entity) == 'ground') && (entity_mgr.get_tag(other) == 'asteroid')) || ((entity_mgr.get_tag(entity) == 'asteroid') && (entity_mgr.get_tag(other) == 'ground'))
-  end
-
-  def is_just_asteroid_hitting_platform?(entity_mgr, entity, other)
-    return ((entity_mgr.get_tag(entity) == 'platform') && (entity_mgr.get_tag(other) == 'asteroid')) || ((entity_mgr.get_tag(entity) == 'asteroid') && (entity_mgr.get_tag(other) == 'platform'))
+  def is_same_polygon?(entity, player)
+    return entity == player
   end
 
   def is_player_clash?(entity_mgr, entity, other)
     return ((entity_mgr.get_tag(entity) == 'p1_lander') && (entity_mgr.get_tag(other) == 'p2_lander')) || ((entity_mgr.get_tag(entity) == 'p2_lander') && (entity_mgr.get_tag(other) == 'p1_lander'))
   end
 
-  def is_crash?(bounding_areas, entity, other)
-    return Intersector.overlapConvexPolygons(bounding_areas[entity], bounding_areas[other])
+  def is_crash?(bounding_areas, entity, player)
+    return Intersector.overlapConvexPolygons(bounding_areas[entity], bounding_areas[player])
   end
 
-  def is_player1_crash?(entity_mgr, entity, other)
-    return (entity_mgr.get_tag(entity) == 'p1_lander') || (entity_mgr.get_tag(other) == 'p1_lander')
+  def is_player1_crash?(entity_mgr, entity, player)
+    return entity_mgr.get_tag(player) == 'p1_lander'
   end
 
-  def is_player2_crash?(entity_mgr, entity, other)
-    return (entity_mgr.get_tag(entity) == 'p2_lander') || (entity_mgr.get_tag(other) == 'p2_lander')
+  def is_player2_crash?(entity_mgr, entity, player)
+    return (entity_mgr.get_tag(player) == 'p2_lander')
   end
 
 end
