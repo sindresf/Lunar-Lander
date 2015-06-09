@@ -44,6 +44,17 @@ class Physics < System
           velocity_component.horizontal = 0
         end
       else
+      # TODO make gravity and wind be applied before stop, so they're stopped
+      # TODO make stopping THAT MUCH BETTER
+      # TODO make wind effect complete
+      aerodynamic_enitites = entity_mgr.get_all_entities_with_component_of_type Aerodynamics
+      aerodynamic_enitites.each do |entity|
+        aerodynamic_component = entity_mgr.get_component_of_type(entity, Aerodynamics)
+        velocity = entity_mgr.get_component_of_type(entity, Velocity) # TODO really think about this
+        
+        velocity.horizontal += @world.wind_strength * (0.03 / aerodynamic_component)
+        velocity.vertical += @world.wind_strength * (0.03 / aerodynamic_component)
+      end
         velocity_component.vertical += @ACCELERATION * delta
       end
     end

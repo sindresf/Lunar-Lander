@@ -31,10 +31,11 @@ module WorldMaker
   end
 
   def self.make_neon
-    world = World.new('neon', "neonskin/", false, true)
+    world = World.new('neon', "neonskin/", true, true)
     world.engine_x = 0
     world.engine_y = 0
     world.gravity_strength = GRAVITY_STANDARD
+    world.wind_strength = 0.003 # TODO something
     world.asteroid_freq = ASTEROID_FREQ_STANDARD
     world.asteroid_sides = ['left', 'above']
     world.music = Gdx.audio.newMusic Gdx.files.internal("res/music/flux.mp3")

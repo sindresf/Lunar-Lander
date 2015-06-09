@@ -70,7 +70,7 @@ class PlayingScreen
       thrust = 0.01
       @entity_manager.add_component p2_lander, Engine.new(thrust, @world.engine_x, @world.engine_y)
       @entity_manager.add_component p2_lander, Fuel.new(100)
-      @entity_manager.add_component p2_lander, Renderable.new(@world.skin, "crashlander2.png", 1.2, 0, PLAYER2)
+      @entity_manager.add_component p2_lander, Renderable.new(@world.skin, "crashlander2.png", 1.0, 0, PLAYER2)
       @entity_manager.add_component p2_lander, Controls.new([Input::Keys::J, Input::Keys::K, Input::Keys::L])
       if @world.has_wind
         @entity_manager.add_component p2_lander, Aerodynamics.new(0.12)
@@ -132,7 +132,7 @@ class PlayingScreen
     thrust = 0.01
     @entity_manager.add_component p1_lander, Engine.new(thrust, @world.engine_x, @world.engine_y)
     @entity_manager.add_component p1_lander, Fuel.new(250)
-    @entity_manager.add_component p1_lander, Renderable.new(@world.skin, "crashlander1.png", 1.2, 0, PLAYER1)
+    @entity_manager.add_component p1_lander, Renderable.new(@world.skin, "crashlander1.png", 1.0, 0, PLAYER1)
     @entity_manager.add_component p1_lander, Controls.new([Input::Keys::A, Input::Keys::S, Input::Keys::D])
     if @world.has_gravity
       @entity_manager.add_component p1_lander, GravitySensitive.new
