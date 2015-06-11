@@ -62,17 +62,26 @@ class CollisionSystem < System
 
         #OK, so we care, check it out
         if is_crash?(bounding_areas, entity, player)
-          if is_player1_crash?(entity_mgr, entity, player)
-            return true
-          elsif is_player2_crash?(entity_mgr, entity, player)
-            return true
-          else
-            return false
+
+          if is_player1_crash?(entity_mgr, player)
+            if with_asteroid?(entity_mgr, entity)
+              register_player_hit(player, entity_mgr)
+            elsif with_ground?(entity_mgr, entity)
+              life_component = entity_mgr.get_component_of_type(player, Life)
+              life_component.lives = 0
+            end
+
+          elsif is_player2_crash?(entity_mgr, player)
+            if with_asteroid?(entity_mgr, entity)
+              register_player_hit(player, entity_mgr)
+            elsif with_ground?(entity_mgr, entity)
+              life_component = entity_mgr.get_component_of_type(player, Life)
+              life_component.lives = 0
+            end
           end
         end
       end
     end
-    return false
   end
 
   # Helper ifs for readability
@@ -88,12 +97,26 @@ class CollisionSystem < System
     return Intersector.overlapConvexPolygons(bounding_areas[entity], bounding_areas[player])
   end
 
-  def is_player1_crash?(entity_mgr, entity, player)
+  def is_player1_crash?(entity_mgr, player)
     return entity_mgr.get_tag(player) == 'p1_lander'
   end
 
-  def is_player2_crash?(entity_mgr, entity, player)
+  def is_player2_crash?(entity_mgr, player)
     return (entity_mgr.get_tag(player) == 'p2_lander')
   end
 
+  def with_asteroid?(entity_mgr, entity)
+    return (entity_mgr.get_tag(entity) == 'asteroid')
+  end
+
+  def with_ground?(entity_mgr, entity)
+    return (entity_mgr.get_tag(entity) == 'ground')
+  end
+
+  def register_player_hit(player, entity_mgr)
+    life_component = entity_mgr.get_component_of_type(player, Life)
+    score_component = entity_mgr.get_component_of_type(player, Score)
+    life_component.lives -= 1
+    score_component.score -= 200
+  end
 end

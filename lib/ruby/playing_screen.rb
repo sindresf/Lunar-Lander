@@ -79,6 +79,7 @@ class PlayingScreen
       end
       @entity_manager.add_component p2_lander, Velocity.new
       @entity_manager.add_component p2_lander, Motion.new
+      @entity_manager.add_component p2_lander, Score.new
       @entity_manager.add_component p2_lander, Collision.new
       @entity_manager.add_component p2_lander, Landable.new
     end
@@ -145,6 +146,7 @@ class PlayingScreen
     end
     @entity_manager.add_component p1_lander, Velocity.new
     @entity_manager.add_component p1_lander, Motion.new
+    @entity_manager.add_component p1_lander, Score.new
     @entity_manager.add_component p1_lander, Collision.new
     @entity_manager.add_component p1_lander, Landable.new
 
@@ -174,7 +176,7 @@ class PlayingScreen
     @engine_system.process_one_game_tick(delta, @entity_manager)
     @physics_system.process_one_game_tick(delta, @entity_manager, @movement_system)
     @cleanup_asteroid_system .process_one_game_tick(delta,@entity_manager)
-    @game_over = @collision_system.process_one_game_tick(delta,@entity_manager)
+    @collision_system.process_one_game_tick(delta,@entity_manager)
     @landed = @landing_system.process_one_game_tick(delta,@entity_manager)
 
     # Make sure you "layer" things in here from bottom to top...
@@ -207,8 +209,6 @@ class PlayingScreen
 
     if @landed
       @font.draw(@batch,"Hooray you made it!", 120, 150)
-    elsif @game_over
-      @font.draw(@batch,"Bang, you're dead!", 120, 150)
     end
 
     @batch.end
@@ -231,24 +231,22 @@ class PlayingScreen
       score = calculate_score
       @game.setScreen ResultScreen.new(@game, @menu_screen, @world, @multiplayer, @muted, score)
     end
-
   end
 
   def calculate_score()
-    score = 0
-    life_worth = 100
+    scores = [0, 0]
 
-    score += @world.max_time - @time_used
+    scores[0] += @world.max_time - @time_used
+    scores[1] += @world.max_time - @time_used
+
     players = @entity_manager.get_all_entities_with_component_of_type Life
-    # TODO this whole thing needs to be pr player and stuff
+    p = 0
     players.each do |player|
-      hp = @entity_manager.get_component_of_type(player, Life)
-      score += hp.lives * life_worth
+      score = @entity_manager.get_component_of_type(player, Score)
+      scores[p] += score.score
+      p += 1
     end
-
-    # score += win / loose
-
-    return score
+    return scores
   end
 
   def resize width, height

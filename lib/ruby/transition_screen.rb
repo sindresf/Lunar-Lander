@@ -20,6 +20,7 @@ require 'components/pad'
 require 'components/position'
 require 'components/renderable'
 require 'components/rotation'
+require 'components/score'
 require 'components/solid'
 require 'components/velocity'
 
@@ -67,7 +68,9 @@ class TransitionScreen
       @entity_manager.add_component p2_lander, Position.new(700, 90)
       @entity_manager.add_component p2_lander, Renderable.new(@world.skin, "crashlander2.png", 1, 0, PLAYER2)
       @entity_manager.add_component p2_lander, Controls.new([Input::Keys::J, Input::Keys::L])
+      @entity_manager.add_component p2_lander, Life.new(@world.player_hp)
       @entity_manager.add_component p2_lander, Velocity.new
+      @entity_manager.add_component p2_lander, Score.new
       @entity_manager.add_component p2_lander, Motion.new
       @entity_manager.add_component p2_lander, Collision.new
     end
@@ -125,9 +128,11 @@ class TransitionScreen
       @entity_manager.add_component p1_lander, Position.new(420, 90)
     end
     @entity_manager.add_component p1_lander, Rotation.new(0.04, 12)
+    @entity_manager.add_component p1_lander, Life.new(@world.player_hp)
     @entity_manager.add_component p1_lander, Renderable.new(@world.skin, "crashlander1.png", 1, 0, PLAYER1)
     @entity_manager.add_component p1_lander, Controls.new([Input::Keys::A, Input::Keys::D])
     @entity_manager.add_component p1_lander, Velocity.new
+    @entity_manager.add_component p1_lander, Score.new
     @entity_manager.add_component p1_lander, Motion.new
     @entity_manager.add_component p1_lander, Collision.new
 
