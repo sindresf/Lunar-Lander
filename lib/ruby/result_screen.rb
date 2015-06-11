@@ -12,7 +12,7 @@ require 'helper/WorldMaker'
 
 class ResultScreen
   include Screen
-  def initialize(game, menu_screen, world, multiplayer, muted)
+  def initialize(game, menu_screen, world, multiplayer, muted, score)
     @game = game
     @menu_screen = menu_screen
     @world = world
@@ -20,6 +20,7 @@ class ResultScreen
     @muted = muted
     @bg_song = Gdx.audio.newMusic(Gdx.files.internal("res/music/wearethechampions.mp3"))
     @bg_song.setVolume 0.8
+    @score = score
   end
 
   def show
@@ -62,6 +63,10 @@ class ResultScreen
 
     @user_option_system.process_one_game_tick @result_entity_manager
     @rendering_system.process_one_game_tick(3, @result_entity_manager, @batch, @font)
+    
+
+    @font.draw(@batch, "Score: #{@score.round(1)}", 200, 300);
+    
     @batch.end
 
     if Gdx.input.isKeyPressed(Input::Keys::ENTER)

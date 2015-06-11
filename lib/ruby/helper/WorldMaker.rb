@@ -20,6 +20,8 @@ module WorldMaker
 
   def self.make_first
     world = World.new('first', "firstskin/", false, true)
+    world.player_hp = 3
+    world.max_time = 300
     world.engine_x = 0 # TODO don't forget these when animation comes
     world.engine_y = 0
     world.gravity_strength = GRAVITY_STANDARD
@@ -32,6 +34,8 @@ module WorldMaker
 
   def self.make_neon
     world = World.new('neon', "neonskin/", true, true)
+    world.player_hp = 3
+    world.max_time = 300
     world.engine_x = 0
     world.engine_y = 0
     world.gravity_strength = GRAVITY_STANDARD
@@ -45,6 +49,8 @@ module WorldMaker
 
   def self.make_solid
     world = World.new('solid', "solidskin/", false, true)
+    world.player_hp = 3
+    world.max_time = 300
     world.engine_x = 0
     world.engine_y = 0
     world.gravity_strength = GRAVITY_STANDARD

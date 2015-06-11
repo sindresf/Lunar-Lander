@@ -53,6 +53,7 @@ class TransitionScreen
     @bg_song = @world.music
     @multiplayer = multiplayer
     @muted = muted
+    @time_used = 0
   end
 
   def show
@@ -173,6 +174,7 @@ class TransitionScreen
     @elapsed += delta;
     if (@elapsed >= 1000)
       @game.increment_game_clock(@elapsed/1000*LunarLanderGame::GAME_CLOCK_MULTIPLIER)
+      @time_used += 1
       @elapsed = 0
     end
 
@@ -198,7 +200,7 @@ class TransitionScreen
       @bg_song.dispose
       @game.setScreen @menu_screen
     elsif Gdx.input.isKeyPressed(Input::Keys::ENTER)
-      @game.setScreen PlayingScreen.new(@game, @menu_screen, @world, @multiplayer, @muted)
+      @game.setScreen PlayingScreen.new(@game, @menu_screen, @world, @multiplayer, @muted, @time_used)
     end
   end
 

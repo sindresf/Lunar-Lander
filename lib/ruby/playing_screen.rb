@@ -43,13 +43,14 @@ require 'helper/renderinglevels'
 class PlayingScreen
   include Screen
   include RenderingLevels
-  def initialize(game, menu_screen, world, multiplayer, muted)
+  def initialize(game, menu_screen, world, multiplayer, muted, transition_time_used)
     @game = game
     @world = world
     @menu_screen = menu_screen
     @bg_song = @world.music
     @multiplayer = multiplayer
     @muted = muted
+    @time_used = transition_time_used
   end
 
   def show
@@ -65,6 +66,7 @@ class PlayingScreen
 
     if @multiplayer
       p2_lander = @entity_manager.create_tagged_entity('p2_lander')
+      @entity_manager.add_component p2_lander, Life.new(@world.player_hp)
       @entity_manager.add_component p2_lander, Position.new(70, 200)
       @entity_manager.add_component p2_lander, Rotation.new(0.1)
       thrust = 0.01
@@ -127,6 +129,7 @@ class PlayingScreen
     @entity_manager.add_component platformbackground, Pad.new
 
     p1_lander = @entity_manager.create_tagged_entity 'p1_lander'
+    @entity_manager.add_component p1_lander, Life.new(@world.player_hp)
     @entity_manager.add_component p1_lander, Position.new(450,450)
     @entity_manager.add_component p1_lander, Rotation.new(0.1)
     thrust = 0.01
@@ -146,7 +149,7 @@ class PlayingScreen
     @entity_manager.add_component p1_lander, Landable.new
 
     platform = @entity_manager.create_tagged_entity 'platform'
-    @entity_manager.add_component platform, Position.new(150, 145)
+    @entity_manager.add_component platform, Position.new(150, 445)
     @entity_manager.add_component platform, Renderable.new(@world.skin, "platform.png", 1.0, 0, PLATFORM)
     upper_y = 145 + @entity_manager.get_component_of_type(platform, Renderable).height
     upper_x = 150 + @entity_manager.get_component_of_type(platform, Renderable).width
@@ -184,16 +187,23 @@ class PlayingScreen
     @rotate_asteroids_system.process_one_game_tick(delta, @entity_manager)
     @rendering_system.process_one_game_tick(LEVELS, @entity_manager, @batch, @font)
 
-    # This shows how to do something every N seconds:
     @elapsed += delta;
+    nth_count = 1
+    # This shows how to do something every 10nth of a second:
+    if (@elapsed >= 100 * nth_count) # TODO This is too fast, not correct
+      @time_used += 0.1
+      nth_count += 1
+    end
+    # This shows how to do something every N seconds:
     if (@elapsed >= 1000)
       @game.increment_game_clock(@elapsed/1000*LunarLanderGame::GAME_CLOCK_MULTIPLIER)
       @elapsed = 0
+      nth_count = 1
     end
+    @font.draw(@batch, "Time used: #{@time_used.round(1)}", 8, 50);
 
     @font.draw(@batch, "FPS: #{Gdx.graphics.getFramesPerSecond}", 8, 460);
     @font.draw(@batch, "ESC to exit", 8, 20);
-    @font.draw(@batch, "Time now: #{@game.game_clock.to_s}", 8, 50);
 
     if @landed
       @font.draw(@batch,"Hooray you made it!", 120, 150)
@@ -218,9 +228,27 @@ class PlayingScreen
       end
       @bg_song.stop
       @bg_song.dispose
-      @game.setScreen ResultScreen.new(@game, @menu_screen, @world, @multiplayer, @muted)
+      score = calculate_score
+      @game.setScreen ResultScreen.new(@game, @menu_screen, @world, @multiplayer, @muted, score)
     end
 
+  end
+
+  def calculate_score()
+    score = 0
+    life_worth = 100
+
+    score += @world.max_time - @time_used
+    players = @entity_manager.get_all_entities_with_component_of_type Life
+    # TODO this whole thing needs to be pr player and stuff
+    players.each do |player|
+      hp = @entity_manager.get_component_of_type(player, Life)
+      score += hp.lives * life_worth
+    end
+
+    # score += win / loose
+
+    return score
   end
 
   def resize width, height

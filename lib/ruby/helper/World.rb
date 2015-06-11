@@ -1,5 +1,5 @@
 class World
-  attr_accessor :music, :wind_strength, :gravity_strength, :asteroid_freq, :asteroid_sides, :engine_x, :engine_y #all used In ifs
+  attr_accessor :music, :player_hp, :wind_strength, :gravity_strength, :asteroid_freq, :asteroid_sides, :engine_x, :engine_y, :max_time #all used In ifs
   attr_reader :name, :skin, :has_wind, :has_gravity # all ifs
   def initialize(name, skin, has_wind, has_gravity) # all ifs
     @skin = skin

@@ -4,9 +4,11 @@ require_relative 'startup_screen'
 class LunarLanderGame < Game
   include ApplicationListener
   attr_reader :game_clock, :is_running
+  attr_accessor :score
   GAME_CLOCK_MULTIPLIER=1
   def initialize
     @is_running = true
+    @score = 0
   end
 
   def create
